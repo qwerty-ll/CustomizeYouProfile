@@ -7,6 +7,8 @@
 Pick the effects you like, run one command (or add one workflow file), and they appear on your profile.
 Every image is generated from your own contributions, repositories and stats, so nobody else's profile looks like yours.
 
+[![Built with AI](https://img.shields.io/badge/built%20with-AI%20(Claude)-8A63D2?logo=anthropic&logoColor=white)](#-built-with-ai)
+
 [Gallery](#-gallery) · [Install in one command](#-install-in-one-command) · [Manual setup](#-manual-setup) · [Options](#%EF%B8%8F-options) · [FAQ](#-faq) · [На русском](#-на-русском)
 
 </div>
@@ -196,6 +198,14 @@ Node 18+ with no dependencies.
 
 ---
 
+## 🤖 Built with AI
+
+This project was made with the help of AI. The effects, the action, the installer, the tests and these docs were written together with **Claude** (Anthropic) in [Claude Code](https://claude.com/claude-code): [@qwerty-ll](https://github.com/qwerty-ll) came up with the ideas and direction, and Claude wrote and checked the code. Commits written this way carry a `Co-Authored-By: Claude` line.
+
+Found a bug or have an idea for an effect? [Open an issue](https://github.com/qwerty-ll/CustomizeYouProfile/issues).
+
+---
+
 ## 🇷🇺 На русском
 
 **CustomizeYouProfile** — анимированные эффекты для профиля GitHub, которые рисуются из **твоих** коммитов и обновляются каждый день.
@@ -214,6 +224,7 @@ LANGUAGE=ru NAME="Макар" TAGLINE="фронтенд и геймджемы|п
 - **Эффекты про тебя:** `intro` (имя и печатающиеся строки: `name`, `tagline`), `skills` (твой стек: `skills`), `rpg-card` (карточка персонажа: уровень, характеристики, класс, ачивки), `languages` (языки из публичных репозиториев).
 - **Эффекты по коммитам:** `dino-run`, `fireworks`, `black-hole`, `oscilloscope`, `terminal`, `notebook` (с `language: ru` на русском: «Классная работа» и «5+»), `space-shooter`, или `all`.
 - **Приватные репозитории не читаются**, в картинку попадают только публичные данные.
+- **Сделано с помощью ИИ:** код, эффекты и документацию писал **Claude** (Anthropic) в Claude Code вместе с автором, идеи и направление от [@qwerty-ll](https://github.com/qwerty-ll).
 - Все настройки описаны в разделе [Options](#%EF%B8%8F-options), ответы на вопросы в [FAQ](#-faq).
 
 ---
