@@ -9,7 +9,7 @@ English · [Русский](README.ru.md)
 ### [🎛 Open the configurator →](https://qwerty-ll.github.io/CustomizeYouProfile/)
 Pick effects, preview them on your own profile and add them in one click. No terminal needed.
 
-[![Test](https://github.com/qwerty-ll/CustomizeYouProfile/actions/workflows/test.yml/badge.svg)](https://github.com/qwerty-ll/CustomizeYouProfile/actions/workflows/test.yml)
+[![Test](https://github.com/qwerty-ll/CustomizeYouProfile/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/qwerty-ll/CustomizeYouProfile/actions/workflows/test.yml)
 [![Built with AI](https://img.shields.io/badge/built%20with-AI%20(Claude)-8A63D2?logo=anthropic&logoColor=white)](#-built-with-ai)
 
 [Quick start](#-quick-start) · [Gallery](#-gallery) · [Seasonal modes](#-seasonal--personal-modes-opt-in) · [Options](#%EF%B8%8F-options) · [FAQ](#-faq)
@@ -25,12 +25,12 @@ Open the [configurator](https://qwerty-ll.github.io/CustomizeYouProfile/), enter
 ### 💻 One command
 
 ```bash
-NAME="Mona" TAGLINE="Frontend dev|Cat person" \
+CYP_NAME="Mona" CYP_TAGLINE="Frontend dev|Cat person" \
   bash <(curl -fsSL https://raw.githubusercontent.com/qwerty-ll/CustomizeYouProfile/main/install.sh) intro,rpg-card,dino-run
 ```
 
 - Needs a macOS or Linux terminal and the [GitHub CLI](https://cli.github.com), logged in (`gh auth login`).
-- List the effects you want, or `all`. The variables in front are optional: `NAME`, `TAGLINE`, `SKILLS`, `STYLE`, `LANGUAGE`, `SEASONS`, `BIRTHDAY`, `COUNTDOWN` and `README_POSITION` take the same values as the [options](#%EF%B8%8F-options).
+- List the effects you want, or `all`. The variables in front are optional: `CYP_NAME`, `CYP_TAGLINE`, `CYP_SKILLS`, `CYP_STYLE`, `CYP_LANGUAGE`, `CYP_SEASONS`, `CYP_BIRTHDAY`, `CYP_COUNTDOWN` and `CYP_README_POSITION` take the same values as the matching [options](#%EF%B8%8F-options).
 - The script creates your profile repository if you don't have one, adds the workflow and starts the first run. About a minute later the effects are on your profile.
 - Put `DRY_RUN=1` in front to see what it would do without changing anything.
 
@@ -184,7 +184,7 @@ No. The images live between `<!-- customize-you-profile:start -->` and `<!-- cus
 - The installer won't replace a `profile-effects.yml` workflow that isn't from this project, unless you add `FORCE=1`.
 
 ### What data does it read?
-Only the account it draws (the repository owner, or `login`): the contribution calendar and yearly totals, name, avatar, account age, followers, PR and issue counts, and the account's own public repositories (for stars and languages). Private repositories are never read, so their names and languages can't leak into a public image. Every profile gets its own images; even the scenery, like stars and city lights, is seeded from the username.
+Only the account it draws (the repository owner, or `login`): the contribution calendar and yearly totals, name, avatar, account age, followers, PR and issue counts, and the account's own public repositories (the 100 most-starred, for stars and languages). Private repositories are never read, so their names and languages can't leak into a public image. Every profile gets its own images; even the scenery, like stars and city lights, is seeded from the username.
 
 ### Is it safe?
 The workflow only gets `contents: write` on your profile repository, the token is only sent to `api.github.com`, and everything you type is escaped before it goes into an image. The images are **public**, so keep private things out of the inputs; if one looks like a token, the run stops instead of publishing it. `@v1` follows new releases; to review every update yourself, pin a commit instead: `uses: qwerty-ll/CustomizeYouProfile@<commit sha>`. More in [SECURITY.md](SECURITY.md).
@@ -193,7 +193,7 @@ The workflow only gets `contents: write` on your profile repository, the token i
 The default `github.token` only sees public activity. To count private contributions, turn on *Private contributions* in your profile settings, create a [personal access token](https://github.com/settings/tokens) (classic, `read:user` scope), save it as a repository secret named `PROFILE_TOKEN`, and add `token: ${{ secrets.PROFILE_TOKEN }}` under `with:`.
 
 ### The images didn't change today
-GitHub caches README images for a few minutes, so check again a bit later. Also look at the **Actions** tab: GitHub pauses scheduled workflows in repositories with no activity for 60 days. If that happens, click **Enable workflow** there.
+GitHub caches README images for a few minutes, so check again a bit later. Also look at the **Actions** tab, where a failed run shows its error (short GitHub API hiccups are retried twice, so a blip won't fail it). GitHub also pauses scheduled workflows in repositories with no activity for 60 days; if that happens, click **Enable workflow** there.
 
 ### Do I need to update anything later?
 No. Every run draws the last 12 months, and `@v1` picks up new releases by itself. Busy and almost empty profiles both work: sizes scale to your busiest day, and busy profiles show their biggest days.
