@@ -33,14 +33,14 @@
       <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="#e34c26"/>
       <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq2 1.7s ease-in-out -1.1s infinite">
-      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="#3178c6"/>
-      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="url(#leds)"/>
+      <rect x="260" y="133.2" width="52" height="44.8" rx="3" fill="#3178c6"/>
+      <rect x="260" y="133.2" width="52" height="44.8" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq3 2.5s ease-in-out -0.8s infinite">
       <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="#663399"/>
       <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq4 1.7s ease-in-out -1.4s infinite">
-      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="#3572A5"/>
-      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="url(#leds)"/>
+      <rect x="452" y="142" width="52" height="36" rx="3" fill="#3572A5"/>
+      <rect x="452" y="142" width="52" height="36" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq5 1.9s ease-in-out -0.7s infinite">
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="#b07219"/>
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="url(#leds)"/>
@@ -67,10 +67,10 @@
 <text x="190" y="200" class="lang" text-anchor="middle">HTML</text>
 <text x="190" y="216" class="pct" text-anchor="middle" fill="#e34c26">16%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq2 1.7s ease-in-out -1.1s infinite">
-      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="#3178c6"/>
-      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="url(#leds)"/>
+      <rect x="260" y="133.2" width="52" height="44.8" rx="3" fill="#3178c6"/>
+      <rect x="260" y="133.2" width="52" height="44.8" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="260" y="125.1" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk2 1.7s ease-out -1.1s infinite"/>
+<rect x="260" y="125.2" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk2 1.7s ease-out -1.1s infinite"/>
 <text x="286" y="200" class="lang" text-anchor="middle">TypeScript</text>
 <text x="286" y="216" class="pct" text-anchor="middle" fill="#3178c6">14%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq3 2.5s ease-in-out -0.8s infinite">
@@ -81,10 +81,10 @@
 <text x="382" y="200" class="lang" text-anchor="middle">CSS</text>
 <text x="382" y="216" class="pct" text-anchor="middle" fill="#663399">12%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq4 1.7s ease-in-out -1.4s infinite">
-      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="#3572A5"/>
-      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="url(#leds)"/>
+      <rect x="452" y="142" width="52" height="36" rx="3" fill="#3572A5"/>
+      <rect x="452" y="142" width="52" height="36" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="452" y="133.9" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk4 1.7s ease-out -1.4s infinite"/>
+<rect x="452" y="134" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk4 1.7s ease-out -1.4s infinite"/>
 <text x="478" y="200" class="lang" text-anchor="middle">Python</text>
 <text x="478" y="216" class="pct" text-anchor="middle" fill="#3572A5">9.0%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq5 1.9s ease-in-out -0.7s infinite">
@@ -100,7 +100,7 @@
     </g></g>
 <rect x="644" y="155.6" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk6 2.4s ease-out -1.7s infinite"/>
 <text x="670" y="200" class="lang" text-anchor="middle">Shell</text>
-<text x="670" y="216" class="pct" text-anchor="middle" fill="#89e051">0.4%</text>
+<text x="670" y="216" class="pct" text-anchor="middle" fill="#89e051">0.5%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq7 1.6s ease-in-out -0.5s infinite">
       <rect x="740" y="163.6" width="52" height="14.4" rx="3" fill="#7e858d"/>
       <rect x="740" y="163.6" width="52" height="14.4" rx="3" fill="url(#leds)"/>
