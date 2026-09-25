@@ -58,7 +58,8 @@ async function fetchProfileLive(login, token) {
   } catch (err) {
     throw transient(`GitHub API unreachable (${err.name === "TimeoutError" ? "no answer in 60s" : err.cause?.code ?? err.message})`);
   }
-  const json = await res.json().catch(() => ({}));
+  const json = await res.json().catch(() => null);
+  if (json === null) throw transient(`GitHub API gave an unreadable answer (HTTP ${res.status})`);
   if (!res.ok || json.errors) {
     const message = `GitHub API error ${res.status} for "${login}": ${JSON.stringify(json.errors ?? json)}`;
     // a busy GraphQL backend answers 502/504, or 200 with "Something went wrong … timeout"
@@ -180,7 +181,21 @@ export function seedFor(login, salt) {
 export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 export const monthName = (date) => MONTHS[Number(date.slice(5, 7)) - 1];
 export const f1 = (n) => +n.toFixed(1);
-export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+// Text for SVG: markup escaped, and characters XML forbids (control codes, lone
+// surrogates) dropped, since a single one keeps the whole image from rendering.
+export const esc = (s) => String(s)
+  .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g, "")
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+// User-perceived characters: 👨‍💻, 🇺🇦, ❤️ or an accented letter stay whole.
+const segmenter = typeof Intl.Segmenter === "function" ? new Intl.Segmenter("en", { granularity: "grapheme" }) : null;
+export const graphemes = (s) => (segmenter ? Array.from(segmenter.segment(String(s)), (g) => g.segment) : Array.from(String(s)));
+// The first `n` of them, so truncating never cuts an emoji in half.
+export const clip = (s, n) => graphemes(s).slice(0, n).join("");
+// Monospace cells: emoji and East Asian wide characters take two.
+const WIDE = /\p{Emoji_Presentation}|\ufe0f|[\u{10000}-\u{10ffff}\u1100-\u115f\u2e80-\ua4cf\uac00-\ud7a3\uf900-\ufaff\ufe30-\ufe4f\uff00-\uff60\uffe0-\uffe6]/u;
+export const cells = (s) => graphemes(s).map((ch) => ({ ch, w: WIDE.test(ch) ? 2 : 1 }));
+export const cellWidth = (s) => cells(s).reduce((sum, c) => sum + c.w, 0);
 export const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 // Group days by calendar month, in order.

@@ -1,7 +1,7 @@
 // The calm tech stack: two slow rows of soft pills with a colored dot, on a
 // transparent background in GitHub colors. Light and dark files.
 
-import { GH_THEMES, SANS, esc, f1 } from "../../lib.mjs";
+import { GH_THEMES, SANS, cellWidth, clip, esc, f1 } from "../../lib.mjs";
 import { KNOWN, PALETTE } from "../neon/skills.mjs";
 
 export default function render(ctx, options = {}) {
@@ -26,7 +26,7 @@ function draw(T, { login, profile }, options) {
     let color = KNOWN[s.toLowerCase()] || langColor.get(s.toLowerCase()) || PALETTE[i % PALETTE.length];
     const lum = /^#[0-9a-f]{6}$/i.test(color) ? luminance(color) : 0.5;
     if ((T.name === "light" && lum > 0.8) || (T.name === "dark" && lum < 0.04)) color = T.muted;
-    return { label: s.slice(0, 28), color };
+    return { label: clip(s, 28), color };
   });
 
   const css = [], defs = [], out = [];
@@ -37,7 +37,7 @@ function draw(T, { login, profile }, options) {
     let x = 0;
     const seq = [];
     while (x < W + 200) for (const c of list) {
-      const w = f1(c.label.length * CW + PAD * 2 + 10);
+      const w = f1(cellWidth(c.label) * CW + PAD * 2 + 10);
       seq.push({ ...c, x, w });
       x += w + GAP;
     }

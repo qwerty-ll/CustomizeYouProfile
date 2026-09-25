@@ -2,7 +2,7 @@
 // after another, and a row of quiet stat pills. Transparent background, GitHub
 // colors, light and dark files.
 
-import { GH_THEMES, MONO, SANS, esc, f1, keyframeBuilder } from "../../lib.mjs";
+import { GH_THEMES, MONO, SANS, clip, esc, f1, keyframeBuilder } from "../../lib.mjs";
 import { cellWidth, scheduleLines, typewriter } from "../../scenes/typing.mjs";
 
 export default function render(ctx, options = {}) {
@@ -25,7 +25,7 @@ function draw(T, { login, profile, total }, options) {
   const modes = options.modes ?? {};
   if (modes.birthday) texts.unshift(modes.text.birthdayLine);
   for (const c of modes.countdowns ?? []) texts.push(`⏳ ${c.text}`);
-  const { lines, end: DURATION } = scheduleLines(texts.map((t) => t.slice(0, 80)));
+  const { lines, end: DURATION } = scheduleLines(texts.map((t) => clip(t, 80)));
 
   const keyframes = keyframeBuilder(DURATION);
   const css = [], out = [];

@@ -49,7 +49,7 @@ inputs:
     description: Set to `false` to only write the SVG files and leave the README alone.
     default: "true"
   language:
-    description: Language for text inside effects that have it (notebook). `en` or `ru`.
+    description: Language for text inside effects (notebook, countdown, seasonal greetings). `en` or `ru`.
     default: en
   commit:
     description: Commit and push the result. Set to `false` to handle that yourself.
@@ -84,8 +84,9 @@ runs:
         IN_TODAY: ${{ inputs.today }}
         IN_STYLE: ${{ inputs.style }}
       run: |
-        args=(--login "${IN_LOGIN:-$GITHUB_REPOSITORY_OWNER}" --effects "$IN_EFFECTS" --out "$IN_OUT"
-              --readme "$IN_README" --readme-position "$IN_POSITION" --language "$IN_LANGUAGE"
+        # --opt=value, so a value starting with "-" is never read as an option
+        args=("--login=${IN_LOGIN:-$GITHUB_REPOSITORY_OWNER}" "--effects=$IN_EFFECTS" "--out=$IN_OUT"
+              "--readme=$IN_README" "--readme-position=$IN_POSITION" "--language=$IN_LANGUAGE"
               "--name=$IN_NAME" "--tagline=$IN_TAGLINE" "--skills=$IN_SKILLS"
               "--seasons=$IN_SEASONS" "--birthday=$IN_BIRTHDAY" "--countdown=$IN_COUNTDOWN" "--today=$IN_TODAY" "--style=$IN_STYLE")
         [ "$IN_UPDATE_README" = "false" ] && args+=(--no-readme)
@@ -101,7 +102,7 @@ runs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add -- "$IN_OUT"
+        git add -A -- "${IN_OUT%/}/*.svg"   # only the images, even with output-dir: .
         # the README may be readme.md / Readme.md; stage whichever one exists
         want=$(basename "$IN_README" | tr '[:upper:]' '[:lower:]')
         for f in "$(dirname "$IN_README")"/*; do
@@ -112,5 +113,6 @@ runs:
           exit 0
         fi
         git commit -m "$IN_MESSAGE"
-        # another run may have pushed meanwhile; our files are generated, so rebasing is safe
-        git push || { git pull --rebase --autostash && git push; }
+        # another run may have pushed meanwhile; our files are generated, so on a
+        # conflict this run's fresh output wins (-X theirs is our commit in a rebase)
+        git push || { git pull --rebase --autostash -X theirs && git push; }

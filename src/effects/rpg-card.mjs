@@ -2,7 +2,7 @@
 // contributions, an XP bar, six stats, a class from your top language and
 // achievements that unlock one by one.
 
-import { MONO, TW, esc, f1, keyframeBuilder, safeAvatar } from "../lib.mjs";
+import { MONO, TW, esc, f1, graphemes, keyframeBuilder, safeAvatar } from "../lib.mjs";
 
 const CLASSES = {
   JavaScript: "Sorcerer", TypeScript: "Paladin", Python: "Mage", Java: "Knight", "C#": "Warlock",
@@ -18,7 +18,7 @@ export default function render({ login, profile, total }, options = {}) {
   const klass = `${lang ? `${lang} ` : ""}${CLASSES[lang] ?? "Adventurer"}`;
   const raw = Math.sqrt(total) * 1.2 + 1;
   const level = Math.floor(raw), xp = raw - level;
-  const years = (Date.now() - new Date(profile.createdAt)) / (365.25 * 864e5);
+  const years = ((options.modes?.today ?? new Date()) - new Date(profile.createdAt)) / (365.25 * 864e5);
 
   const STATS = [
     ["STR", "commits this year", profile.yearCommits, 1500, "#ff6b6b"],
@@ -70,7 +70,7 @@ export default function render({ login, profile, total }, options = {}) {
   const avatar = safeAvatar(options.avatar);
   out.push(avatar
     ? `<image href="${avatar}" x="54" y="54" width="116" height="116" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice"/>`
-    : `<circle cx="112" cy="112" r="58" fill="#3b2f6b"/><text x="112" y="126" text-anchor="middle" class="initial">${esc((profile.name || login)[0].toUpperCase())}</text>`);
+    : `<circle cx="112" cy="112" r="58" fill="#3b2f6b"/><text x="112" y="126" text-anchor="middle" class="initial">${esc(graphemes(profile.name || login)[0].toUpperCase())}</text>`);
   out.push(`<circle cx="112" cy="112" r="60" fill="none" stroke="url(#gold)" stroke-width="3"/>`);
   out.push(`<rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV ${level}</text>`);
   out.push(`<text x="112" y="208" text-anchor="middle" class="name">${esc(profile.name || login)}</text>`);

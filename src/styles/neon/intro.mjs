@@ -2,7 +2,7 @@
 // lines about you typed and erased one after another.
 // options.name overrides the display name; options.tagline is a list of lines.
 
-import { MONO, esc, f1, keyframeBuilder, rng, seedFor } from "../../lib.mjs";
+import { MONO, clip, esc, f1, keyframeBuilder, rng, seedFor } from "../../lib.mjs";
 import { cellWidth, scheduleLines, typewriter } from "../../scenes/typing.mjs";
 
 export default function render({ login, profile, total }, options = {}) {
@@ -20,7 +20,7 @@ export default function render({ login, profile, total }, options = {}) {
   const modes = options.modes ?? {};
   if (modes.birthday) lines.unshift(modes.text.birthdayLine);
   for (const c of modes.countdowns ?? []) lines.push(`⏳ ${c.text}`);
-  lines.forEach((l, i) => (lines[i] = l.slice(0, 70)));
+  lines.forEach((l, i) => (lines[i] = clip(l, 70)));
 
   // ---------- typing timeline ----------
   const CW = 8.4, TY = 150;

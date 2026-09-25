@@ -2,6 +2,8 @@
 // for it (seasons / birthday / countdown inputs); dates are compared in UTC
 // against the day the action runs.
 
+import { clip } from "./lib.mjs";
+
 export const SEASONS = {
   "new-year": { from: [12, 15], to: [1, 10] },
   "halloween": { from: [10, 24], to: [11, 1] },
@@ -10,6 +12,16 @@ export const SEASONS = {
 const pad = (n) => String(n).padStart(2, "0");
 const md = (d) => [d.getUTCMonth() + 1, d.getUTCDate()];
 const dayNumber = (d) => Math.floor(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) / 864e5);
+
+// A real calendar day, or null: no rolling 02-30 over into March, and no two-digit
+// years (Date.UTC reads 0099 as 1999).
+export function utcDate(year, month, day) {
+  const d = new Date(Date.UTC(year, month - 1, day));
+  return d.getUTCFullYear() === year && d.getUTCMonth() === month - 1 && d.getUTCDate() === day ? d : null;
+}
+// The birthday in a given year; Feb 29 is celebrated on Feb 28 in other years.
+export const birthdayIn = (year, { month, day }) =>
+  utcDate(year, month, day) ?? (month === 2 && day === 29 ? utcDate(year, 2, 28) : null);
 
 function inWindow(today, { from, to }) {
   const [m, d] = md(today), v = m * 100 + d, a = from[0] * 100 + from[1], b = to[0] * 100 + to[1];
@@ -33,7 +45,7 @@ export function parseBirthday(input = "") {
   let m = v.match(/^(?:\d{4}-)?(\d{1,2})-(\d{1,2})$/), month, day;
   if (m) [month, day] = [+m[1], +m[2]];
   else if ((m = v.match(/^(\d{1,2})\.(\d{1,2})(?:\.\d{4})?$/))) [day, month] = [+m[1], +m[2]];
-  if (!month || month > 12 || !day || day > 31) throw new Error(`birthday "${v}" should look like MM-DD (e.g. 03-15)`);
+  if (!month || !utcDate(2000, month, day)) throw new Error(`birthday "${v}" should be a real date like MM-DD (e.g. 03-15)`);
   return { month, day };
 }
 
@@ -48,9 +60,9 @@ export function parseCountdowns(input = "", birthday = null) {
     }
     const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})\s*[|:\-–]?\s*(.*)$/);
     if (!m) throw new Error(`countdown "${raw}" should look like "YYYY-MM-DD Label"`);
-    const date = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-    if (Number.isNaN(date.getTime())) throw new Error(`countdown "${raw}" has an invalid date`);
-    out.push({ date, label: m[4].trim().slice(0, 40) || null });
+    const date = utcDate(+m[1], +m[2], +m[3]);
+    if (!date) throw new Error(`countdown "${raw}" has a date that doesn't exist`);
+    out.push({ date, label: clip(m[4].trim(), 40) || null });
   }
   if (out.length > 3) throw new Error("up to 3 countdowns are supported");
   return out;
@@ -84,12 +96,12 @@ function ruDays(n) {
 // Everything effects need to know about today's modes.
 export function resolveModes({ today = new Date(), seasons = [], birthday = null, countdowns = [], language = "en" }) {
   const t = TEXT[language] ?? TEXT.en;
-  const isBirthday = !!birthday && md(today)[0] === birthday.month && md(today)[1] === birthday.day;
+  const isBirthday = !!birthday && dayNumber(birthdayIn(today.getUTCFullYear(), birthday)) === dayNumber(today);
   const cds = countdowns.map((c) => {
     let date = c.date, label = c.label;
     if (c.birthday) {
-      date = new Date(Date.UTC(today.getUTCFullYear(), birthday.month - 1, birthday.day));
-      if (dayNumber(date) < dayNumber(today)) date = new Date(Date.UTC(today.getUTCFullYear() + 1, birthday.month - 1, birthday.day));
+      date = birthdayIn(today.getUTCFullYear(), birthday);
+      if (dayNumber(date) < dayNumber(today)) date = birthdayIn(today.getUTCFullYear() + 1, birthday);
       label = label ?? t.birthdayLabel;
     }
     label = label ?? t.untilLabel;

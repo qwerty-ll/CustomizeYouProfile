@@ -2,13 +2,13 @@
 // keyframe (and is backspaced from the end), instead of animating a clipPath,
 // which Safari ignores inside <img> SVGs.
 
-import { TW, esc, f1 } from "../lib.mjs";
+import { TW, cells, cellWidth, esc, f1 } from "../lib.mjs";
 
-// Code points, with emoji and other astral characters counted as two cells wide.
-export function cells(text) {
-  return Array.from(text).map((ch) => ({ ch, w: ch.codePointAt(0) > 0xffff ? 2 : 1 }));
-}
-export const cellWidth = (text) => cells(text).reduce((s, c) => s + c.w, 0);
+// Grapheme cells (emoji and wide characters count as two), see lib.mjs.
+export { cells, cellWidth };
+// Hebrew, Arabic, Syriac, Thaana, N'Ko…: letters that must be laid out by the
+// browser's bidi and joining rules, which one <text> per letter would break.
+const RTL = /[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufefc]/;
 
 // Schedule lines one after another: type, hold, backspace, pause.
 export function scheduleLines(texts, { start = 0.9, type = 0.055, erase = 0.025, hold = 1.8, gap = 0.35 } = {}) {
@@ -34,7 +34,11 @@ export function typewriter(lines, { x, y, cw, anim, prefix, cls, cursor }) {
     const lx = typeof x === "function" ? x(l) : x;
     l.x = lx;
     let col = 0;
-    cells(l.text).forEach(({ ch, w }, i) => {
+    if (RTL.test(l.text)) {
+      // the whole line fades in while the cursor runs, and out while it backs up
+      out += `<text x="${f1(lx)}" y="${y}" ${anim(`${prefix}${li}_all`, [[0, "opacity:0"], [l.start, "opacity:0"], [l.typed, "opacity:1", TW], [l.erase, "opacity:1"], [l.end, "opacity:0", TW]], cls)}>${esc(l.text)}</text>`;
+      col = cellWidth(l.text);
+    } else cells(l.text).forEach(({ ch, w }, i) => {
       const on = l.start + (i + 1) * l.type, off = l.erase + (l.n - i) * l.eraseStep;
       if (ch.trim()) {
         out += `<text x="${f1(lx + col * cw)}" y="${y}" ${anim(`${prefix}${li}_${i}`, [[0, "opacity:0"], [on, "opacity:1"], [off, "opacity:0"]], cls)}>${esc(ch)}</text>`;

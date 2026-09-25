@@ -1,7 +1,7 @@
 // Your tech stack as two rows of neon chips gliding in opposite directions.
 // options.skills is the list; without it, your top languages are used.
 
-import { MONO, esc, f1 } from "../../lib.mjs";
+import { MONO, cellWidth, clip, esc, f1 } from "../../lib.mjs";
 
 // A few well-known brand-ish colors; everything else cycles through a palette.
 export const KNOWN = {
@@ -20,7 +20,7 @@ export default function render({ login, profile }, options = {}) {
   const langColor = new Map(profile.languages.map((l) => [l.name.toLowerCase(), l.color]));
   let skills = options.skills?.length ? options.skills : profile.languages.slice(0, 10).map((l) => l.name);
   if (!skills.length) skills = ["GitHub"];
-  const chips = skills.map((s, i) => ({ label: s.slice(0, 28), color: KNOWN[s.toLowerCase()] || langColor.get(s.toLowerCase()) || PALETTE[i % PALETTE.length] }));
+  const chips = skills.map((s, i) => ({ label: clip(s, 28), color: KNOWN[s.toLowerCase()] || langColor.get(s.toLowerCase()) || PALETTE[i % PALETTE.length] }));
 
   const css = [], out = [], defs = [];
   defs.push(`<clipPath id="frame"><rect width="${W}" height="${H}" rx="16"/></clipPath>`);
@@ -34,7 +34,7 @@ export default function render({ login, profile }, options = {}) {
   function row(list, y, dir, speed) {
     let x = 0, seq = [];
     while (x < W + 200) for (const c of list) {
-      const w = f1(c.label.length * CW + PAD * 2);
+      const w = f1(cellWidth(c.label) * CW + PAD * 2);
       seq.push({ ...c, x, w });
       x += w + GAP;
     }
@@ -43,7 +43,7 @@ export default function render({ login, profile }, options = {}) {
       <g transform="translate(${f1(c.x + off)},${y})">
         <rect width="${c.w}" height="${CH}" rx="${CH / 2}" fill="${c.color}" fill-opacity=".1" stroke="${c.color}" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="${PAD - 4}" cy="${CH / 2}" r="3" fill="${c.color}"/>
-        <text x="${f1(PAD + 4)}" y="${CH / 2 + 5}" textLength="${f1(c.label.length * CW)}" lengthAdjust="spacingAndGlyphs" class="chip">${esc(c.label)}</text>
+        <text x="${f1(PAD + 4)}" y="${CH / 2 + 5}" textLength="${f1(cellWidth(c.label) * CW)}" lengthAdjust="spacingAndGlyphs" class="chip">${esc(c.label)}</text>
       </g>`).join("");
     const name = `row${y}`;
     css.push(`@keyframes ${name}{from{transform:translateX(${dir < 0 ? 0 : -period}px)}to{transform:translateX(${dir < 0 ? -period : 0}px)}}`);

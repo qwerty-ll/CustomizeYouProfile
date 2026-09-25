@@ -17,8 +17,9 @@ import { resolveSettings } from "./settings.mjs";
 
 export { EFFECTS };
 
-const { values } = parseArgs({
-  options: {
+let values;
+try {
+  ({ values } = parseArgs({ options: {
     login: { type: "string" },
     effects: { type: "string", default: "all" },
     out: { type: "string", default: "profile-effects" },
@@ -34,13 +35,19 @@ const { values } = parseArgs({
     countdown: { type: "string", default: "" },
     today: { type: "string", default: "" },
     style: { type: "string", default: "clean" },
-  },
-});
+  } }));
+} catch (err) {
+  fail(err.message);
+}
 
 const login = values.login ?? process.env.GITHUB_REPOSITORY_OWNER;
 const token = process.env.GITHUB_TOKEN ?? process.env.INPUT_TOKEN;
 if (!login) fail("no GitHub login: pass --login or set GITHUB_REPOSITORY_OWNER");
 if (!token && !process.env.CALENDAR_CACHE) fail("no token: set GITHUB_TOKEN");
+if (!values.out.trim()) fail("output-dir is empty");
+if (!values["no-readme"] && !values.readme.trim()) fail("readme is empty (set update-readme: false to leave the README alone)");
+const position = values["readme-position"].trim().toLowerCase();
+if (!["top", "bottom"].includes(position)) fail(`readme-position "${values["readme-position"]}" should be top or bottom`);
 
 // Text inputs are drawn into public images. If one holds a token (GitHub expands
 // ${{ … }} in `with:` values, so a stray ${{ github.token }} would), stop here.
@@ -95,8 +102,8 @@ if (!values["no-readme"]) {
   // and writing README.md next to readme.md would leave two files.
   let readmePath = values.readme;
   try {
-    const dir = dirname(readmePath) || ".";
-    const hit = (await readdir(dir)).find((f) => f.toLowerCase() === basename(readmePath).toLowerCase());
+    const dir = dirname(readmePath) || ".", want = basename(readmePath), names = await readdir(dir);
+    const hit = names.includes(want) ? want : names.find((f) => f.toLowerCase() === want.toLowerCase());
     if (hit) readmePath = join(dir, hit);
   } catch {}
   const base = relative(dirname(readmePath), values.out).split("\\").join("/") || ".";
@@ -105,7 +112,7 @@ if (!values["no-readme"]) {
   try { current = await readFile(readmePath, "utf8"); } catch {}
   let next = current, skipped = false;
   try {
-    next = updateReadme(current, block, values["readme-position"]);
+    next = updateReadme(current, block, position);
   } catch (err) {
     if (!(err instanceof ReadmeMarkerError)) throw err;
     console.warn(`::warning::CustomizeYouProfile: ${readmePath}: ${err.message}`);
