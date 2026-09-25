@@ -7,10 +7,19 @@ branding:
 
 inputs:
   effects:
-    description: "Comma-separated effect ids, or `all`: dino-run, fireworks, black-hole, solar-system, oscilloscope, terminal, notebook, space-shooter"
+    description: "Comma-separated effect ids, or `all`: intro, skills, rpg-card, languages, dino-run, fireworks, black-hole, oscilloscope, terminal, notebook, space-shooter"
     default: dino-run
   login:
     description: GitHub user whose contributions are drawn. Defaults to the repository owner.
+    default: ""
+  name:
+    description: Display name for `intro` (defaults to your GitHub name).
+    default: ""
+  tagline:
+    description: Lines typed in `intro`, separated by `|`, e.g. "Frontend dev|Game jams|Coffee".
+    default: ""
+  skills:
+    description: Comma-separated tech stack for `skills` (defaults to your top languages).
     default: ""
   output-dir:
     description: Folder (relative to the repository root) where the SVG files are written.
@@ -51,9 +60,13 @@ runs:
         IN_POSITION: ${{ inputs.readme-position }}
         IN_UPDATE_README: ${{ inputs.update-readme }}
         IN_LANGUAGE: ${{ inputs.language }}
+        IN_NAME: ${{ inputs.name }}
+        IN_TAGLINE: ${{ inputs.tagline }}
+        IN_SKILLS: ${{ inputs.skills }}
       run: |
         args=(--login "${IN_LOGIN:-$GITHUB_REPOSITORY_OWNER}" --effects "$IN_EFFECTS" --out "$IN_OUT"
-              --readme "$IN_README" --readme-position "$IN_POSITION" --language "$IN_LANGUAGE")
+              --readme "$IN_README" --readme-position "$IN_POSITION" --language "$IN_LANGUAGE"
+              "--name=$IN_NAME" "--tagline=$IN_TAGLINE" "--skills=$IN_SKILLS")
         [ "$IN_UPDATE_README" = "false" ] && args+=(--no-readme)
         node "$GITHUB_ACTION_PATH/src/cli.mjs" "${args[@]}"
 

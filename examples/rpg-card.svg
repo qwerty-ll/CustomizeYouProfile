@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="320" viewBox="0 0 860 320">
+<title>qwerty-ll: level 20 JavaScript Sorcerer</title>
+<defs><clipPath id="frame"><rect width="860" height="320" rx="16"/></clipPath><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1530"/><stop offset="1" stop-color="#0c0a16"/></linearGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a3"/><stop offset=".5" stop-color="#c9973b"/><stop offset="1" stop-color="#ffe7a3"/></linearGradient><linearGradient id="xp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048e8"/><stop offset="1" stop-color="#e599f7"/></linearGradient><linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="avatar"><circle cx="112" cy="112" r="58"/></clipPath></defs>
+<style>
+    .m{animation-duration:10.040s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}
+    .fb{transform-box:fill-box;transform-origin:center}
+    .fbl{transform-box:fill-box;transform-origin:left center}
+    .name{font:bold 16px "Segoe UI",-apple-system,Helvetica,Arial,sans-serif;fill:#fff4d6}
+    .klass{font:italic 12px Georgia,serif;fill:#d0bfff}
+    .lvl{font:bold 12px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#ffe7a3;letter-spacing:1px}
+    .label{font:10px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#9d93c7;letter-spacing:1px}
+    .key{font:bold 11px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+    .val{font:bold 11px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#fff4d6}
+    .icon{font-size:14px}
+    .lock{font-size:8px}
+    .initial{font:bold 48px Georgia,serif;fill:#e5dbff}
+    @keyframes aura{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.75;transform:scale(1.06)}}
+@keyframes xp{0.0000%{transform:scaleX(0)}7.9482%{transform:scaleX(0)}7.9681%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}19.9203%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes st0{0.0000%{transform:scaleX(0)}13.9243%{transform:scaleX(0)}13.9442%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}22.9084%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv0{0.0000%{opacity:0}18.9243%{opacity:0}22.9084%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes st1{0.0000%{transform:scaleX(0)}15.7171%{transform:scaleX(0)}15.7371%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}24.7012%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv1{0.0000%{opacity:0}20.7171%{opacity:0}24.7012%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes st2{0.0000%{transform:scaleX(0)}17.5100%{transform:scaleX(0)}17.5299%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}26.4940%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv2{0.0000%{opacity:0}22.5100%{opacity:0}26.4940%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes st3{0.0000%{transform:scaleX(0)}19.3028%{transform:scaleX(0)}19.3227%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}28.2869%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv3{0.0000%{opacity:0}24.3028%{opacity:0}28.2869%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes st4{0.0000%{transform:scaleX(0)}21.0956%{transform:scaleX(0)}21.1155%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}30.0797%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv4{0.0000%{opacity:0}26.0956%{opacity:0}30.0797%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes st5{0.0000%{transform:scaleX(0)}22.8884%{transform:scaleX(0)}22.9084%{transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}31.8725%{transform:scaleX(1)}94.0239%{transform:scaleX(1)}99.0040%{transform:scaleX(0)}100.0000%{transform:scaleX(0)}}
+@keyframes sv5{0.0000%{opacity:0}27.8884%{opacity:0}31.8725%{opacity:1}94.0239%{opacity:1}99.0040%{opacity:0}100.0000%{opacity:0}}
+@keyframes bd0{0.0000%{opacity:0;transform:scale(.2)}27.6693%{opacity:0;transform:scale(.2)}27.6892%{opacity:0;transform:scale(.2);animation-timing-function:cubic-bezier(.3,1.6,.5,1)}31.6733%{opacity:1;transform:scale(1)}94.0239%{opacity:1;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd1{0.0000%{opacity:0;transform:scale(1)}29.8805%{opacity:0;transform:scale(1)}32.8685%{opacity:.8;transform:scale(1)}94.0239%{opacity:.8;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd2{0.0000%{opacity:0;transform:scale(.2)}32.0518%{opacity:0;transform:scale(.2)}32.0717%{opacity:0;transform:scale(.2);animation-timing-function:cubic-bezier(.3,1.6,.5,1)}36.0558%{opacity:1;transform:scale(1)}94.0239%{opacity:1;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd3{0.0000%{opacity:0;transform:scale(1)}34.2629%{opacity:0;transform:scale(1)}37.2510%{opacity:.8;transform:scale(1)}94.0239%{opacity:.8;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd4{0.0000%{opacity:0;transform:scale(1)}36.4542%{opacity:0;transform:scale(1)}39.4422%{opacity:.8;transform:scale(1)}94.0239%{opacity:.8;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd5{0.0000%{opacity:0;transform:scale(1)}38.6454%{opacity:0;transform:scale(1)}41.6335%{opacity:.8;transform:scale(1)}94.0239%{opacity:.8;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd6{0.0000%{opacity:0;transform:scale(1)}40.8367%{opacity:0;transform:scale(1)}43.8247%{opacity:.8;transform:scale(1)}94.0239%{opacity:.8;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes bd7{0.0000%{opacity:0;transform:scale(.2)}43.0080%{opacity:0;transform:scale(.2)}43.0279%{opacity:0;transform:scale(.2);animation-timing-function:cubic-bezier(.3,1.6,.5,1)}47.0120%{opacity:1;transform:scale(1)}94.0239%{opacity:1;transform:scale(1)}99.0040%{opacity:0;transform:scale(1)}100.0000%{opacity:0;transform:scale(1)}}
+@keyframes shine{0.0000%{transform:translateX(0)}51.1952%{transform:translateX(0)}65.1394%{transform:translateX(1260px)}100.0000%{transform:translateX(1260px)}}</style>
+<g clip-path="url(#frame)">
+<rect width="860" height="320" fill="url(#bg)"/>
+<rect x="8" y="8" width="844" height="304" rx="12" fill="none" stroke="url(#gold)" stroke-width="2"/>
+<rect x="14" y="14" width="832" height="292" rx="9" fill="none" stroke="#c9973b" stroke-opacity=".35"/>
+<path d="M8 -1L17 8L8 17L-1 8Z" fill="url(#gold)"/>
+<path d="M852 -1L861 8L852 17L843 8Z" fill="url(#gold)"/>
+<path d="M8 303L17 312L8 321L-1 312Z" fill="url(#gold)"/>
+<path d="M852 303L861 312L852 321L843 312Z" fill="url(#gold)"/>
+<circle cx="112" cy="112" r="66" fill="none" stroke="#b197fc" stroke-width="4" filter="url(#glow)" style="transform-box:fill-box;transform-origin:center;animation:aura 3s ease-in-out infinite"/>
+<image href="data:image/png;base64,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" x="54" y="54" width="116" height="116" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice"/>
+<circle cx="112" cy="112" r="60" fill="none" stroke="url(#gold)" stroke-width="3"/>
+<rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 20</text>
+<text x="112" y="208" text-anchor="middle" class="name">mellou</text>
+<text x="112" y="226" text-anchor="middle" class="klass">JavaScript Sorcerer</text>
+<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">276 contributions · next level 94%</text>
+<rect x="230" y="54" width="590" height="12" rx="6" fill="#2a2340"/>
+<rect x="230" y="54" width="552.2" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
+<text x="230" y="105" class="key" fill="#ff6b6b">STR</text><text x="268" y="105" class="label">commits this year</text>
+<rect x="390" y="96" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="96" width="318.9" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
+<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">257</text>
+<text x="230" y="131" class="key" fill="#4dabf7">INT</text><text x="268" y="131" class="label">public repos</text>
+<rect x="390" y="122" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="122" width="303.7" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
+<text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">23</text>
+<text x="230" y="157" class="key" fill="#51cf66">DEX</text><text x="268" y="157" class="label">pull requests</text>
+<rect x="390" y="148" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="148" width="153" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
+<text x="820" y="157" text-anchor="end" class="m val" style="animation-name:sv2">7</text>
+<text x="230" y="183" class="key" fill="#f783ac">CHA</text><text x="268" y="183" class="label">followers</text>
+<rect x="390" y="174" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="174" width="46.8" height="10" rx="5" fill="#f783ac" class="m fbl" style="animation-name:st3"/>
+<text x="820" y="183" text-anchor="end" class="m val" style="animation-name:sv3">1</text>
+<text x="230" y="209" class="key" fill="#ffa94d">VIT</text><text x="268" y="209" class="label">longest streak</text>
+<rect x="390" y="200" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="200" width="164.4" height="10" rx="5" fill="#ffa94d" class="m fbl" style="animation-name:st4"/>
+<text x="820" y="209" text-anchor="end" class="m val" style="animation-name:sv4">4</text>
+<text x="230" y="235" class="key" fill="#ffd43b">LUK</text><text x="268" y="235" class="label">stars earned</text>
+<rect x="390" y="226" width="420" height="10" rx="5" fill="#2a2340"/>
+<rect x="390" y="226" width="10" height="10" rx="5" fill="#ffd43b" class="m fbl" style="animation-name:st5"/>
+<text x="820" y="235" text-anchor="end" class="m val" style="animation-name:sv5">0</text>
+<text x="230" y="264" class="label">ACHIEVEMENTS · 3/8</text>
+<g class="m fb" style="animation-name:bd0"><circle cx="245" cy="284" r="14" fill="#2d2150" stroke="url(#gold)" stroke-width="1.5"/>
+      <text x="245" y="289" text-anchor="middle" class="icon">🌱</text>
+      <title>First steps</title></g>
+<g class="m fb" style="animation-name:bd1"><circle cx="325" cy="284" r="14" fill="#1a1626" stroke="#3a3450" stroke-width="1.5"/>
+      <text x="325" y="289" text-anchor="middle" class="icon" opacity=".25">🔥</text>
+      <text x="334" y="297" text-anchor="middle" class="lock">🔒</text><title>Week streak (locked)</title></g>
+<g class="m fb" style="animation-name:bd2"><circle cx="405" cy="284" r="14" fill="#2d2150" stroke="url(#gold)" stroke-width="1.5"/>
+      <text x="405" y="289" text-anchor="middle" class="icon">🌍</text>
+      <title>Polyglot</title></g>
+<g class="m fb" style="animation-name:bd3"><circle cx="485" cy="284" r="14" fill="#1a1626" stroke="#3a3450" stroke-width="1.5"/>
+      <text x="485" y="289" text-anchor="middle" class="icon" opacity=".25">⭐</text>
+      <text x="494" y="297" text-anchor="middle" class="lock">🔒</text><title>Star collector (locked)</title></g>
+<g class="m fb" style="animation-name:bd4"><circle cx="565" cy="284" r="14" fill="#1a1626" stroke="#3a3450" stroke-width="1.5"/>
+      <text x="565" y="289" text-anchor="middle" class="icon" opacity=".25">🤝</text>
+      <text x="574" y="297" text-anchor="middle" class="lock">🔒</text><title>Team player (locked)</title></g>
+<g class="m fb" style="animation-name:bd5"><circle cx="645" cy="284" r="14" fill="#1a1626" stroke="#3a3450" stroke-width="1.5"/>
+      <text x="645" y="289" text-anchor="middle" class="icon" opacity=".25">👥</text>
+      <text x="654" y="297" text-anchor="middle" class="lock">🔒</text><title>Influencer (locked)</title></g>
+<g class="m fb" style="animation-name:bd6"><circle cx="725" cy="284" r="14" fill="#1a1626" stroke="#3a3450" stroke-width="1.5"/>
+      <text x="725" y="289" text-anchor="middle" class="icon" opacity=".25">🏃</text>
+      <text x="734" y="297" text-anchor="middle" class="lock">🔒</text><title>Marathon (locked)</title></g>
+<g class="m fb" style="animation-name:bd7"><circle cx="805" cy="284" r="14" fill="#2d2150" stroke="url(#gold)" stroke-width="1.5"/>
+      <text x="805" y="289" text-anchor="middle" class="icon">🛡️</text>
+      <title>Veteran</title></g>
+<g transform="skewX(-20)"><rect x="-200" y="0" width="160" height="320" fill="url(#shine)" class="m " style="animation-name:shine"/></g>
+</g>
+</svg>

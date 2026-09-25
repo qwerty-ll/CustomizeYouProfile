@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      - run: node test/validate.mjs
       - uses: ./
         with:
           effects: all

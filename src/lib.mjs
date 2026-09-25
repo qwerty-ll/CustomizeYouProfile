@@ -2,22 +2,34 @@
 
 export const LEVELS = { NONE: 0, FIRST_QUARTILE: 1, SECOND_QUARTILE: 2, THIRD_QUARTILE: 3, FOURTH_QUARTILE: 4 };
 
-export async function fetchCalendar(login, token) {
-  // Local dev: CALENDAR_CACHE=/tmp/cal.json reuses one API response across runs.
+export async function fetchProfile(login, token) {
+  // Local dev: CALENDAR_CACHE=/tmp/x.json reuses one API response across runs.
   const cache = process.env.CALENDAR_CACHE;
   if (cache) {
     const { readFile, writeFile } = await import("node:fs/promises");
-    try { return JSON.parse(await readFile(cache, "utf8")); } catch {}
-    const cal = await fetchCalendarLive(login, token);
-    await writeFile(cache, JSON.stringify(cal));
-    return cal;
+    try {
+      const cached = JSON.parse(await readFile(cache, "utf8"));
+      if (cached.contributionsCollection) return cached;
+    } catch {}
+    const user = await fetchProfileLive(login, token);
+    await writeFile(cache, JSON.stringify(user));
+    return user;
   }
-  return fetchCalendarLive(login, token);
+  return fetchProfileLive(login, token);
 }
 
-async function fetchCalendarLive(login, token) {
-  const query = `query($login:String!){user(login:$login){contributionsCollection{contributionCalendar{
-    totalContributions weeks{contributionDays{date weekday contributionCount contributionLevel}}}}}}`;
+// One query for everything the effects use. Only public repositories are read,
+// so private project languages never end up in a public image.
+async function fetchProfileLive(login, token) {
+  const query = `query($login:String!){user(login:$login){
+    login name avatarUrl(size:160) createdAt
+    followers{totalCount}
+    pullRequests{totalCount} issues{totalCount}
+    repositories(ownerAffiliations:OWNER,isFork:false,privacy:PUBLIC,first:100,orderBy:{field:STARGAZERS,direction:DESC}){
+      totalCount nodes{name stargazerCount languages(first:8,orderBy:{field:SIZE,direction:DESC}){edges{size node{name color}}}}}
+    contributionsCollection{
+      totalCommitContributions totalPullRequestContributions totalIssueContributions totalPullRequestReviewContributions
+      contributionCalendar{totalContributions weeks{contributionDays{date weekday contributionCount contributionLevel}}}}}}`;
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json", "User-Agent": "CustomizeYouProfile" },
@@ -26,18 +38,62 @@ async function fetchCalendarLive(login, token) {
   const json = await res.json().catch(() => ({}));
   if (!res.ok || json.errors) throw new Error(`GitHub API error for "${login}": ${JSON.stringify(json.errors ?? json)}`);
   if (!json.data?.user) throw new Error(`GitHub user "${login}" not found`);
-  return json.data.user.contributionsCollection.contributionCalendar;
+  return json.data.user;
 }
 
-// Everything an effect gets: the calendar plus a flat, indexed day list with grid coordinates.
-export function buildContext(login, calendar) {
+// Small avatar as a data URI: images inside an SVG shown via <img> can't load external URLs.
+export async function fetchAvatar(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const type = res.headers.get("content-type") || "image/png";
+    return `data:${type};base64,${Buffer.from(await res.arrayBuffer()).toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+// Everything an effect gets: calendar, a flat indexed day list with grid coordinates, and profile stats.
+export function buildContext(login, user) {
+  const calendar = user.contributionsCollection.contributionCalendar;
   const days = [];
   calendar.weeks.forEach((w, col) =>
     w.contributionDays.forEach((d) =>
       days.push({ ...d, col, row: d.weekday, count: d.contributionCount, level: LEVELS[d.contributionLevel] ?? 0 })));
   days.forEach((d, i) => (d.index = i));
   const maxCount = Math.max(0, ...days.map((d) => d.count));
-  return { login, calendar, days, weeks: calendar.weeks.length, total: calendar.totalContributions, maxCount };
+
+  const langs = new Map();
+  for (const repo of user.repositories.nodes)
+    for (const { size, node } of repo.languages.edges) {
+      const l = langs.get(node.name) ?? { name: node.name, color: node.color || "#8b949e", size: 0, repos: 0 };
+      l.size += size; l.repos++;
+      langs.set(node.name, l);
+    }
+  const languages = [...langs.values()].sort((a, b) => b.size - a.size);
+  const langTotal = languages.reduce((s, l) => s + l.size, 0) || 1;
+  languages.forEach((l) => (l.share = l.size / langTotal));
+
+  let longest = 0, run = 0;
+  for (const d of days) { run = d.count ? run + 1 : 0; longest = Math.max(longest, run); }
+  const cc = user.contributionsCollection;
+  const profile = {
+    name: user.name || user.login,
+    avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt,
+    followers: user.followers.totalCount,
+    repos: user.repositories.totalCount,
+    stars: user.repositories.nodes.reduce((s, r) => s + r.stargazerCount, 0),
+    pullRequests: user.pullRequests.totalCount,
+    issues: user.issues.totalCount,
+    yearCommits: cc.totalCommitContributions,
+    yearPullRequests: cc.totalPullRequestContributions,
+    yearReviews: cc.totalPullRequestReviewContributions,
+    activeDays: days.filter((d) => d.count > 0).length,
+    longestStreak: longest,
+    languages,
+  };
+  return { login: user.login || login, calendar, days, weeks: calendar.weeks.length, total: calendar.totalContributions, maxCount, profile };
 }
 
 // The `n` biggest days, returned in date order. Keeps busy profiles watchable.
