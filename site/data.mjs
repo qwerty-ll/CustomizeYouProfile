@@ -52,13 +52,18 @@ async function getJson(url) {
 // (rate limited) each repo counts once for its main language.
 export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null) {
   const own = repos.filter((r) => !r.fork);
+  // the calendar comes from a third-party mirror: keep only well-formed days
+  const days = (Array.isArray(contrib?.contributions) ? contrib.contributions : [])
+    .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d?.date) && !Number.isNaN(Date.parse(d.date)))
+    .map((d) => ({ date: d.date, count: Math.max(0, Math.floor(Number(d.count)) || 0), level: Math.min(4, Math.max(0, Math.floor(Number(d.level)) || 0)) }));
   const weeks = [];
-  for (const d of contrib.contributions) {
+  for (const d of days) {
     const weekday = new Date(`${d.date}T00:00:00Z`).getUTCDay();
     if (!weeks.length || weekday === 0) weeks.push({ contributionDays: [] });
     weeks.at(-1).contributionDays.push({ date: d.date, weekday, contributionCount: d.count, contributionLevel: LEVELS[d.level] ?? "NONE" });
   }
-  const total = contrib.contributions.reduce((s, d) => s + d.count, 0);
+  const total = days.reduce((s, d) => s + d.count, 0);
+  const reported = Number(contrib?.total?.lastYear);
   return {
     login: rest.login,
     name: rest.name,
@@ -80,7 +85,7 @@ export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null)
       totalPullRequestContributions: 0,
       totalIssueContributions: 0,
       totalPullRequestReviewContributions: 0,
-      contributionCalendar: { totalContributions: contrib.total?.lastYear ?? total, weeks },
+      contributionCalendar: { totalContributions: Number.isFinite(reported) && reported >= 0 ? reported : total, weeks },
     },
   };
 }
@@ -125,6 +130,7 @@ export async function fetchAvatarDataUri(url) {
     const res = await fetch(`${url}${url.includes("?") ? "&" : "?"}s=160`);
     if (!res.ok) return null;
     const blob = await res.blob();
+    if (blob.size > 512 * 1024) return null;                 // app.mjs also checks it with safeAvatar()
     return await new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);

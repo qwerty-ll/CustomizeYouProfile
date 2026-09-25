@@ -255,6 +255,13 @@ Don't hand-edit *inside* the block, because it's regenerated every day. To arran
 **What data does it read?**
 Your contribution calendar and totals, follower count, PR and issue counts, and your **public** repositories (for stars and languages). Private repositories are never read, so their names and languages can't leak into a public image.
 
+**Is it safe?**
+- The workflow only gets `contents: write` on your profile repository, and the token is only sent to `api.github.com`. Inputs reach the scripts as environment variables, never pasted into shell code.
+- Everything you type (name, tagline, skills, countdown labels) is escaped before it goes into an SVG, and GitHub shows README images through `<img>`, where scripts never run anyway.
+- The images are **public**. Don't put anything private into the inputs; if an input contains something that looks like a token, the run stops instead of publishing it. The configurator and the installer also defuse `${{ … }}` in your text, which GitHub would otherwise evaluate.
+- `@v1` follows new releases of this action. If you'd rather review every update, pin a commit: `uses: qwerty-ll/CustomizeYouProfile@<commit sha>`.
+- The configurator runs entirely in your browser: no token, no server of ours. It reads public data from the GitHub API and the contribution calendar from the public mirror [github-contributions-api.jogruber.de](https://github.com/grubersjoe/github-contributions-api) (GitHub has no token-free API for it), so that service sees which username you preview.
+
 **Do I need to update anything next year?**
 No. Every run draws the last 12 months from GitHub, so it just keeps rolling. If the action itself gets improvements, `@v1` picks them up automatically.
 
@@ -309,6 +316,7 @@ LANGUAGE=ru NAME="Макар" TAGLINE="фронтенд и геймджемы|п
 - **Сезонные и личные режимы, только по желанию:** `seasons: new-year, halloween` (снег, гирлянда, шапка Санты и ёлки / летучие мыши, паук и тыквы), `birthday: 03-15` (конфетти и «С днём рождения» в этот день), `countdown: "2026-12-31 Релиз; birthday"` (карточка обратного отсчёта). Если эти строки не прописать, ничего не включится.
 - **Твой README не перезаписывается:** картинки живут в отдельном блоке между метками `customize-you-profile:start/end`, текст вокруг не трогается. Если метки повреждены, README не меняется, а в логах будет предупреждение. Внутри блока руками не правь, он обновляется каждый день. Чтобы расставить картинки по-своему, поставь `update-readme: false`.
 - **Приватные репозитории не читаются**, в картинку попадают только публичные данные.
+- **Безопасность:** workflow получает только `contents: write` на свой профильный репозиторий, токен уходит только в `api.github.com`, весь введённый текст экранируется. Картинки **публичные**, так что не пиши во входные поля ничего личного: если там окажется что-то похожее на токен, запуск остановится. Хочешь проверять каждое обновление — закрепи версию коммитом: `uses: qwerty-ll/CustomizeYouProfile@<sha>`.
 - **Сделано с помощью ИИ:** код, эффекты и документацию писал **Claude** (Anthropic) в Claude Code вместе с автором, идеи и направление от [@qwerty-ll](https://github.com/qwerty-ll).
 - Все настройки описаны в разделе [Options](#%EF%B8%8F-options), ответы на вопросы в [FAQ](#-faq).
 

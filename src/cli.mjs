@@ -42,6 +42,15 @@ const token = process.env.GITHUB_TOKEN ?? process.env.INPUT_TOKEN;
 if (!login) fail("no GitHub login: pass --login or set GITHUB_REPOSITORY_OWNER");
 if (!token && !process.env.CALENDAR_CACHE) fail("no token: set GITHUB_TOKEN");
 
+// Text inputs are drawn into public images. If one holds a token (GitHub expands
+// ${{ … }} in `with:` values, so a stray ${{ github.token }} would), stop here.
+const TOKEN_LIKE = /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/;
+for (const key of ["name", "tagline", "skills", "countdown"]) {
+  const v = values[key];
+  if (TOKEN_LIKE.test(v) || (token && token.length >= 20 && v.includes(token)))
+    fail(`the ${key} input looks like it contains a token; it would be published in the image, so nothing was generated`);
+}
+
 // Inputs → options + today's (opt-in) modes, then the effect list.
 let settings, selected;
 try {

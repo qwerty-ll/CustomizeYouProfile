@@ -2,7 +2,7 @@
 // data with the exact code the Action runs, then copy a ready-made setup.
 
 import { demoUser } from "./src/demo.mjs";
-import { buildContext } from "./src/lib.mjs";
+import { buildContext, safeAvatar } from "./src/lib.mjs";
 import { EFFECTS, resolveEffects } from "./src/registry.mjs";
 import { renderEffect } from "./src/render.mjs";
 import { resolveSettings } from "./src/settings.mjs";
@@ -199,7 +199,7 @@ function renderStatus() {
   else if (s.kind === "error") el.innerHTML = `<span class="bad">${esc(s.message)}</span>`;
   else if (s.kind === "loaded") {
     const p = state.ctx.profile;
-    el.innerHTML = `${state.avatar ? `<img class="avatar" src="${state.avatar}" alt="">` : ""}
+    el.innerHTML = `${state.avatar ? `<img class="avatar" src="${esc(state.avatar)}" alt="">` : ""}
       <span><b>${esc(p.name)}</b> <span class="muted">@${esc(state.ctx.login)}</span><br>
       <small>${esc(t("loaded", state.ctx.total))} · ${state.repo.exists ? `<span class="good">✓ ${t("repoOk")}</span>` : `<span class="warn">${t("repoMissing")}</span>`}</small></span>`;
   } else el.innerHTML = `<span class="muted">${t("demo")}</span>`;
@@ -300,7 +300,7 @@ async function loadUser(login) {
     const { user, repo } = await fetchPublicProfile(login);
     state.ctx = buildContext(user.login, user);
     state.repo = repo;
-    state.avatar = await fetchAvatarDataUri(user.avatarUrl);
+    state.avatar = safeAvatar(await fetchAvatarDataUri(user.avatarUrl));
     state.status = { kind: "loaded" };
     store.set("login", user.login);                       // remember only names that worked
     const url = new URL(location.href);

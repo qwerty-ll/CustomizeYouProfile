@@ -6,20 +6,25 @@ export const ACTION = "qwerty-ll/CustomizeYouProfile@v1";
 export const WORKFLOW_PATH = ".github/workflows/profile-effects.yml";
 export const INSTALL_URL = "https://raw.githubusercontent.com/qwerty-ll/CustomizeYouProfile/main/install.sh";
 
+// Values end up inside a workflow: line breaks would break the YAML, and GitHub
+// evaluates ${{ … }} in `with:` values (so "${{ github.token }}" in a tagline would
+// print the token into a public image). Both are neutralized.
+export const clean = (s) => String(s).replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, " ").replace(/\$\{\{/g, "$ {{");
 const yq = (s) => `"${String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
 const sq = (s) => `'${String(s).replace(/'/g, "'\\''")}'`;
 
 // cfg: { effects[], style, language, name, tagline, skills, seasons[], birthday, countdown, position }
 export function inputs(cfg) {
   const out = [["effects", cfg.effects.join(", ")]];
+  const add = (k, v) => out.push([k, clean(v)]);
   if (cfg.style === "neon") out.push(["style", "neon"]);
   if (cfg.language === "ru") out.push(["language", "ru"]);
-  if (cfg.name) out.push(["name", cfg.name]);
-  if (cfg.tagline) out.push(["tagline", cfg.tagline]);
-  if (cfg.skills) out.push(["skills", cfg.skills]);
+  if (cfg.name) add("name", cfg.name);
+  if (cfg.tagline) add("tagline", cfg.tagline);
+  if (cfg.skills) add("skills", cfg.skills);
   if (cfg.seasons?.length) out.push(["seasons", cfg.seasons.join(", ")]);
-  if (cfg.birthday) out.push(["birthday", cfg.birthday]);
-  if (cfg.countdown) out.push(["countdown", cfg.countdown]);
+  if (cfg.birthday) add("birthday", cfg.birthday);
+  if (cfg.countdown) add("countdown", cfg.countdown);
   if (cfg.position === "bottom") out.push(["readme-position", "bottom"]);
   return out;
 }

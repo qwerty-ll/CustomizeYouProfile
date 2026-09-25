@@ -3,19 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Only this site's own code runs; network access is limited to the public APIs the preview reads. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://avatars.githubusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>CustomizeYouProfile · configurator</title>
   <meta name="description" content="Pick animated effects for your GitHub profile README, preview them on your own data and get a ready-made setup.">
   <meta property="og:title" content="CustomizeYouProfile">
   <meta property="og:description" content="Animated effects for your GitHub profile, drawn from your own data. Pick, preview, install.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f883d'/%3E%3Cg fill='%23fff'%3E%3Crect x='6' y='16' width='5' height='10' rx='1.5'/%3E%3Crect x='13.5' y='10' width='5' height='16' rx='1.5'/%3E%3Crect x='21' y='6' width='5' height='20' rx='1.5'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="stylesheet" href="./style.css">
-  <script>
-    // pick the saved/system theme before first paint to avoid a flash
-    try {
-      const saved = JSON.parse(localStorage.getItem("cyp:theme"));
-      document.documentElement.dataset.theme = saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    } catch { document.documentElement.dataset.theme = "light"; }
-  </script>
+  <script src="./theme.js"></script>
   <script type="module" src="./app.mjs"></script>
 </head>
 <body>

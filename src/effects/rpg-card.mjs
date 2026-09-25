@@ -2,7 +2,7 @@
 // contributions, an XP bar, six stats, a class from your top language and
 // achievements that unlock one by one.
 
-import { MONO, TW, esc, f1, keyframeBuilder } from "../lib.mjs";
+import { MONO, TW, esc, f1, keyframeBuilder, safeAvatar } from "../lib.mjs";
 
 const CLASSES = {
   JavaScript: "Sorcerer", TypeScript: "Paladin", Python: "Mage", Java: "Knight", "C#": "Warlock",
@@ -67,8 +67,9 @@ export default function render({ login, profile, total }, options = {}) {
   // avatar with a pulsing aura
   css.push(`@keyframes aura{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.75;transform:scale(1.06)}}`);
   out.push(`<circle cx="112" cy="112" r="66" fill="none" stroke="#b197fc" stroke-width="4" filter="url(#glow)" style="transform-box:fill-box;transform-origin:center;animation:aura 3s ease-in-out infinite"/>`);
-  out.push(options.avatar
-    ? `<image href="${options.avatar}" x="54" y="54" width="116" height="116" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice"/>`
+  const avatar = safeAvatar(options.avatar);
+  out.push(avatar
+    ? `<image href="${avatar}" x="54" y="54" width="116" height="116" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice"/>`
     : `<circle cx="112" cy="112" r="58" fill="#3b2f6b"/><text x="112" y="126" text-anchor="middle" class="initial">${esc((profile.name || login)[0].toUpperCase())}</text>`);
   out.push(`<circle cx="112" cy="112" r="60" fill="none" stroke="url(#gold)" stroke-width="3"/>`);
   out.push(`<rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV ${level}</text>`);

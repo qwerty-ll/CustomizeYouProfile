@@ -91,6 +91,27 @@ const wrap = resolveModes({ today: new Date("2026-03-20T12:00:00Z"), birthday: {
 assert.ok(wrap.days > 300 && wrap.iso === "2027-03-15", "next birthday rolls over to next year");
 assert.equal(decorate("<svg width=\"10\" height=\"10\"></svg>", OFF, 1), "<svg width=\"10\" height=\"10\"></svg>");
 
+// Only plain raster data URIs are embedded as the avatar; text is escaped for attributes too
+{
+  const { esc, safeAvatar } = await import("../src/lib.mjs");
+  assert.equal(esc(`<a href="x" title='y'>&`), "&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;");
+  assert.equal(safeAvatar("data:image/png;base64,iVBORw0KGgo="), "data:image/png;base64,iVBORw0KGgo=");
+  for (const bad of ["data:image/svg+xml;base64,PHN2Zz4=", 'data:image/png" onload="x;base64,AA==', "https://x/a.png", "data:image/png;base64,AA==\"", null, 42])
+    assert.equal(safeAvatar(bad), null, `rejects ${bad}`);
+  const { default: rpg } = await import("../src/effects/rpg-card.mjs");
+  const [card] = await rpg(buildContext(PROFILES[1].login, PROFILES[1]), { ...OPTIONS[0], avatar: 'data:image/png;base64,AA==" onload="x' });
+  assert.ok(!card.svg.includes("onload") && !card.svg.includes("<image"), "unsafe avatar falls back to the initial");
+}
+// The CLI refuses to publish a token that ended up in a text input
+{
+  const { spawnSync } = await import("node:child_process");
+  const cli = new URL("../src/cli.mjs", import.meta.url).pathname;
+  const r = spawnSync(process.execPath, [cli, "--login", "x", "--no-readme", "--out", "/nonexistent", "--tagline", "hi ghs_" + "a".repeat(36)],
+    { env: { ...process.env, GITHUB_TOKEN: "t" } });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr.toString(), /looks like it contains a token/);
+}
+
 // README block handling
 const b = "<img src=a.svg>";
 assert.equal(updateReadme(null, b), `${START}\n${NOTE}\n${b}\n${END}\n`);
@@ -150,6 +171,16 @@ assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().ends
   const { execFileSync: run } = await import("node:child_process");
   const probe = installCommand(cfg).replace(/bash <\(curl[^)]*\)/, `bash -c 'printf "%s" "$NAME"' _`);
   assert.equal(run("bash", ["-c", probe]).toString(), tricky, "shell command passes the value exactly, nothing is executed");
+  // line breaks can't break the YAML, and ${{ … }} is never handed to GitHub to evaluate
+  const sneaky = workflowYaml({ ...cfg, name: "a\n          token: x", tagline: "hi ${{ github.token }}" });
+  assert.ok(!sneaky.includes("${{") && !/^\s+token:/m.test(sneaky), "no injected keys or expressions");
+  assert.ok(!installCommand({ ...cfg, tagline: "${{ secrets.X }}" }).includes("${{"));
+  // the third-party calendar mirror can't smuggle markup or NaN into the images
+  const junk = toUser({ login: "mona", followers: 0, public_repos: 0 }, [],
+    { total: { lastYear: "<x>" }, contributions: [{ date: "<svg onload=x>", count: 1, level: 1 }, { date: "2026-01-04", count: "7<b>", level: 99 }, null, { date: "2026-01-05", count: -3, level: "x" }] });
+  const jc = buildContext("mona", junk);
+  assert.deepEqual(jc.days.map((d) => [d.date, d.count, d.level]), [["2026-01-04", 0, 4], ["2026-01-05", 0, 0]]);
+  assert.equal(jc.total, 0);
   assert.ok(newWorkflowUrl("mona", "main", yaml).startsWith("https://github.com/mona/mona/new/main?filename=.github%2Fworkflows%2Fprofile-effects.yml&value="));
 }
 // the built site must render exactly like src/

@@ -32,9 +32,12 @@ command -v gh >/dev/null || die "GitHub CLI not found. Install it from https://c
 gh auth status >/dev/null 2>&1 || die "GitHub CLI is not logged in. Run: gh auth login"
 
 if [ "$EFFECTS" != "all" ]; then
-  for e in ${EFFECTS//,/ }; do
+  read -r -a REQUESTED <<< "${EFFECTS//,/ }"   # no glob expansion, one line only
+  [ "${#REQUESTED[@]}" -gt 0 ] || die "No effects given. Available: $AVAILABLE (or all)"
+  for e in "${REQUESTED[@]}"; do
     [[ " $AVAILABLE " == *" $e "* ]] || die "Unknown effect '$e'. Available: $AVAILABLE (or all)"
   done
+  EFFECTS=$(IFS=,; printf '%s' "${REQUESTED[*]}")   # normalized: only validated ids go into the workflow
 fi
 
 LOGIN=$(gh api user --jq .login)
@@ -75,8 +78,12 @@ jobs:
           effects: $EFFECTS
 YAML
 )
-# optional personal text, quoted for YAML
-yaml_quote() { printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')"; }
+# optional personal text, quoted for YAML. Line breaks become spaces (they would
+# break the file) and "${{" is defused: GitHub evaluates ${{ … }} in `with:`
+# values, so e.g. ${{ github.token }} in a tagline would end up in a public image.
+yaml_quote() {
+  printf '"%s"' "$(printf '%s' "$1" | tr '\000-\037\177' ' ' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\$[{][{]/$ {{/g')"
+}
 [ -n "${NAME:-}" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$NAME")"
 [ -n "${TAGLINE:-}" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$TAGLINE")"
 [ -n "${SKILLS:-}" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$SKILLS")"

@@ -46,12 +46,20 @@ export async function fetchAvatar(url) {
   try {
     const res = await fetch(url);
     if (!res.ok) return null;
-    const type = res.headers.get("content-type") || "image/png";
-    return `data:${type};base64,${Buffer.from(await res.arrayBuffer()).toString("base64")}`;
+    const type = (res.headers.get("content-type") || "image/png").split(";")[0].trim().toLowerCase();
+    const bytes = Buffer.from(await res.arrayBuffer());
+    if (bytes.length > AVATAR_MAX_BYTES) return null;
+    return safeAvatar(`data:${type};base64,${bytes.toString("base64")}`);
   } catch {
     return null;
   }
 }
+
+// Only a plain base64 raster image may go into an SVG attribute; anything else
+// (odd content types, SVG, quotes) is dropped and the initial is drawn instead.
+export const AVATAR_MAX_BYTES = 512 * 1024;
+export const safeAvatar = (uri) =>
+  typeof uri === "string" && uri.length < AVATAR_MAX_BYTES * 1.4 && /^data:image\/(?:png|jpeg|gif|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(uri) ? uri : null;
 
 // Everything an effect gets: calendar, a flat indexed day list with grid coordinates, and profile stats.
 export function buildContext(login, user) {
@@ -144,7 +152,7 @@ export function seedFor(login, salt) {
 export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 export const monthName = (date) => MONTHS[Number(date.slice(5, 7)) - 1];
 export const f1 = (n) => +n.toFixed(1);
-export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 export const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 // Group days by calendar month, in order.
