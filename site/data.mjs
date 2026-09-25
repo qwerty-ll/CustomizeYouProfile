@@ -2,7 +2,7 @@
 // browser (no token): GitHub's REST API for the profile and repositories, and
 // a public contributions mirror for the calendar. The Action itself uses
 // GitHub's GraphQL API, so numbers in the preview can differ slightly
-// (e.g. languages are weighted by repo size instead of bytes of code).
+// (e.g. languages are counted per repository instead of bytes of code).
 
 const LEVELS = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
 
@@ -60,7 +60,8 @@ export function toUser(rest, repos, contrib, pullRequests = 0) {
       nodes: own.map((r) => ({
         name: r.name,
         stargazerCount: r.stargazers_count ?? 0,
-        languages: { edges: r.language ? [{ size: Math.max(1, r.size ?? 1) * 1024, node: { name: r.language, color: LANGUAGE_COLORS[r.language] ?? "#8b949e" } }] : [] },
+        // each repo counts once for its main language; one huge repo shouldn't decide it
+        languages: { edges: r.language ? [{ size: 1000, node: { name: r.language, color: LANGUAGE_COLORS[r.language] ?? "#8b949e" } }] : [] },
       })),
     },
     contributionsCollection: {
