@@ -9,7 +9,7 @@ Every image is generated from your own contributions, repositories and stats, so
 
 [![Built with AI](https://img.shields.io/badge/built%20with-AI%20(Claude)-8A63D2?logo=anthropic&logoColor=white)](#-built-with-ai)
 
-[Gallery](#-gallery) · [Install in one command](#-install-in-one-command) · [Manual setup](#-manual-setup) · [Options](#%EF%B8%8F-options) · [FAQ](#-faq) · [На русском](#-на-русском)
+[Gallery](#-gallery) · [Seasonal modes](#-seasonal--personal-modes-opt-in) · [Install in one command](#-install-in-one-command) · [Manual setup](#-manual-setup) · [Options](#%EF%B8%8F-options) · [FAQ](#-faq) · [На русском](#-на-русском)
 
 </div>
 
@@ -49,7 +49,7 @@ A synthwave T-rex runs through your year and jumps over commit-cacti; taller cac
 <img alt="Dino run" src="examples/dino-run.svg" width="100%">
 
 #### `fireworks`: Fireworks
-One rocket per month over a night city (a busy month gets a huge burst, a quiet one just fizzles), then the finale rocket's sparks fly into place and draw your whole contribution graph in the sky. Around New Year (Dec 15 to Jan 15) it becomes a *Happy New Year* show with snow.
+One rocket per month over a night city (a busy month gets a huge burst, a quiet one just fizzles), then the finale rocket's sparks fly into place and draw your whole contribution graph in the sky. With [seasonal modes](#-seasonal--personal-modes-opt-in) on, the finale turns into *Happy New Year*, *Happy Halloween* or *Happy birthday*.
 
 <img alt="Fireworks" src="examples/fireworks.svg" width="100%">
 
@@ -83,6 +83,37 @@ A spaceship shoots down your commits as they fly at it, biggest first. Comes in 
 
 ---
 
+## 🎉 Seasonal & personal modes (opt-in)
+
+Extra looks that switch on **by themselves on the right dates**, but **only if you turn them on**. Leave these inputs empty and nothing changes.
+
+```yaml
+      - uses: qwerty-ll/CustomizeYouProfile@v1
+        with:
+          effects: intro, dino-run, fireworks
+          seasons: new-year, halloween          # or: all
+          birthday: "03-15"                     # MM-DD
+          countdown: 2026-12-31 Release; birthday   # up to 3, separated by ;
+```
+
+| Input | When it shows | What changes |
+|---|---|---|
+| `seasons: new-year` | Dec 15 – Jan 10 | Snow and a blinking garland on every effect. The dino wears a Santa hat and jumps over Christmas trees, and the fireworks finale says *Happy New Year* |
+| `seasons: halloween` | Oct 24 – Nov 1 | Bats, a dangling spider and jack-o'-lanterns on every effect. The dino jumps over glowing pumpkin towers, and the fireworks turn orange and purple |
+| `birthday: MM-DD` | on that day | Confetti, balloons and a *Happy birthday* ribbon on every effect. The intro types *it's my birthday today!* and the fireworks finale says *Happy birthday* |
+| `countdown: …` | every day | A `countdown` card with flip-clock digits for up to 3 dates (`YYYY-MM-DD Label`, or `birthday` for your next birthday). The intro also types *N days until …* |
+
+Dates follow UTC and the image updates once a day when the workflow runs.
+
+<table>
+<tr><td><b>new-year</b><br><img alt="New Year dino" src="examples/modes/new-year/dino-run.svg"></td></tr>
+<tr><td><b>halloween</b><br><img alt="Halloween dino" src="examples/modes/halloween/dino-run.svg"></td></tr>
+<tr><td><b>birthday</b><br><img alt="Birthday intro" src="examples/modes/birthday/intro.svg"></td></tr>
+<tr><td><b>countdown</b><br><img alt="Countdown" src="examples/modes/countdown/countdown.svg"></td></tr>
+</table>
+
+---
+
 ## 🚀 Install in one command
 
 You need the [GitHub CLI](https://cli.github.com) logged in (`gh auth login`). Then:
@@ -96,6 +127,13 @@ Replace `intro,rpg-card,dino-run` with the effects you want, or use `all`. To pe
 ```bash
 NAME="Mona" TAGLINE="Frontend dev|Cat person|Ships on Fridays" SKILLS="TypeScript,React,Go,Figma" \
   bash <(curl -fsSL https://raw.githubusercontent.com/qwerty-ll/CustomizeYouProfile/main/install.sh) all
+```
+
+Seasonal modes work the same way (they stay off unless you add them):
+
+```bash
+SEASONS=all BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday" \
+  bash <(curl -fsSL https://raw.githubusercontent.com/qwerty-ll/CustomizeYouProfile/main/install.sh) intro,dino-run
 ```
 
 The script:
@@ -155,6 +193,10 @@ You can move that block anywhere in your README; later runs update it in place a
 | `name` | your GitHub name | Name shown in `intro` |
 | `tagline` | a few facts about you | Lines typed in `intro`, separated by <code>&#124;</code> |
 | `skills` | your top languages | Comma-separated list for `skills` |
+| `seasons` | off | `new-year`, `halloween` or `all`: see [seasonal modes](#-seasonal--personal-modes-opt-in) |
+| `birthday` | off | `MM-DD`; confetti and *Happy birthday* on that day |
+| `countdown` | off | Up to 3 `YYYY-MM-DD Label` entries separated by `;` (or `birthday`) |
+| `today` | real date | Pretend it's another day (for previewing modes) |
 | `language` | `en` | Text language for effects that have text (`notebook`): `en` or `ru` |
 | `readme` | `README.md` | README to add the images to |
 | `readme-position` | `top` | Where the block goes the first time: `top` or `bottom` |
@@ -223,6 +265,7 @@ LANGUAGE=ru NAME="Макар" TAGLINE="фронтенд и геймджемы|п
 - **Раз в год обновлять не нужно:** каждый день рисуются последние 12 месяцев.
 - **Эффекты про тебя:** `intro` (имя и печатающиеся строки: `name`, `tagline`), `skills` (твой стек: `skills`), `rpg-card` (карточка персонажа: уровень, характеристики, класс, ачивки), `languages` (языки из публичных репозиториев).
 - **Эффекты по коммитам:** `dino-run`, `fireworks`, `black-hole`, `oscilloscope`, `terminal`, `notebook` (с `language: ru` на русском: «Классная работа» и «5+»), `space-shooter`, или `all`.
+- **Сезонные и личные режимы, только по желанию:** `seasons: new-year, halloween` (снег, гирлянда, шапка Санты и ёлки / летучие мыши, паук и тыквы), `birthday: 03-15` (конфетти и «С днём рождения» в этот день), `countdown: "2026-12-31 Релиз; birthday"` (карточка обратного отсчёта). Если эти строки не прописать, ничего не включится.
 - **Приватные репозитории не читаются**, в картинку попадают только публичные данные.
 - **Сделано с помощью ИИ:** код, эффекты и документацию писал **Claude** (Anthropic) в Claude Code вместе с автором, идеи и направление от [@qwerty-ll](https://github.com/qwerty-ll).
 - Все настройки описаны в разделе [Options](#%EF%B8%8F-options), ответы на вопросы в [FAQ](#-faq).

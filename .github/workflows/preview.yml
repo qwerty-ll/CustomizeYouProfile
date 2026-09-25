@@ -24,6 +24,16 @@ jobs:
         with:
           ref: main
       - run: node test/validate.mjs
+      - name: Seasonal previews (pretend it's the right day)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          Y=$(date -u +%Y)
+          fx() { node src/cli.mjs --login "$GITHUB_REPOSITORY_OWNER" --no-readme "$@"; }
+          fx --out examples/modes/new-year --effects dino-run,fireworks --seasons new-year --today "$Y-12-31"
+          fx --out examples/modes/halloween --effects dino-run --seasons halloween --today "$Y-10-31"
+          fx --out examples/modes/birthday --effects intro --birthday 03-15 --today "$Y-03-15"
+          fx --out examples/modes/countdown --effects countdown --birthday 03-15 --countdown "$((Y + 1))-01-01 New Year; birthday; $((Y + 1))-06-01 Vacation"
       - uses: ./
         with:
           effects: all

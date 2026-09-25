@@ -14,7 +14,12 @@ export default function render({ login, profile, total }, options = {}) {
     `${plural(total, "contribution")} in the last year`,
     top ? `mostly writing ${top}` : "building things on GitHub",
     `${plural(profile.repos, "public repo")} · ${plural(profile.stars, "star")}`,
-  ]).map((l) => l.slice(0, 70));
+  ]).slice();
+  // opt-in personal modes add their own lines
+  const modes = options.modes ?? {};
+  if (modes.birthday) lines.unshift(modes.text.birthdayLine);
+  for (const c of modes.countdowns ?? []) lines.push(`⏳ ${c.text}`);
+  lines.forEach((l, i) => (lines[i] = l.slice(0, 70)));
 
   // ---------- typing timeline ----------
   const CW = 8.4, TY = 150, TYPE = 0.055, ERASE = 0.025, HOLD = 1.8;

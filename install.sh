@@ -8,6 +8,8 @@
 #   2. adds .github/workflows/profile-effects.yml with the effects you chose,
 #   3. starts the first run, which adds the images to your README.
 # Optional: NAME="Mona" TAGLINE="Frontend dev|Loves cats" SKILLS="React,Go" LANGUAGE=ru
+#           SEASONS="new-year,halloween" BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday"
+#           (seasonal/birthday/countdown modes stay off unless you set them)
 # Set DRY_RUN=1 to only print what would happen.
 
 set -euo pipefail
@@ -16,7 +18,7 @@ EFFECTS="${1:-dino-run}"
 LANGUAGE="${LANGUAGE:-en}"
 ACTION_REF="${ACTION_REF:-qwerty-ll/CustomizeYouProfile@v1}"
 WORKFLOW_PATH=".github/workflows/profile-effects.yml"
-AVAILABLE="intro skills rpg-card languages dino-run fireworks black-hole oscilloscope terminal notebook space-shooter"
+AVAILABLE="intro skills rpg-card languages dino-run fireworks black-hole oscilloscope terminal notebook space-shooter countdown"
 
 say() { printf '\033[1;35m›\033[0m %s\n' "$*"; }
 die() { printf '\033[1;31m✗\033[0m %s\n' "$*" >&2; exit 1; }
@@ -70,6 +72,9 @@ yaml_quote() { printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')
 [ -n "${NAME:-}" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$NAME")"
 [ -n "${TAGLINE:-}" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$TAGLINE")"
 [ -n "${SKILLS:-}" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$SKILLS")"
+[ -n "${SEASONS:-}" ] && WORKFLOW+=$'\n'"          seasons: $(yaml_quote "$SEASONS")"
+[ -n "${BIRTHDAY:-}" ] && WORKFLOW+=$'\n'"          birthday: $(yaml_quote "$BIRTHDAY")"
+[ -n "${COUNTDOWN:-}" ] && WORKFLOW+=$'\n'"          countdown: $(yaml_quote "$COUNTDOWN")"
 
 [ -n "${DRY_RUN:-}" ] && printf '%s\n' "$WORKFLOW" | sed 's/^/    /'
 

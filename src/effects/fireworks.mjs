@@ -1,21 +1,24 @@
 // A fireworks show over a night city: one rocket per month (bigger month =
 // bigger, higher burst; an empty month just fizzles), then a finale rocket whose
 // sparks fly into place and draw the whole contribution graph in the sky before
-// falling as embers. Around New Year (Dec 15 – Jan 15) the title says so and it snows.
+// falling as embers. Opt-in modes change the finale: New Year, Halloween, birthday.
 
 import { MONO, TW, f1, keyframeBuilder, monthsOf, rng, seedFor } from "../lib.mjs";
 
-export default function render({ login, days, weeks, total }) {
+export default function render({ login, days, weeks, total }, options = {}) {
   const W = 860, H = 300, GROUND = H - 30;
   const random = rng(seedFor(login, 2027));
   const months = monthsOf(days);
   const maxMonth = Math.max(1, ...months.map((m) => m.total));
 
-  const last = new Date(days.at(-1).date + "T00:00:00Z");
-  const NEW_YEAR = (last.getUTCMonth() === 11 && last.getUTCDate() >= 15) || (last.getUTCMonth() === 0 && last.getUTCDate() <= 15);
-  const nyYear = last.getUTCMonth() === 11 ? last.getUTCFullYear() + 1 : last.getUTCFullYear();
+  const modes = options.modes ?? {};
+  const NEW_YEAR = !!modes.newYear, nyYear = modes.nyYear;
+  // birthday wins over the seasons if both happen on the same day
+  const theme = modes.birthday ? "birthday" : NEW_YEAR ? "newYear" : modes.halloween ? "halloween" : null;
 
-  const PALETTES = [
+  const PALETTES = theme === "halloween" ? [
+    ["#ff922b", "#f76707", "#ffe8cc"], ["#9c36b5", "#e599f7", "#f8f0fc"], ["#94d82d", "#5c940d", "#f4fce3"],
+  ] : [
     ["#ffd166", "#ff9f1c", "#fff3c4"], ["#ff5fa2", "#ffb3d9", "#ffffff"], ["#7ee8fa", "#3a86ff", "#e0fbff"],
     ["#9dff8a", "#38e54d", "#f0ffe0"], ["#c77dff", "#7b2ff7", "#f3e0ff"], ["#ff595e", "#ffca3a", "#ffffff"],
   ];
@@ -141,16 +144,6 @@ export default function render({ login, days, weeks, total }) {
   out.push(flashes.join(""));
   out.push(shows.join("\n"));
 
-  if (NEW_YEAR) {
-    let snow = "";
-    for (let i = 0; i < 40; i++) {
-      const d = 5 + random() * 6;
-      snow += `<circle cx="${f1(random() * W)}" cy="-6" r="${f1(0.8 + random() * 1.4)}" fill="#fff" opacity="${f1(0.5 + random() * 0.5)}" style="animation:snow ${f1(d)}s linear ${f1(-random() * d)}s infinite"/>`;
-    }
-    css.push(`@keyframes snow{to{transform:translate(-30px,${H + 10}px)}}`);
-    out.push(snow);
-  }
-
   // night city
   let city = "", x = -10;
   while (x < W + 10) {
@@ -167,15 +160,18 @@ export default function render({ login, days, weeks, total }) {
 
   // HUD + title under the spark graph
   out.push(`<text x="18" y="24" class="hud">@${login}</text>`);
-  out.push(`<text x="${W - 18}" y="24" class="hud" text-anchor="end">${NEW_YEAR ? `New Year ${nyYear}` : "one rocket per month"}</text>`);
+  out.push(`<text x="${W - 18}" y="24" class="hud" text-anchor="end">one rocket per month</text>`);
   const first = months[0], lastM = months.at(-1);
-  const title = NEW_YEAR ? `HAPPY NEW YEAR ${nyYear}` : `${total} CONTRIBUTIONS`;
+  const title = theme === "birthday" ? modes.text.happyBirthday
+    : theme === "newYear" ? `${modes.text.happyNewYear} ${nyYear}`
+    : theme === "halloween" ? modes.text.happyHalloween
+    : `${total} CONTRIBUTIONS`;
   out.push(`<g ${anim("title", [
     [0, "opacity:0;transform:translateY(8px)"], [T_FORMED - 0.3, "opacity:0;transform:translateY(8px)"],
     [T_FORMED + 0.4, "opacity:1;transform:translateY(0)", TW], [T_FALL + 0.6, "opacity:1;transform:translateY(0)"], [T_FALL + 1.4, "opacity:0;transform:translateY(0)", TW],
   ])}>
     <text x="${W / 2}" y="${GY + 7 * STEP + 38}" text-anchor="middle" class="big" fill="url(#title)" filter="url(#glow)">${title}</text>
-    <text x="${W / 2}" y="${GY + 7 * STEP + 58}" text-anchor="middle" class="hud">${first.name} ${first.year} → ${lastM.name} ${lastM.year}${NEW_YEAR ? ` · ${total} contributions` : ""}</text>
+    <text x="${W / 2}" y="${GY + 7 * STEP + 58}" text-anchor="middle" class="hud">${first.name} ${first.year} → ${lastM.name} ${lastM.year}${theme ? ` · ${total} contributions` : ""}</text>
   </g>`);
 
   const style = `

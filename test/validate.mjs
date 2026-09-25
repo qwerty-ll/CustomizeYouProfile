@@ -5,7 +5,9 @@
 import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
 import { buildContext, rng } from "../src/lib.mjs";
+import { decorate } from "../src/decorate.mjs";
 import { updateReadme, START, END } from "../src/readme.mjs";
+import { parseBirthday, parseCountdowns, parseSeasons, resolveModes } from "../src/seasonal.mjs";
 
 const LEVEL_NAMES = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
 
@@ -46,9 +48,15 @@ const PROFILES = [
   fakeUser({ login: "heavy", activity: 0.97, peak: 400, langs: 9, seed: 3 }),
   fakeUser({ login: "a-very-long-login-name-xx", activity: 0.4, peak: 12, name: "Someone With A Really Quite Long Display Name", seed: 4 }),
 ];
+const OFF = resolveModes({ today: new Date("2026-12-31T12:00:00Z") });   // nothing opted in
+const ALL_ON = (language, today) => resolveModes({
+  today: new Date(today), language, seasons: parseSeasons("all"), birthday: parseBirthday(today.slice(5, 10)),
+  countdowns: parseCountdowns("2026-12-31 <Release> & co; birthday; 2020-01-01 Past", parseBirthday(today.slice(5, 10))),
+});
 const OPTIONS = [
-  { language: "en", tagline: [], skills: [] },
-  { language: "ru", name: "Макар", tagline: ["строка с <угловыми> & скобками", "x".repeat(120)], skills: ["React", "Node.js", "C#", "<script>"] },
+  { language: "en", tagline: [], skills: [], modes: OFF },
+  { language: "ru", name: "Макар", tagline: ["строка с <угловыми> & скобками", "x".repeat(120)], skills: ["React", "Node.js", "C#", "<script>"], modes: ALL_ON("ru", "2026-12-31T12:00:00Z") },
+  { language: "en", tagline: [], skills: [], modes: ALL_ON("en", "2026-10-31T12:00:00Z") },
 ];
 
 // Minimal XML checks: balanced tags and no duplicate attributes.
@@ -78,6 +86,7 @@ for (const user of PROFILES) {
       const { default: render } = await import(`../src/effects/${id}.mjs`);
       const files = await render(ctx, { ...options, avatar: null });
       assert.ok(files.length > 0, `${id} produced no files`);
+      for (const f of files) f.svg = decorate(f.svg, options.modes, 1);
       for (const { file, svg } of files) {
         const where = `${id}/${file} for ${user.login} (${options.language})`;
         checkXml(svg, where);
@@ -92,6 +101,26 @@ for (const user of PROFILES) {
   }
 }
 
+// Modes are strictly opt-in and date-bound
+assert.equal(OFF.any, false);
+assert.equal(OFF.newYear, false);
+const ny = resolveModes({ today: new Date("2027-01-05T12:00:00Z"), seasons: ["new-year"] });
+assert.ok(ny.newYear && !ny.halloween && ny.nyYear === 2027);
+assert.ok(!resolveModes({ today: new Date("2026-07-01T12:00:00Z"), seasons: ["new-year", "halloween"] }).any);
+assert.ok(resolveModes({ today: new Date("2026-10-30T12:00:00Z"), seasons: ["halloween"] }).halloween);
+assert.deepEqual(parseBirthday("15.03"), { month: 3, day: 15 });
+assert.deepEqual(parseBirthday("2001-03-15"), { month: 3, day: 15 });
+assert.throws(() => parseBirthday("13-40"));
+assert.throws(() => parseSeasons("xmas"));
+assert.throws(() => parseCountdowns("tomorrow party"));
+assert.throws(() => parseCountdowns("birthday"));
+const cd = resolveModes({ today: new Date("2026-03-10T12:00:00Z"), birthday: { month: 3, day: 15 }, countdowns: parseCountdowns("birthday; 2026-03-10 Launch", { month: 3, day: 15 }) }).countdowns;
+assert.equal(cd[0].days, 5);
+assert.equal(cd[1].days, 0);
+const wrap = resolveModes({ today: new Date("2026-03-20T12:00:00Z"), birthday: { month: 3, day: 15 }, countdowns: [{ birthday: true, label: null }] }).countdowns[0];
+assert.ok(wrap.days > 300 && wrap.iso === "2027-03-15", "next birthday rolls over to next year");
+assert.equal(decorate("<svg width=\"10\" height=\"10\"></svg>", OFF, 1), "<svg width=\"10\" height=\"10\"></svg>");
+
 // README block handling
 const b = "<img src=a.svg>";
 assert.equal(updateReadme(null, b), `${START}\n${b}\n${END}\n`);
@@ -102,4 +131,4 @@ assert.ok(updateReadme(mine, b, "bottom").trimEnd().endsWith(END));
 const again = updateReadme(top, "<img src=b.svg>");
 assert.ok(again.includes("b.svg") && !again.includes("a.svg") && again.split(START).length === 2);
 
-console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets, README checks pass`);
+console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode + README checks pass`);

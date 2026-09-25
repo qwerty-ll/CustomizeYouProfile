@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="180" viewBox="0 0 860 180">
+<title>qwerty-ll: countdown</title>
+<defs><clipPath id="frame"><rect width="860" height="180" rx="16"/></clipPath><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101428"/><stop offset="1" stop-color="#1c1033"/></linearGradient><linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2f4a"/><stop offset=".5" stop-color="#23263d"/><stop offset=".5" stop-color="#1b1d30"/><stop offset="1" stop-color="#15172a"/></linearGradient><linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7ee8fa"/><stop offset=".5" stop-color="#c77dff"/><stop offset="1" stop-color="#ff5fa2"/></linearGradient><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="t0_0"><rect x="102.7" y="44" width="50" height="33"/></clipPath><clipPath id="b0_0"><rect x="102.7" y="77" width="50" height="33"/></clipPath><clipPath id="t0_1"><rect x="160.7" y="44" width="50" height="33"/></clipPath><clipPath id="b0_1"><rect x="160.7" y="77" width="50" height="33"/></clipPath><clipPath id="t1_0"><rect x="347" y="44" width="50" height="33"/></clipPath><clipPath id="b1_0"><rect x="347" y="77" width="50" height="33"/></clipPath><clipPath id="t1_1"><rect x="405" y="44" width="50" height="33"/></clipPath><clipPath id="b1_1"><rect x="405" y="77" width="50" height="33"/></clipPath><clipPath id="t1_2"><rect x="463" y="44" width="50" height="33"/></clipPath><clipPath id="b1_2"><rect x="463" y="77" width="50" height="33"/></clipPath><clipPath id="t2_0"><rect x="620.3" y="44" width="50" height="33"/></clipPath><clipPath id="b2_0"><rect x="620.3" y="77" width="50" height="33"/></clipPath><clipPath id="t2_1"><rect x="678.3" y="44" width="50" height="33"/></clipPath><clipPath id="b2_1"><rect x="678.3" y="77" width="50" height="33"/></clipPath><clipPath id="t2_2"><rect x="736.3" y="44" width="50" height="33"/></clipPath><clipPath id="b2_2"><rect x="736.3" y="77" width="50" height="33"/></clipPath></defs>
+<style>
+    .label{font:bold 13px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#d0bfff;letter-spacing:1.5px;text-transform:uppercase}
+    .digit{font:bold 44px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#f8f9ff}
+    .big{font:bold 14px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:url(#accent)}
+    .done{fill:#ffd43b}
+    .date{font:11px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#8f88b8}
+    @keyframes flipTop{0%,88%{transform:scaleY(1)}94%,100%{transform:scaleY(0)}}
+@keyframes flipBottom{0%,93%{transform:scaleY(0)}100%{transform:scaleY(1)}}</style>
+<g clip-path="url(#frame)">
+<rect width="860" height="180" fill="url(#bg)"/>
+<circle cx="0" cy="0" r="1.1" fill="#fff" opacity="0.15"/><circle cx="97" cy="53" r="0.6" fill="#fff" opacity="0.25"/><circle cx="194" cy="106" r="0.6" fill="#fff" opacity="0.35"/><circle cx="291" cy="159" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="388" cy="32" r="0.6" fill="#fff" opacity="0.55"/><circle cx="485" cy="85" r="0.6" fill="#fff" opacity="0.15"/><circle cx="582" cy="138" r="0.6" fill="#fff" opacity="0.25"/><circle cx="679" cy="11" r="1.1" fill="#fff" opacity="0.35"/><circle cx="776" cy="64" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="13" cy="117" r="0.6" fill="#fff" opacity="0.55"/><circle cx="110" cy="170" r="0.6" fill="#fff" opacity="0.15"/><circle cx="207" cy="43" r="0.6" fill="#fff" opacity="0.25"/><circle cx="304" cy="96" r="0.6" fill="#fff" opacity="0.35"/><circle cx="401" cy="149" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="498" cy="22" r="1.1" fill="#fff" opacity="0.55"/><circle cx="595" cy="75" r="0.6" fill="#fff" opacity="0.15"/><circle cx="692" cy="128" r="0.6" fill="#fff" opacity="0.25"/><circle cx="789" cy="1" r="0.6" fill="#fff" opacity="0.35"/><circle cx="26" cy="54" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="123" cy="107" r="0.6" fill="#fff" opacity="0.55"/><circle cx="220" cy="160" r="0.6" fill="#fff" opacity="0.15"/><circle cx="317" cy="33" r="1.1" fill="#fff" opacity="0.25"/><circle cx="414" cy="86" r="0.6" fill="#fff" opacity="0.35"/><circle cx="511" cy="139" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="608" cy="12" r="0.6" fill="#fff" opacity="0.55"/><circle cx="705" cy="65" r="0.6" fill="#fff" opacity="0.15"/><circle cx="802" cy="118" r="0.6" fill="#fff" opacity="0.25"/><circle cx="39" cy="171" r="0.6" fill="#fff" opacity="0.35"/><circle cx="136" cy="44" r="1.1" fill="#fff" opacity="0.45000000000000007"/><circle cx="233" cy="97" r="0.6" fill="#fff" opacity="0.55"/><circle cx="330" cy="150" r="0.6" fill="#fff" opacity="0.15"/><circle cx="427" cy="23" r="0.6" fill="#fff" opacity="0.25"/><circle cx="524" cy="76" r="0.6" fill="#fff" opacity="0.35"/><circle cx="621" cy="129" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="718" cy="2" r="0.6" fill="#fff" opacity="0.55"/><circle cx="815" cy="55" r="1.1" fill="#fff" opacity="0.15"/><circle cx="52" cy="108" r="0.6" fill="#fff" opacity="0.25"/><circle cx="149" cy="161" r="0.6" fill="#fff" opacity="0.35"/><circle cx="246" cy="34" r="0.6" fill="#fff" opacity="0.45000000000000007"/><circle cx="343" cy="87" r="0.6" fill="#fff" opacity="0.55"/>
+<text x="156.7" y="30" class="label" text-anchor="middle">New Year</text>
+<g filter="url(#glow)">
+        <rect x="102.7" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="127.7" y="94" class="digit" text-anchor="middle">9</text>
+        <rect x="102.7" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:127.7px 77px;animation:flipTop 6s ease-in 0s infinite"><g clip-path="url(#t0_0)"><rect x="102.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="127.7" y="94" class="digit" text-anchor="middle">9</text></g></g>
+<g style="transform-origin:127.7px 77px;animation:flipBottom 6s ease-out 0s infinite"><g clip-path="url(#b0_0)"><rect x="102.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="127.7" y="94" class="digit" text-anchor="middle">9</text></g></g>
+<g filter="url(#glow)">
+        <rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="185.7" y="94" class="digit" text-anchor="middle">8</text>
+        <rect x="160.7" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:185.7px 77px;animation:flipTop 6s ease-in -0.3s infinite"><g clip-path="url(#t0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">8</text></g></g>
+<g style="transform-origin:185.7px 77px;animation:flipBottom 6s ease-out -0.3s infinite"><g clip-path="url(#b0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">8</text></g></g>
+<text x="156.7" y="136" class="big" text-anchor="middle">98 days</text>
+<text x="156.7" y="154" class="date" text-anchor="middle">Jan 1, 2027</text>
+<text x="430" y="30" class="label" text-anchor="middle">my birthday</text>
+<g filter="url(#glow)">
+        <rect x="347" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="372" y="94" class="digit" text-anchor="middle">1</text>
+        <rect x="347" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:372px 77px;animation:flipTop 6s ease-in -1.3s infinite"><g clip-path="url(#t1_0)"><rect x="347" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="372" y="94" class="digit" text-anchor="middle">1</text></g></g>
+<g style="transform-origin:372px 77px;animation:flipBottom 6s ease-out -1.3s infinite"><g clip-path="url(#b1_0)"><rect x="347" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="372" y="94" class="digit" text-anchor="middle">1</text></g></g>
+<g filter="url(#glow)">
+        <rect x="405" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="430" y="94" class="digit" text-anchor="middle">7</text>
+        <rect x="405" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:430px 77px;animation:flipTop 6s ease-in -1.6s infinite"><g clip-path="url(#t1_1)"><rect x="405" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="430" y="94" class="digit" text-anchor="middle">7</text></g></g>
+<g style="transform-origin:430px 77px;animation:flipBottom 6s ease-out -1.6s infinite"><g clip-path="url(#b1_1)"><rect x="405" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="430" y="94" class="digit" text-anchor="middle">7</text></g></g>
+<g filter="url(#glow)">
+        <rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="488" y="94" class="digit" text-anchor="middle">1</text>
+        <rect x="463" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:488px 77px;animation:flipTop 6s ease-in -1.8s infinite"><g clip-path="url(#t1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">1</text></g></g>
+<g style="transform-origin:488px 77px;animation:flipBottom 6s ease-out -1.8s infinite"><g clip-path="url(#b1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">1</text></g></g>
+<text x="430" y="136" class="big" text-anchor="middle">171 days</text>
+<text x="430" y="154" class="date" text-anchor="middle">Mar 15, 2027</text>
+<rect x="293.3" y="24" width="1" height="132" fill="#fff" opacity=".08"/>
+<text x="703.3" y="30" class="label" text-anchor="middle">Vacation</text>
+<g filter="url(#glow)">
+        <rect x="620.3" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="645.3" y="94" class="digit" text-anchor="middle">2</text>
+        <rect x="620.3" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:645.3px 77px;animation:flipTop 6s ease-in -2.6s infinite"><g clip-path="url(#t2_0)"><rect x="620.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="645.3" y="94" class="digit" text-anchor="middle">2</text></g></g>
+<g style="transform-origin:645.3px 77px;animation:flipBottom 6s ease-out -2.6s infinite"><g clip-path="url(#b2_0)"><rect x="620.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="645.3" y="94" class="digit" text-anchor="middle">2</text></g></g>
+<g filter="url(#glow)">
+        <rect x="678.3" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="703.3" y="94" class="digit" text-anchor="middle">4</text>
+        <rect x="678.3" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:703.3px 77px;animation:flipTop 6s ease-in -2.9s infinite"><g clip-path="url(#t2_1)"><rect x="678.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="703.3" y="94" class="digit" text-anchor="middle">4</text></g></g>
+<g style="transform-origin:703.3px 77px;animation:flipBottom 6s ease-out -2.9s infinite"><g clip-path="url(#b2_1)"><rect x="678.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="703.3" y="94" class="digit" text-anchor="middle">4</text></g></g>
+<g filter="url(#glow)">
+        <rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
+        <text x="761.3" y="94" class="digit" text-anchor="middle">9</text>
+        <rect x="736.3" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
+      </g>
+<g style="transform-origin:761.3px 77px;animation:flipTop 6s ease-in -3.1s infinite"><g clip-path="url(#t2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">9</text></g></g>
+<g style="transform-origin:761.3px 77px;animation:flipBottom 6s ease-out -3.1s infinite"><g clip-path="url(#b2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">9</text></g></g>
+<text x="703.3" y="136" class="big" text-anchor="middle">249 days</text>
+<text x="703.3" y="154" class="date" text-anchor="middle">Jun 1, 2027</text>
+<rect x="566.7" y="24" width="1" height="132" fill="#fff" opacity=".08"/>
+</g>
+</svg>

@@ -241,9 +241,43 @@ export default function render({ login, days: allDays, total, maxCount }, option
     return `<g fill="url(#cg${level})" filter="url(#glow)"><title>${count} contributions on ${date}</title>${parts.join("")}</g>`;
   }
 
+  // Seasonal obstacles (opt-in): Christmas trees for New Year, pumpkin towers
+  // for Halloween. Same footprint as the cactus, so the jump maths still holds.
+  const modes = options.modes ?? {};
+  defs.push(`<linearGradient id="tree" gradientUnits="userSpaceOnUse" x1="0" y1="${GROUND - 60}" x2="0" y2="${GROUND}"><stop offset="0" stop-color="#8ce99a"/><stop offset="1" stop-color="#1b7a3a"/></linearGradient>`);
+  defs.push(`<radialGradient id="pk" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffa94d"/><stop offset="1" stop-color="#d9480f"/></radialGradient>`);
+  css.push(`@keyframes fl{0%,100%{opacity:1}40%{opacity:.55}45%{opacity:.95}70%{opacity:.7}}`);
+  const ORNAMENTS = ["#ff4d4d", "#ffd43b", "#4dabf7", "#f783ac"];
+  function tree({ x, h: full, cw, count, date }) {
+    const h = full - 6;                                   // leave room for the star on top
+    const cx = x + cw / 2, trunk = 4, F = h - trunk, tiers = h > 30 ? 3 : 2, th = F * 0.5;
+    const parts = [`<rect x="${f(cx - 2)}" y="${GROUND - trunk}" width="4" height="${trunk + 1}" fill="#8d5a3b"/>`];
+    for (let k = 0; k < tiers; k++) {
+      const yb = GROUND - trunk - (k * (F - th)) / (tiers - 1), half = (cw / 2) * (1 - 0.2 * k) + 1;
+      parts.push(`<path d="M${f(cx - half)} ${f(yb)}L${f(cx + half)} ${f(yb)}L${f(cx)} ${f(yb - th)}Z" fill="url(#tree)"/>`);
+      parts.push(`<circle cx="${f(cx - half * 0.45)}" cy="${f(yb - 3)}" r="1.4" fill="${ORNAMENTS[k % 4]}"/><circle cx="${f(cx + half * 0.4)}" cy="${f(yb - th * 0.4)}" r="1.4" fill="${ORNAMENTS[(k + 2) % 4]}"/>`);
+    }
+    parts.push(`<path d="M${f(cx)} ${f(GROUND - h - 5)}l1.5 3.4 3.6.4-2.7 2.4.8 3.6-3.2-1.9-3.2 1.9.8-3.6-2.7-2.4 3.6-.4z" fill="#ffe066"/>`);
+    return `<g filter="url(#glow)"><title>${count} contributions on ${date}</title>${parts.join("")}</g>`;
+  }
+  function pumpkins({ x, h: full, cw, count, date }) {
+    const h = full - 4;                                   // leave room for the stem on top
+    const n = Math.max(1, Math.round(h / 16)), ph = h / n, cx = x + cw / 2;
+    const parts = [];
+    for (let j = 0; j < n; j++) {
+      const cy = GROUND - ph * (j + 0.5), rx = (cw / 2) * (1 - 0.06 * j) - 0.5, ry = ph / 2 + 0.6;
+      parts.push(`<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(rx)}" ry="${f(ry)}" fill="url(#pk)"/><ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(rx * 0.42)}" ry="${f(ry)}" fill="none" stroke="#b33f00" stroke-width=".9"/>`);
+    }
+    const ty = GROUND - ph * (n - 0.5), fr = Math.min(cw / 2, ph / 2);
+    parts.push(`<rect x="${f(cx - 1.5)}" y="${f(GROUND - h - 4)}" width="3" height="5" rx="1" fill="#2f6b2f"/>`);
+    parts.push(`<g fill="#ffe066" style="animation:fl 1.6s steps(4) infinite"><path d="M${f(cx - fr * 0.6)} ${f(ty - fr * 0.05)}l${f(fr * 0.25)} ${f(-fr * 0.35)} ${f(fr * 0.25)} ${f(fr * 0.35)}z"/><path d="M${f(cx + fr * 0.1)} ${f(ty - fr * 0.05)}l${f(fr * 0.25)} ${f(-fr * 0.35)} ${f(fr * 0.25)} ${f(fr * 0.35)}z"/><path d="M${f(cx - fr * 0.55)} ${f(ty + fr * 0.2)}h${f(fr * 1.1)}l${f(-fr * 0.2)} ${f(fr * 0.25)}h${f(-fr * 0.7)}z"/></g>`);
+    return `<g filter="url(#glow)"><title>${count} contributions on ${date}</title>${parts.join("")}</g>`;
+  }
+  const obstacle = (c) => (modes.halloween ? pumpkins(c) : modes.newYear ? tree(c) : cactus(c));
+
   groups.forEach((g, i) => {
     // cacti dim once jumped
-    world.push(`<g ${anim(`g${i}`, [[0, "opacity:1"], [g.tMid, "opacity:1"], [g.tDown + 0.3, "opacity:.38", TW], [DURATION, "opacity:.38"]])}>${g.cacti.map(cactus).join("")}</g>`);
+    world.push(`<g ${anim(`g${i}`, [[0, "opacity:1"], [g.tMid, "opacity:1"], [g.tDown + 0.3, "opacity:.38", TW], [DURATION, "opacity:.38"]])}>${g.cacti.map(obstacle).join("")}</g>`);
     const [top] = CACTUS[g.level];
     world.push(`<text x="${f(g.gx + g.gw / 2)}" y="${GROUND - g.maxH - 10}" fill="${top}" font-size="${12 + g.level * 1.5}" filter="url(#glow)" ${anim(`pop${i}`, [
       [0, "opacity:0;transform:translateY(0)"], [g.tMid, "opacity:1;transform:translateY(0)"],
@@ -307,7 +341,8 @@ export default function render({ login, days: allDays, total, maxCount }, option
   out.push(dust.join(""));
   out.push(`<g transform="translate(${DX},${GROUND - DINO_H + 1})"><g class="m" style="animation-name:dino;transform-box:fill-box;transform-origin:50% 80%" filter="url(#glow)">
     <path d="${pixels(BODY, "#")}" fill="url(#dino)"/>
-    <path d="${pixels(BODY, "e")}" fill="#1a0b2e"/>
+    <path d="${pixels(BODY, "e")}" fill="#1a0b2e"/>${modes.newYear ? `
+    <rect x="18" y="-2" width="20" height="4" rx="2" fill="#f8f9fa"/><path d="M20 -2L36 -2Q30 -15 15 -12Z" fill="#e03131"/><circle cx="14.5" cy="-12" r="2.6" fill="#f8f9fa"/>` : ""}
     <g ${anim("run", legFrames)}>
       <path d="${pixels(LEGS.a, "#", 14)}" fill="url(#dino)" style="animation:legA .22s steps(1) infinite"/>
       <path d="${pixels(LEGS.b, "#", 14)}" fill="url(#dino)" style="animation:legB .22s steps(1) infinite"/>
