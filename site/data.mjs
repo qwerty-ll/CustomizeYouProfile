@@ -2,7 +2,7 @@
 // browser (no token): GitHub's REST API for the profile and repositories, and
 // a public contributions mirror for the calendar. The Action itself uses
 // GitHub's GraphQL API, so numbers in the preview can differ slightly
-// (e.g. languages are counted per repository instead of bytes of code).
+// (languages come from the byte counts of your largest repositories only).
 
 const LEVELS = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
 
@@ -19,6 +19,15 @@ export const LANGUAGE_COLORS = {
   CMake: "#DA3434", "F#": "#b845fc", OCaml: "#ef7a08", Erlang: "#B83998", Groovy: "#4298b8", "Visual Basic .NET": "#945db7",
   ShaderLab: "#222c37", HLSL: "#aace60", GLSL: "#5686a5", Mako: "#7e858d", Pascal: "#E3F171", Fortran: "#4d41b1",
 };
+
+const edge = (name, size) => ({ size, node: { name, color: LANGUAGE_COLORS[name] ?? "#8b949e" } });
+function languageEdges(repo, langBytes) {
+  if (langBytes && Object.keys(langBytes).length) {
+    const bytes = langBytes[repo.name];
+    return bytes ? Object.entries(bytes).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([n, b]) => edge(n, b)) : [];
+  }
+  return repo.language ? [edge(repo.language, 1000)] : [];
+}
 
 export class LoadError extends Error {
   constructor(kind, message) { super(message); this.kind = kind; }
@@ -38,7 +47,10 @@ async function getJson(url) {
 }
 
 // Pure: REST + contributions responses → the GraphQL user shape buildContext() expects.
-export function toUser(rest, repos, contrib, pullRequests = 0) {
+// langBytes: { repoName: { Language: bytes } } for the biggest repos. Those dominate the
+// byte totals the Action computes, so they give the same top language. Without it
+// (rate limited) each repo counts once for its main language.
+export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null) {
   const own = repos.filter((r) => !r.fork);
   const weeks = [];
   for (const d of contrib.contributions) {
@@ -60,8 +72,7 @@ export function toUser(rest, repos, contrib, pullRequests = 0) {
       nodes: own.map((r) => ({
         name: r.name,
         stargazerCount: r.stargazers_count ?? 0,
-        // each repo counts once for its main language; one huge repo shouldn't decide it
-        languages: { edges: r.language ? [{ size: 1000, node: { name: r.language, color: LANGUAGE_COLORS[r.language] ?? "#8b949e" } }] : [] },
+        languages: { edges: languageEdges(r, langBytes) },
       })),
     },
     contributionsCollection: {
@@ -75,9 +86,9 @@ export function toUser(rest, repos, contrib, pullRequests = 0) {
 }
 
 // Cached per session so tweaking options doesn't spend the 60 requests/hour
-// GitHub allows without login.
+// GitHub allows without login (a lookup costs about a dozen).
 export async function fetchPublicProfile(login) {
-  const key = `cyp:user:${login.toLowerCase()}`;
+  const key = `cyp:user2:${login.toLowerCase()}`;
   try {
     const hit = JSON.parse(sessionStorage.getItem(key) ?? "null");
     if (hit && Date.now() - hit.at < 15 * 60e3) return hit.data;
@@ -92,12 +103,16 @@ export async function fetchPublicProfile(login) {
     getJson(`https://api.github.com/search/issues?q=${encodeURIComponent(`author:${rest.login} type:pr`)}&per_page=1`).then((r) => r.total_count).catch(() => 0),
     getJson(`https://api.github.com/repos/${rest.login}/${rest.login}`).catch(() => null),
   ]);
+  // exact language bytes for the 6 largest repositories (skipped quietly if rate limited)
+  const biggest = repos.filter((r) => !r.fork && r.size > 0).sort((a, b) => b.size - a.size).slice(0, 6);
+  const langBytes = Object.fromEntries((await Promise.all(biggest.map((r) =>
+    getJson(`https://api.github.com/repos/${r.full_name}/languages`).then((l) => [r.name, l], () => null)))).filter(Boolean));
   let hasWorkflow = false;
   if (profileRepo) {
     hasWorkflow = await getJson(`https://api.github.com/repos/${rest.login}/${rest.login}/contents/.github/workflows/profile-effects.yml`).then(() => true, () => false);
   }
   const data = {
-    user: toUser(rest, repos, contrib, prs),
+    user: toUser(rest, repos, contrib, prs, langBytes),
     repo: profileRepo ? { exists: true, branch: profileRepo.default_branch || "main", hasWorkflow } : { exists: false, branch: "main", hasWorkflow: false },
   };
   try { sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data })); } catch {}

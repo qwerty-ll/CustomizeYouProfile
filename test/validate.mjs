@@ -132,6 +132,11 @@ assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().ends
   assert.equal(c.profile.repos, 1, "forks are skipped");
   assert.equal(c.profile.stars, 4);
   assert.equal(c.profile.languages[0].name, "Go");
+  // with byte counts for the big repos, those decide the ranking (like the Action)
+  const withBytes = buildContext("mona", toUser({ login: "mona", followers: 0, public_repos: 2 },
+    [{ name: "a", fork: false, language: "HTML", size: 1 }, { name: "b", fork: false, language: "HTML", size: 1 }, { name: "big", fork: false, language: "TypeScript", size: 900 }],
+    { contributions }, 0, { big: { JavaScript: 90000, TypeScript: 30000 } }));
+  assert.deepEqual(withBytes.profile.languages.map((l) => l.name), ["JavaScript", "TypeScript"]);
   assert.equal(c.profile.pullRequests, 7);
   for (const id of effects) (await (await import(`../src/effects/${id}.mjs`)).default(c, { ...OPTIONS[0], modes: OFF })).forEach((f) => checkXml(f.svg, `${id} from REST data`));
   // outputs keep every value intact and only list what was changed
