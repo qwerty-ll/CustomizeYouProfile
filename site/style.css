@@ -113,7 +113,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, .tile:has(input
 .btn.primary { background: var(--success-btn); border-color: #1f232826; color: #fff; }
 .btn.primary:hover { background: var(--success-btn-hover); }
 .btn.small { font-size: 12px; min-height: 26px; padding: 2px 10px; }
-.link { font: inherit; font-size: 12px; font-weight: 500; color: var(--accent); background: none; border: 0; padding: 2px 6px; cursor: pointer; }
+.link { font: inherit; font-size: 12px; font-weight: 500; color: var(--accent); background: none; border: 0; padding: 5px 6px; margin: -3px 0; cursor: pointer; }
 .link:hover { text-decoration: underline; }
 .icon { font: inherit; font-size: 18px; line-height: 1; width: 32px; height: 32px; flex: none; color: var(--muted); background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
 .icon:hover { color: var(--danger); border-color: var(--border); }
@@ -141,7 +141,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, .tile:has(input
 
 /* segmented control */
 .segmented { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 3px; background: var(--bg-inset); border-radius: 8px; }
-.segmented label { display: block; cursor: pointer; }
+.segmented label { display: block; cursor: pointer; position: relative; }   /* keeps the hidden radio inside, not page-wide */
 .segmented input { position: absolute; opacity: 0; pointer-events: none; }
 .segmented span { display: block; padding: 6px 10px; border-radius: 6px; text-align: center; }
 .segmented b { display: block; font-size: 13px; font-weight: 600; }
@@ -177,12 +177,12 @@ input:focus, select:focus, textarea:focus, button:focus-visible, .tile:has(input
   border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: grid; gap: 18px;
   background: var(--readme-bg); max-height: calc(100vh - 170px); overflow: auto; box-shadow: var(--shadow);
 }
-.frame[data-theme="light"] { background: #ffffff; border-color: #d1d9e0; }
-.frame[data-theme="dark"] { background: #0d1117; border-color: #3d444d; }
+.frame[data-theme="light"] { background: #ffffff; border-color: #d1d9e0; --caption: #59636e; }
+.frame[data-theme="dark"] { background: #0d1117; border-color: #3d444d; --caption: #9198a1; }
 .frame figure { margin: 0; }
 .frame img { display: block; width: 100%; height: auto; }
-.frame figcaption { font-size: 11px; color: #8b949e; margin-top: 6px; text-align: center; letter-spacing: .3px; }
-.frame .empty { margin: 40px 0; text-align: center; color: #8b949e; }
+.frame figcaption { font-size: 11px; color: var(--caption); margin-top: 6px; text-align: center; letter-spacing: .3px; }
+.frame .empty { margin: 40px 0; text-align: center; color: var(--caption); }
 .problems { margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--warn); color: var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); font-size: 13px; }
 .note { color: var(--muted); font-size: 12px; margin: 10px 2px 0; }
 
@@ -200,6 +200,7 @@ footer { max-width: 1280px; margin: 0 auto; padding: 8px 24px 40px; color: var(-
   .layout, .hero, .top { padding-left: 16px; padding-right: 16px; }
   .top nav a:first-child { display: none; }
   .login .prefix { display: none; }
+  .login input { padding-left: 10px; }
   .row.cd input[type="date"] { flex-basis: 130px; }
 }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }

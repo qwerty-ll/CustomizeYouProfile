@@ -5,6 +5,7 @@ import { demoUser } from "./src/demo.mjs";
 import { buildContext, safeAvatar, seedFor } from "./src/lib.mjs";
 import { EFFECTS, resolveEffects } from "./src/registry.mjs";
 import { renderEffect } from "./src/render.mjs";
+import { birthdayIn } from "./src/seasonal.mjs";
 import { resolveSettings } from "./src/settings.mjs";
 import { CALENDAR_API, LoadError, fetchAvatarDataUri, fetchPublicProfile } from "./data.mjs";
 import { EFFECT_TEXT_RU, MONTHS, STRINGS } from "./i18n.mjs";
@@ -64,7 +65,11 @@ function pretendDate() {
   const y = new Date().getUTCFullYear();
   if (state.pretend === "new-year") return `${y}-12-31`;
   if (state.pretend === "halloween") return `${y}-10-31`;
-  if (state.pretend === "birthday" && birthdayValue()) return `${y}-${birthdayValue()}`;
+  if (state.pretend === "birthday" && birthdayValue()) {
+    // Feb 29 falls on Feb 28 in other years, like in the Action
+    const day = birthdayIn(y, { month: +state.cfg.bMonth, day: +state.cfg.bDay });
+    return day ? day.toISOString().slice(0, 10) : "";
+  }
   return "";
 }
 
@@ -76,7 +81,7 @@ function renderShell() {
   <header class="top">
     <a class="brand" href="./"><span class="logo" aria-hidden="true"></span>CustomizeYouProfile</a>
     <nav>
-      <a href="https://github.com/qwerty-ll/CustomizeYouProfile#readme" target="_blank" rel="noopener">${t("readme")}</a>
+      <a href="https://github.com/qwerty-ll/CustomizeYouProfile/blob/main/${state.ui === "ru" ? "README.ru.md" : "README.md"}" target="_blank" rel="noopener">${t("readme")}</a>
       <a href="https://github.com/qwerty-ll/CustomizeYouProfile" target="_blank" rel="noopener">${t("source")}</a>
       ${state.ui === "ru" ? `<button class="chip" id="ui-lang" type="button" lang="en" aria-label="English (EN)">EN</button>` : `<button class="chip" id="ui-lang" type="button" lang="ru" aria-label="Русский (RU)">RU</button>`}
     </nav>
@@ -116,14 +121,14 @@ function renderShell() {
         <h2><span class="num">3</span>${t("s3")}</h2>
         <div class="field">
           <span class="label">${t("style")}</span>
-          <div class="segmented" role="radiogroup">
+          <div class="segmented" role="radiogroup" aria-label="${t("style")}">
             ${["clean", "neon"].map((s) => `<label><input type="radio" name="style" value="${s}" ${state.cfg.style === s ? "checked" : ""}><span><b>${t(s)}</b><small>${t(s + "Hint")}</small></span></label>`).join("")}
           </div>
           <small class="hint">${t("styleNote")}</small>
         </div>
         <div class="field">
           <span class="label">${t("textLang")}</span>
-          <div class="segmented compact" role="radiogroup">
+          <div class="segmented compact" role="radiogroup" aria-label="${t("textLang")}">
             ${[["en", "English"], ["ru", "Русский"]].map(([v, l]) => `<label><input type="radio" name="language" value="${v}" ${state.cfg.language === v ? "checked" : ""}><span><b>${l}</b></span></label>`).join("")}
           </div>
         </div>
@@ -134,7 +139,7 @@ function renderShell() {
         <label class="field"><span class="label">${t("tagline")}</span><textarea name="tagline" rows="3" placeholder="${esc(t("taglinePh"))}">${esc(state.cfg.tagline)}</textarea></label>
         <div class="field">
           <span class="label">${t("position")}</span>
-          <div class="segmented compact" role="radiogroup">
+          <div class="segmented compact" role="radiogroup" aria-label="${t("position")}">
             ${["top", "bottom"].map((p) => `<label><input type="radio" name="position" value="${p}" ${state.cfg.position === p ? "checked" : ""}><span><b>${t(p)}</b></span></label>`).join("")}
           </div>
         </div>
@@ -165,10 +170,10 @@ function renderShell() {
 
       <section class="card">
         <h2><span class="num">5</span>${t("s5")}</h2>
-        <div class="tabs" role="tablist">
-          ${[["browser", "tabBrowser"], ["command", "tabCommand"], ["file", "tabFile"]].map(([v, k]) => `<button type="button" role="tab" data-tab="${v}" aria-selected="${state.tab === v}">${t(k)}</button>`).join("")}
+        <div class="tabs" role="tablist" aria-label="${t("s5")}">
+          ${[["browser", "tabBrowser"], ["command", "tabCommand"], ["file", "tabFile"]].map(([v, k]) => `<button type="button" role="tab" id="tab-${v}" data-tab="${v}" aria-controls="output">${t(k)}</button>`).join("")}
         </div>
-        <div id="output"></div>
+        <div id="output" role="tabpanel"></div>
       </section>
     </div>
 
@@ -177,7 +182,7 @@ function renderShell() {
         <h2>${t("preview")}</h2>
         <span class="spacer"></span>
         <select id="pretend" aria-label="${t("pretend")}"></select>
-        <div class="segmented compact mini" role="radiogroup">
+        <div class="segmented compact mini" role="radiogroup" aria-label="${t("theme")}">
           ${["light", "dark"].map((v) => `<label><input type="radio" name="theme" value="${v}" ${state.theme === v ? "checked" : ""}><span><b>${t(v)}</b></span></label>`).join("")}
         </div>
       </div>
@@ -205,7 +210,7 @@ function renderStatus() {
     el.innerHTML = `${state.avatar ? `<img class="avatar" src="${esc(state.avatar)}" alt="">` : ""}
       <span><b>${esc(p.name)}</b> <span class="muted">@${esc(state.ctx.login)}</span><br>
       <small>${s.sample ? repo : `${esc(t("loaded", state.ctx.total))} · ${repo}`}</small>
-      ${s.sample ? `<br><small class="warn">${t("sampleYear")}</small>` : ""}</span>`;
+      ${s.sample ? `<br><small class="warn">${t("sampleNote")}</small>` : ""}</span>`;
   } else el.innerHTML = `<span class="muted">${t("demo")}</span>`;
 }
 
@@ -214,7 +219,7 @@ function renderCountdowns() {
     <div class="row cd">
       <input type="date" data-cd="${i}" data-k="date" value="${esc(c.date)}" aria-label="${t("date")}">
       <input data-cd="${i}" data-k="label" value="${esc(c.label)}" placeholder="${esc(t("labelPh"))}" maxlength="40" aria-label="${t("label")}">
-      <button type="button" class="icon" data-cd-del="${i}" aria-label="remove">×</button>
+      <button type="button" class="icon" data-cd-del="${i}" aria-label="${t("removeDate")}">×</button>
     </div>`).join("");
   const canAdd = state.cfg.countdowns.length + (state.cfg.toBirthday ? 1 : 0) < 3;
   $("#countdowns").innerHTML = `${rows}
@@ -236,7 +241,11 @@ function renderPretend() {
 function renderOutput() {
   const cfg = configForOutput();
   const el = $("#output");
-  document.querySelectorAll("[data-tab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === state.tab)));
+  document.querySelectorAll("[data-tab]").forEach((b) => {        // one tab stop; arrow keys move between tabs
+    b.setAttribute("aria-selected", String(b.dataset.tab === state.tab));
+    b.tabIndex = b.dataset.tab === state.tab ? 0 : -1;
+  });
+  el.setAttribute("aria-labelledby", `tab-${state.tab}`);
   if (!cfg.effects.length) { el.innerHTML = `<p class="hint">${t("emptyPreview")}</p>`; return; }
   const yaml = workflowYaml(cfg);
   const code = (text, id) => `<div class="code"><button type="button" class="btn small copy" data-copy="${id}">${t("copy")}</button><pre id="${id}">${esc(text)}</pre></div>`;
@@ -363,6 +372,16 @@ document.addEventListener("change", (e) => {
     case "theme": state.theme = el.value; document.documentElement.dataset.theme = state.theme; save(); return schedulePreview();
   }
   if (el.id === "pretend") { state.pretend = el.value; schedulePreview(); }
+});
+
+document.addEventListener("keydown", (e) => {                   // tabs: arrow keys, Home and End
+  if (e.target.getAttribute?.("role") !== "tab" || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+  const tabs = [...document.querySelectorAll('[role="tab"]')], i = tabs.indexOf(e.target), n = tabs.length;
+  const next = tabs[{ Home: 0, End: n - 1, ArrowLeft: (i + n - 1) % n, ArrowRight: (i + 1) % n }[e.key]];
+  e.preventDefault();
+  state.tab = next.dataset.tab;
+  renderOutput();
+  next.focus();
 });
 
 document.addEventListener("click", async (e) => {

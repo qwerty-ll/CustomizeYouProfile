@@ -111,18 +111,15 @@ const fetchCalendar = (login) => CALENDAR_API
 // doesn't spend the 60 requests/hour GitHub allows without login (a lookup
 // costs about a dozen).
 const CACHE = "cyp:users3", HOUR = 60 * 60e3;
+const readCache = () => { try { return JSON.parse(localStorage.getItem(CACHE)) || {}; } catch { return {}; } };
 function cached(login) {
-  try {
-    const hit = JSON.parse(localStorage.getItem(CACHE) ?? "{}")[login.toLowerCase()];
-    return hit && Date.now() - hit.at < HOUR ? hit.data : null;
-  } catch { return null; }
+  const hit = readCache()[login.toLowerCase()];
+  return hit && Date.now() - hit.at < HOUR ? hit.data : null;
 }
 function remember(login, data) {
-  try {
-    const all = { ...JSON.parse(localStorage.getItem(CACHE) ?? "{}"), [login.toLowerCase()]: { at: Date.now(), data } };
-    const keep = Object.entries(all).filter(([, v]) => Date.now() - v?.at < HOUR).sort((a, b) => b[1].at - a[1].at).slice(0, 5);
-    localStorage.setItem(CACHE, JSON.stringify(Object.fromEntries(keep)));
-  } catch {}
+  const all = { ...readCache(), [login.toLowerCase()]: { at: Date.now(), data } };
+  const keep = Object.entries(all).filter(([, v]) => Date.now() - v?.at < HOUR).sort((a, b) => b[1].at - a[1].at).slice(0, 5);
+  try { localStorage.setItem(CACHE, JSON.stringify(Object.fromEntries(keep))); } catch {}
   return data;
 }
 
