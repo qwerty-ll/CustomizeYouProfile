@@ -51,13 +51,13 @@
 <rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 21</text>
 <text x="112" y="208" text-anchor="middle" class="name">mellou</text>
 <text x="112" y="226" text-anchor="middle" class="klass">JavaScript Sorcerer</text>
-<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">278 contributions · next level 1%</text>
+<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">279 contributions · next level 4%</text>
 <rect x="230" y="54" width="590" height="12" rx="6" fill="#2a2340"/>
-<rect x="230" y="54" width="12" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
+<rect x="230" y="54" width="25.9" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
 <text x="230" y="105" class="key" fill="#ff6b6b">STR</text><text x="268" y="105" class="label">commits this year</text>
 <rect x="390" y="96" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="96" width="319.3" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
-<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">259</text>
+<rect x="390" y="96" width="319.5" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
+<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">260</text>
 <text x="230" y="131" class="key" fill="#4dabf7">INT</text><text x="268" y="131" class="label">public repos</text>
 <rect x="390" y="122" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="122" width="303.7" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
@@ -76,8 +76,8 @@
 <text x="820" y="209" text-anchor="end" class="m val" style="animation-name:sv4">4</text>
 <text x="230" y="235" class="key" fill="#ffd43b">LUK</text><text x="268" y="235" class="label">stars earned</text>
 <rect x="390" y="226" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="226" width="10" height="10" rx="5" fill="#ffd43b" class="m fbl" style="animation-name:st5"/>
-<text x="820" y="235" text-anchor="end" class="m val" style="animation-name:sv5">0</text>
+<rect x="390" y="226" width="46.8" height="10" rx="5" fill="#ffd43b" class="m fbl" style="animation-name:st5"/>
+<text x="820" y="235" text-anchor="end" class="m val" style="animation-name:sv5">1</text>
 <text x="230" y="264" class="label">ACHIEVEMENTS · 3/8</text>
 <g class="m fb" style="animation-name:bd0"><circle cx="245" cy="284" r="14" fill="#2d2150" stroke="url(#gold)" stroke-width="1.5"/>
       <text x="245" y="289" text-anchor="middle" class="icon">🌱</text>
