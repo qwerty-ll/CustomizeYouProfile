@@ -60,7 +60,8 @@ export default function render({ login, days, weeks, total, maxCount }, options 
   const css = [];
   const anim = (name, frames, cls = "") => (css.push(keyframes(name, frames)), `class="m ${cls}" style="animation-name:${name}"`);
   const WIPE = [DURATION - 0.7, DURATION - 0.1];      // everything is erased before the loop restarts
-  const reveal = (name, at, dur) => anim(name, [[0, "transform:scaleX(0)"], [at, "transform:scaleX(0)"], [at + dur, "transform:scaleX(1)", TW], [WIPE[0], "transform:scaleX(1)"], [WIPE[1], "transform:scaleX(0)"]], "fbl");
+  // text fades in as if just written (Safari ignores animated clipPaths, so no wipe)
+  const reveal = (name, at, dur, cls) => anim(name, [[0, "opacity:0;transform:translateX(-6px)"], [at, "opacity:0;transform:translateX(-6px)"], [at + dur, "opacity:1;transform:translateX(0)", TW], [WIPE[0], "opacity:1;transform:translateX(0)"], [WIPE[1], "opacity:0;transform:translateX(0)", TW]], cls);
 
   // ---------- paper ----------
   const defs = [], out = [];
@@ -76,10 +77,8 @@ export default function render({ login, days, weeks, total, maxCount }, options 
   // heading, written with a pen
   const last = days.at(-1).date;
   const date = L.date(Number(last.slice(8)), Number(last.slice(5, 7)) - 1);
-  defs.push(`<clipPath id="h1"><rect x="${W / 2 - 120}" y="10" width="240" height="22" ${reveal("h1", 0.2, 0.6)}/></clipPath>`);
-  defs.push(`<clipPath id="h2"><rect x="${W / 2 - 120}" y="32" width="240" height="22" ${reveal("h2", 0.8, 0.6)}/></clipPath>`);
-  out.push(`<text x="${W / 2}" y="27" class="hand pen" text-anchor="middle" clip-path="url(#h1)">${date}</text>`);
-  out.push(`<text x="${W / 2}" y="48" class="hand pen" text-anchor="middle" clip-path="url(#h2)">${L.heading}</text>`);
+  out.push(`<text x="${W / 2}" y="27" text-anchor="middle" ${reveal("h1", 0.2, 0.6, "hand pen")}>${date}</text>`);
+  out.push(`<text x="${W / 2}" y="48" text-anchor="middle" ${reveal("h2", 0.8, 0.6, "hand pen")}>${L.heading}</text>`);
   out.push(`<text x="${W - 20}" y="27" class="hand pen small" text-anchor="end" opacity=".8">@${esc(login)}</text>`);
 
   // month and weekday labels in pencil
@@ -166,8 +165,7 @@ export default function render({ login, days, weeks, total, maxCount }, options 
   out.push(`<g ${anim("pencil", tipFrames)}>${pencil}</g>`);
 
   // ---------- footer: total, legend, teacher's mark ----------
-  defs.push(`<clipPath id="tot"><rect x="${GX - 30}" y="${fy1 + 10}" width="300" height="26" ${reveal("tot", SHADED + 0.1, 0.8)}/></clipPath>`);
-  out.push(`<text x="${GX - 26}" y="${fy1 + 30}" class="hand pen" clip-path="url(#tot)">${L.total(total)}</text>`);
+  out.push(`<text x="${GX - 26}" y="${fy1 + 30}" ${reveal("tot", SHADED + 0.1, 0.8, "hand pen")}>${L.total(total)}</text>`);
   let legend = `<text x="${fx1 - 128}" y="${fy1 + 26}" class="hand pencil" text-anchor="end">${L.less}</text>`;
   PENCIL.forEach((c, k) => {
     const x = fx1 - 122 + k * (SQ + 4), y = fy1 + 15;
@@ -184,8 +182,7 @@ export default function render({ login, days, weeks, total, maxCount }, options 
     ])}/>
     <text x="0" y="9" text-anchor="middle" ${anim("five", [[0, "opacity:0;transform:scale(1.6)"], [MARK, "opacity:0;transform:scale(1.6)"], [MARK + 0.3, "opacity:1;transform:scale(1)", TW], [WIPE[0], "opacity:1;transform:scale(1)"], [WIPE[1], "opacity:0;transform:scale(1)", TW]], "fb hand mark")}>${L.mark}</text>
   </g>`);
-  defs.push(`<clipPath id="good"><rect x="${MX + 28}" y="${MY - 12}" width="90" height="24" ${reveal("good", MARK + 1, 0.6)}/></clipPath>`);
-  out.push(`<text x="${MX + 30}" y="${MY + 6}" class="hand red" clip-path="url(#good)">${L.praise}</text>`);
+  out.push(`<text x="${MX + 30}" y="${MY + 6}" ${reveal("good", MARK + 1, 0.6, "hand red")}>${L.praise}</text>`);
 
   const style = `
     .m{animation-duration:${DURATION.toFixed(3)}s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}

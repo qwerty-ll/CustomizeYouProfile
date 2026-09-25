@@ -33,6 +33,7 @@ jobs:
           fx --out examples/modes/new-year --effects dino-run,fireworks --seasons new-year --today "$Y-12-31"
           fx --out examples/modes/halloween --effects dino-run --seasons halloween --today "$Y-10-31"
           fx --out examples/modes/birthday --effects intro --birthday 03-15 --today "$Y-03-15"
+          fx --out examples/neon --effects intro,skills,dino-run --style neon
           fx --out examples/modes/countdown --effects countdown --birthday 03-15 --countdown "$((Y + 1))-01-01 New Year; birthday; $((Y + 1))-06-01 Vacation"
       - uses: ./
         with:

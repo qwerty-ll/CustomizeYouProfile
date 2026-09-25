@@ -72,11 +72,10 @@ export default function render({ login, days, weeks, total, maxCount }, options 
   // line 0: prompt + typed command
   const cmdX = PADX + (PROMPT.length + 1) * CW;
   out.push(`<g class="t">${mono(PADX, line(0), PROMPT, C.green)}</g>`);
-  const typeFrames = [[0, "transform:scaleX(0)"]];
-  typeTimes.forEach((tt, i) => typeFrames.push([tt, `transform:scaleX(${((i + 1) / COMMAND.length).toFixed(4)})`]));
-  typeFrames.push([DURATION - 0.5, "transform:scaleX(1)"], [DURATION - 0.2, "transform:scaleX(0)"]);
-  defs.push(`<clipPath id="typed"><rect x="${cmdX}" y="${line(0) - 14}" width="${f1(COMMAND.length * CW)}" height="${LH}" ${anim("type", typeFrames, "fbl")}/></clipPath>`);
-  out.push(`<g class="t" clip-path="url(#typed)">${mono(cmdX, line(0), COMMAND, C.text)}</g>`);
+  // each character appears on its own keyframe (Safari ignores animated clipPaths)
+  [...COMMAND].forEach((ch, i) => {
+    if (ch !== " ") out.push(`<text x="${f1(cmdX + i * CW)}" y="${line(0)}" fill="${C.text}" ${showAt(`ch${i}`, typeTimes[i])}>${esc(ch)}</text>`);
+  });
   // typing cursor rides the end of the typed text, then disappears on Enter
   const curFrames = [[0, `transform:translateX(0);opacity:1`]];
   typeTimes.forEach((tt, i) => curFrames.push([tt, `transform:translateX(${f1((i + 1) * CW)}px);opacity:1`]));
@@ -101,17 +100,18 @@ export default function render({ login, days, weeks, total, maxCount }, options 
       lastCol = col;
     }
   ["Mon", "Wed", "Fri"].forEach((n, k) => (grid += mono(PADX, GRID_Y + (1 + 2 * k) * STEP + 9, n, C.dim, ` class="sm"`)));
+  const columns = [];
   for (const d of days) {
     const x = f1(GRID_X + d.col * STEP), y = f1(GRID_Y + d.row * STEP);
-    grid += d.level
+    columns[d.col] = (columns[d.col] ?? "") + (d.level
       ? `<rect x="${x}" y="${y}" width="8.6" height="8.6" rx="1.5" fill="${GH_DARK[d.level]}"${d.level >= 3 ? ` filter="url(#glow)"` : ""}><title>${d.count} on ${d.date}</title></rect>`
-      : `<rect x="${f1(x + 3.3)}" y="${f1(y + 3.3)}" width="2" height="2" fill="${C.border}"/>`;
+      : `<rect x="${f1(x + 3.3)}" y="${f1(y + 3.3)}" width="2" height="2" fill="${C.border}"/>`);
   }
-  defs.push(`<clipPath id="sweep"><rect x="${PADX - 2}" y="${line(3) - 14}" width="${f1(GRID_X - PADX + weeks * STEP + 4)}" height="${9 * STEP + 20}" ${anim("sweep", [
-    [0, "transform:scaleX(0)"], [GRID_IN, `transform:scaleX(0);animation-timing-function:steps(${weeks})`],
-    [GRID_IN + GRID_T, "transform:scaleX(1)", TW], [DURATION - 0.5, "transform:scaleX(1)"], [DURATION - 0.2, "transform:scaleX(0)"],
-  ], "fbl")}/></clipPath>`);
-  out.push(`<g clip-path="url(#sweep)" ${showAt("gridv", GRID_IN)}>${grid}</g>`);
+  out.push(`<g ${showAt("gridv", GRID_IN)}>${grid}</g>`);
+  // the graph prints column by column
+  const colTime = (col) => GRID_IN + ((col + 1) / weeks) * GRID_T;
+  for (let col = 0; col < weeks; col++)
+    out.push(`<g ${showAt(`col${col}`, colTime(col))}>${columns[col] ?? ""}</g>`);
 
   // stats panel to the right of the graph, one row per graph row
   const SX = GRID_X + weeks * STEP + 22;

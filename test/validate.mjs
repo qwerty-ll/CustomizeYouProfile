@@ -54,9 +54,10 @@ const ALL_ON = (language, today) => resolveModes({
   countdowns: parseCountdowns("2026-12-31 <Release> & co; birthday; 2020-01-01 Past", parseBirthday(today.slice(5, 10))),
 });
 const OPTIONS = [
-  { language: "en", tagline: [], skills: [], modes: OFF },
-  { language: "ru", name: "Макар", tagline: ["строка с <угловыми> & скобками", "x".repeat(120)], skills: ["React", "Node.js", "C#", "<script>"], modes: ALL_ON("ru", "2026-12-31T12:00:00Z") },
-  { language: "en", tagline: [], skills: [], modes: ALL_ON("en", "2026-10-31T12:00:00Z") },
+  { language: "en", tagline: [], skills: [], modes: OFF, style: "clean" },
+  { language: "en", tagline: [], skills: [], modes: OFF, style: "neon" },
+  { language: "ru", name: "Макар", tagline: ["строка с <угловыми> & скобками", "x".repeat(120)], skills: ["React", "Node.js", "C#", "<script>"], modes: ALL_ON("ru", "2026-12-31T12:00:00Z"), style: "neon" },
+  { language: "en", tagline: [], skills: [], modes: ALL_ON("en", "2026-10-31T12:00:00Z"), style: "clean" },
 ];
 
 // Minimal XML checks: balanced tags and no duplicate attributes.
@@ -88,7 +89,8 @@ for (const user of PROFILES) {
       assert.ok(files.length > 0, `${id} produced no files`);
       for (const f of files) f.svg = decorate(f.svg, options.modes, 1);
       for (const { file, svg } of files) {
-        const where = `${id}/${file} for ${user.login} (${options.language})`;
+        const where = `${id}/${file} for ${user.login} (${options.language}, ${options.style})`;
+        assert.ok(!/<clipPath[^>]*>(?:(?!<\/clipPath>)[\s\S])*class="m/.test(svg), `${where}: animated clipPath (Safari won't play it)`);
         checkXml(svg, where);
         assert.ok(svg.length < 400 * 1024, `${where}: ${(svg.length / 1024).toFixed(0)} KB is too big`);
         const loop = svg.match(/animation-duration:([\d.]+)s/);

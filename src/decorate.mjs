@@ -9,6 +9,7 @@ export function decorate(svg, modes, seed) {
   const size = svg.match(/<svg\b[^>]*?\bwidth="([\d.]+)"[^>]*?\bheight="([\d.]+)"/);
   if (!size) return svg;
   const W = +size[1], H = +size[2];
+  const onLight = /<svg\b[^>]*\bdata-bg="light"/.test(svg);        // transparent bg on a white page
   const random = rng(seed);
   const css = [], parts = [];
   const defs = [`<clipPath id="cyp-clip"><rect width="${W}" height="${H}" rx="14"/></clipPath>`,
@@ -20,7 +21,7 @@ export function decorate(svg, modes, seed) {
     css.push(`@keyframes cyp-snow{from{transform:translate(0,-12px)}to{transform:translate(var(--dx),${H + 12}px)}}`);
     for (let i = 0; i < count(5000, 55); i++) {
       const d = 5 + random() * 6;
-      parts.push(`<circle cx="${f1(random() * W)}" cy="0" r="${f1(0.8 + random() * 1.6)}" fill="#fff" opacity="${f1(0.55 + random() * 0.45)}" style="--dx:${f1(-20 - random() * 40)}px;animation:cyp-snow ${f1(d)}s linear ${f1(-random() * d)}s infinite"/>`);
+      parts.push(`<circle cx="${f1(random() * W)}" cy="0" r="${f1(0.8 + random() * 1.6)}" fill="${onLight ? "#a5b8cf" : "#fff"}" opacity="${f1(0.55 + random() * 0.45)}" style="--dx:${f1(-20 - random() * 40)}px;animation:cyp-snow ${f1(d)}s linear ${f1(-random() * d)}s infinite"/>`);
     }
     // garland of blinking bulbs along the top edge
     css.push(`@keyframes cyp-blink{0%,100%{opacity:1}50%{opacity:.2}}`);

@@ -1,13 +1,22 @@
 <!-- customize-you-profile:start -->
-<img alt="Animated intro banner" src="./intro.svg" width="100%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./intro-dark.svg">
+  <img alt="Animated intro banner" src="./intro.svg" width="100%">
+</picture>
 
-<img alt="Tech stack" src="./skills.svg" width="100%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./skills-dark.svg">
+  <img alt="Tech stack" src="./skills.svg" width="100%">
+</picture>
 
 <img alt="GitHub stats as an RPG character card" src="./rpg-card.svg" width="100%">
 
 <img alt="Top languages as an animated equalizer" src="./languages.svg" width="100%">
 
-<img alt="A dino running through the year, jumping over commit-cacti" src="./dino-run.svg" width="100%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./dino-run-dark.svg">
+  <img alt="A dino running through the year, jumping over commit-cacti" src="./dino-run.svg" width="100%">
+</picture>
 
 <img alt="Fireworks for every month that end by drawing the contribution graph in the sky" src="./fireworks.svg" width="100%">
 

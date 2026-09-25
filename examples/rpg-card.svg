@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="320" viewBox="0 0 860 320">
-<title>qwerty-ll: level 20 JavaScript Sorcerer</title>
+<title>qwerty-ll: level 21 JavaScript Sorcerer</title>
 <defs><clipPath id="frame"><rect width="860" height="320" rx="16"/></clipPath><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1530"/><stop offset="1" stop-color="#0c0a16"/></linearGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a3"/><stop offset=".5" stop-color="#c9973b"/><stop offset="1" stop-color="#ffe7a3"/></linearGradient><linearGradient id="xp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048e8"/><stop offset="1" stop-color="#e599f7"/></linearGradient><linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="avatar"><circle cx="112" cy="112" r="58"/></clipPath></defs>
 <style>
     .m{animation-duration:10.040s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}
@@ -48,24 +48,24 @@
 <circle cx="112" cy="112" r="66" fill="none" stroke="#b197fc" stroke-width="4" filter="url(#glow)" style="transform-box:fill-box;transform-origin:center;animation:aura 3s ease-in-out infinite"/>
 <image href="data:image/png;base64,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" x="54" y="54" width="116" height="116" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice"/>
 <circle cx="112" cy="112" r="60" fill="none" stroke="url(#gold)" stroke-width="3"/>
-<rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 20</text>
+<rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 21</text>
 <text x="112" y="208" text-anchor="middle" class="name">mellou</text>
 <text x="112" y="226" text-anchor="middle" class="klass">JavaScript Sorcerer</text>
-<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">277 contributions · next level 97%</text>
+<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">278 contributions · next level 1%</text>
 <rect x="230" y="54" width="590" height="12" rx="6" fill="#2a2340"/>
-<rect x="230" y="54" width="573.5" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
+<rect x="230" y="54" width="12" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
 <text x="230" y="105" class="key" fill="#ff6b6b">STR</text><text x="268" y="105" class="label">commits this year</text>
 <rect x="390" y="96" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="96" width="319.1" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
-<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">258</text>
+<rect x="390" y="96" width="319.3" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
+<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">259</text>
 <text x="230" y="131" class="key" fill="#4dabf7">INT</text><text x="268" y="131" class="label">public repos</text>
 <rect x="390" y="122" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="122" width="303.7" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
 <text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">23</text>
 <text x="230" y="157" class="key" fill="#51cf66">DEX</text><text x="268" y="157" class="label">pull requests</text>
 <rect x="390" y="148" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="148" width="102" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
-<text x="820" y="157" text-anchor="end" class="m val" style="animation-name:sv2">3</text>
+<rect x="390" y="148" width="153" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
+<text x="820" y="157" text-anchor="end" class="m val" style="animation-name:sv2">7</text>
 <text x="230" y="183" class="key" fill="#f783ac">CHA</text><text x="268" y="183" class="label">followers</text>
 <rect x="390" y="174" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="174" width="46.8" height="10" rx="5" fill="#f783ac" class="m fbl" style="animation-name:st3"/>

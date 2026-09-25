@@ -10,6 +10,7 @@
 # Optional: NAME="Mona" TAGLINE="Frontend dev|Loves cats" SKILLS="React,Go" LANGUAGE=ru
 #           SEASONS="new-year,halloween" BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday"
 #           (seasonal/birthday/countdown modes stay off unless you set them)
+#           STYLE=neon for the glowing synthwave look instead of the calm default
 # Set DRY_RUN=1 to only print what would happen.
 
 set -euo pipefail
@@ -72,6 +73,7 @@ yaml_quote() { printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')
 [ -n "${NAME:-}" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$NAME")"
 [ -n "${TAGLINE:-}" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$TAGLINE")"
 [ -n "${SKILLS:-}" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$SKILLS")"
+[ -n "${STYLE:-}" ] && WORKFLOW+=$'\n'"          style: $(yaml_quote "$STYLE")"
 [ -n "${SEASONS:-}" ] && WORKFLOW+=$'\n'"          seasons: $(yaml_quote "$SEASONS")"
 [ -n "${BIRTHDAY:-}" ] && WORKFLOW+=$'\n'"          birthday: $(yaml_quote "$BIRTHDAY")"
 [ -n "${COUNTDOWN:-}" ] && WORKFLOW+=$'\n'"          countdown: $(yaml_quote "$COUNTDOWN")"

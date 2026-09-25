@@ -166,7 +166,7 @@ export default function render({ login, days, weeks, total }, options = {}) {
       @keyframes flick{from{transform:scaleX(.6);opacity:.7}to{transform:scaleX(1.1);opacity:1}}
       ${css.join("\n")}`;
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" data-bg="${theme === light ? "light" : "dark"}">
   <title>${login}: ${total} contributions in the last year</title>
   <style>${style}</style>
   ${out.join("\n")}

@@ -49,6 +49,7 @@ const { values } = parseArgs({
     birthday: { type: "string", default: "" },
     countdown: { type: "string", default: "" },
     today: { type: "string", default: "" },
+    style: { type: "string", default: "clean" },
   },
 });
 
@@ -97,7 +98,10 @@ try {
 }
 console.log(`${login}: ${ctx.total} contributions, busiest day ${ctx.maxCount}, ${ctx.days.filter((d) => d.count).length} active days`);
 
+const style = values.style.trim().toLowerCase() || "clean";
+if (!["clean", "neon"].includes(style)) fail(`style "${values.style}" should be clean or neon`);
 const options = {
+  style,
   language,
   name: values.name.trim(),
   tagline: values.tagline.split("|").map((s) => s.trim()).filter(Boolean),

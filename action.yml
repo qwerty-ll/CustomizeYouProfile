@@ -21,6 +21,9 @@ inputs:
   skills:
     description: Comma-separated tech stack for `skills` (defaults to your top languages).
     default: ""
+  style:
+    description: "`clean` (default): calm GitHub colors that follow the viewer's light/dark theme. `neon`: the glowing synthwave look (intro, skills, dino-run)."
+    default: clean
   seasons:
     description: "Opt-in seasonal looks: `new-year` (Dec 15 – Jan 10), `halloween` (Oct 24 – Nov 1), `all`, or empty for none."
     default: ""
@@ -79,11 +82,12 @@ runs:
         IN_BIRTHDAY: ${{ inputs.birthday }}
         IN_COUNTDOWN: ${{ inputs.countdown }}
         IN_TODAY: ${{ inputs.today }}
+        IN_STYLE: ${{ inputs.style }}
       run: |
         args=(--login "${IN_LOGIN:-$GITHUB_REPOSITORY_OWNER}" --effects "$IN_EFFECTS" --out "$IN_OUT"
               --readme "$IN_README" --readme-position "$IN_POSITION" --language "$IN_LANGUAGE"
               "--name=$IN_NAME" "--tagline=$IN_TAGLINE" "--skills=$IN_SKILLS"
-              "--seasons=$IN_SEASONS" "--birthday=$IN_BIRTHDAY" "--countdown=$IN_COUNTDOWN" "--today=$IN_TODAY")
+              "--seasons=$IN_SEASONS" "--birthday=$IN_BIRTHDAY" "--countdown=$IN_COUNTDOWN" "--today=$IN_TODAY" "--style=$IN_STYLE")
         [ "$IN_UPDATE_README" = "false" ] && args+=(--no-readme)
         node "$GITHUB_ACTION_PATH/src/cli.mjs" "${args[@]}"
 

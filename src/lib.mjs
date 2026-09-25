@@ -175,3 +175,18 @@ export function monthLabels(days, weeks) {
 
 export const GH_DARK = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 export const MONO = `ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace`;
+
+// GitHub's own colors, for the calm "clean" style that follows the viewer's theme.
+export const GH_THEMES = {
+  light: {
+    name: "light", fg: "#1f2328", muted: "#59636e", subtle: "#f6f8fa", border: "#d0d7de", bg: "#ffffff",
+    accent: "#0969da", success: "#1a7f37", ink: "#535353", cloud: "#d8dee4",
+    levels: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+  },
+  dark: {
+    name: "dark", fg: "#e6edf3", muted: "#9198a1", subtle: "#151b23", border: "#30363d", bg: "#0d1117",
+    accent: "#4493f8", success: "#3fb950", ink: "#c9d1d9", cloud: "#262c36",
+    levels: ["#151b23", "#0e4429", "#006d32", "#26a641", "#39d353"],
+  },
+};
+export const SANS = `-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif`;
