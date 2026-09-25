@@ -1,0 +1,16 @@
+name: Effect idea
+description: Suggest a new effect or a change to an existing one.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What would it show, and which of your GitHub data would it use (contribution calendar, languages, stats…)?
+    validations:
+      required: true
+  - type: textarea
+    id: refs
+    attributes:
+      label: References
+      description: Sketches, GIFs or links to something similar, if you have them.

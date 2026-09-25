@@ -1,0 +1,16 @@
+{
+  "name": "customize-you-profile",
+  "private": true,
+  "description": "Animated effects for your GitHub profile README, drawn from your own contributions and refreshed daily.",
+  "license": "MIT",
+  "repository": "github:qwerty-ll/CustomizeYouProfile",
+  "homepage": "https://qwerty-ll.github.io/CustomizeYouProfile/",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node test/validate.mjs",
+    "build": "node site/build.mjs",
+    "dev": "node site/serve.mjs"
+  }
+}

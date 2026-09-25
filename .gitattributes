@@ -1,0 +1,7 @@
+# Consistent line endings: install.sh is piped straight into bash, and CRLF would break it.
+* text=auto eol=lf
+*.png binary
+
+# The gallery is regenerated daily by .github/workflows/preview.yml: collapse it in diffs
+# and keep it out of the repository's language stats.
+examples/** linguist-generated=true

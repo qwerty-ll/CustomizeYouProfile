@@ -1,0 +1,35 @@
+# Push a version tag (git tag v1.5.0 && git push origin v1.5.0) to publish a
+# release: tests run, the GitHub release gets generated notes, and the major
+# tag (v1) moves to it, so every workflow on @v1 picks it up on its next run.
+name: Release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node test/validate.mjs
+      - name: Create the release and move the major tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+          else
+            gh release create "$TAG" --verify-tag --generate-notes --title "$TAG"
+          fi
+          MAJOR="${TAG%%.*}"
+          git tag -f "$MAJOR" "$GITHUB_SHA"
+          git push -f origin "refs/tags/$MAJOR"
+          echo "Moved $MAJOR to $TAG ($GITHUB_SHA)."

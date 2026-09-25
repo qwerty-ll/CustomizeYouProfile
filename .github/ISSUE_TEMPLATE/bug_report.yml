@@ -1,0 +1,45 @@
+name: Bug report
+description: An effect looks wrong, the workflow fails, or the configurator misbehaves.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check the [FAQ](https://github.com/qwerty-ll/CustomizeYouProfile#-faq) first.
+        **Never paste tokens or secrets here.** Found a security problem? Report it privately instead: [SECURITY.md](https://github.com/qwerty-ll/CustomizeYouProfile/blob/main/SECURITY.md).
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      options:
+        - The generated images (Action)
+        - The workflow run fails
+        - The one-command installer (install.sh)
+        - The configurator website
+    validations:
+      required: true
+  - type: input
+    id: profile
+    attributes:
+      label: Your profile or workflow run
+      description: A link to your profile, or to the failed run in the Actions tab.
+      placeholder: https://github.com/<you>/<you>/actions/runs/...
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Screenshots help a lot for visual bugs.
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Your workflow step
+      description: The `uses:` step with its `with:` inputs (remove anything private).
+      render: yaml
+  - type: textarea
+    id: log
+    attributes:
+      label: Log output
+      description: The "Generate effects" step output, or the installer output.
+      render: text

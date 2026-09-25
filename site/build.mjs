@@ -33,7 +33,7 @@ async function copyTree(from, to, skip = () => false) {
 }
 
 await rm(out, { recursive: true, force: true });
-await copyTree(join(root, "site"), out, (rel) => rel === "build.mjs");
+await copyTree(join(root, "site"), out, (rel) => rel === "build.mjs" || rel === "serve.mjs");
 await copyTree(join(root, "src"), join(out, "src"), (rel) => rel === "cli.mjs");
 await writeFile(join(out, ".nojekyll"), "");
 console.log(`site built (v=${version}) -> ${relative(process.cwd(), out) || out}`);

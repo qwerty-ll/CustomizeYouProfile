@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Configurator
+    url: https://qwerty-ll.github.io/CustomizeYouProfile/
+    about: Pick effects, preview them on your own profile and get a ready-made setup.
+  - name: Report a security vulnerability
+    url: https://github.com/qwerty-ll/CustomizeYouProfile/security/advisories/new
+    about: Please report security problems privately, not in a public issue.
