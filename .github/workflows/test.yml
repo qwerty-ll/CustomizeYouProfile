@@ -3,7 +3,6 @@ name: Test
 on:
   pull_request:
   push:
-    branches-ignore: [main]
 
 permissions:
   contents: read
@@ -25,5 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: bash -n install.sh
-      - run: shellcheck install.sh
+      - run: shellcheck install.sh test/install.test.sh
+      - run: bash test/install.test.sh
+      - name: Same on bash 3.2, the version macOS ships
+        run: docker run --rm -v "$PWD:/w" -w /w bash:3.2 bash test/install.test.sh

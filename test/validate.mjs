@@ -169,7 +169,7 @@ assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().ends
   assert.ok(!yaml.includes("style:") && !yaml.includes("skills:"), "defaults are left out");
   assert.ok(yaml.includes("uses: qwerty-ll/CustomizeYouProfile@v1") && yaml.includes("effects: intro, dino-run"));
   const { execFileSync: run } = await import("node:child_process");
-  const probe = installCommand(cfg).replace(/bash <\(curl[^)]*\)/, `bash -c 'printf "%s" "$NAME"' _`);
+  const probe = installCommand(cfg).replace(/bash <\(curl[^)]*\)/, `bash -c 'printf "%s" "$CYP_NAME"' _`);
   assert.equal(run("bash", ["-c", probe]).toString(), tricky, "shell command passes the value exactly, nothing is executed");
   // line breaks can't break the YAML, and ${{ … }} is never handed to GitHub to evaluate
   const sneaky = workflowYaml({ ...cfg, name: "a\n          token: x", tagline: "hi ${{ github.token }}" });
@@ -253,4 +253,129 @@ assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().ends
   }
 }
 
-console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode + README + configurator checks pass`);
+// Emoji, accents and right-to-left text stay whole; XML-breaking characters are dropped
+{
+  const { cellWidth, clip, esc, graphemes } = await import("../src/lib.mjs");
+  const { renderEffect } = await import("../src/render.mjs");
+  assert.deepEqual(graphemes("👨‍💻 🇺🇦 ❤️ é"), ["👨‍💻", " ", "🇺🇦", " ", "❤️", " ", "é"]);
+  assert.equal(clip("aaa😀x", 4), "aaa😀");
+  assert.equal(cellWidth("日本 ok"), 7);
+  assert.equal(esc("a\u0001b\ud83dc\u0007"), "abc", "control characters and lone surrogates are dropped");
+  const ctx = buildContext(PROFILES[1].login, PROFILES[1]);
+  for (const style of ["clean", "neon"]) {
+    const [intro] = await renderEffect("intro", ctx, { ...OPTIONS[0], style, tagline: ["👨‍💻 Full-stack dev", "שלום עולם"], modes: OFF });
+    checkXml(intro.svg, `${style} intro with emoji`);
+    assert.ok(intro.svg.includes(">👨‍💻</text>"), `${style} intro types the emoji as one character`);
+    assert.ok(intro.svg.includes(">שלום עולם</text>"), `${style} intro draws a right-to-left line in one piece`);
+    const [skills] = await renderEffect("skills", ctx, { ...OPTIONS[0], style, skills: [`${"a".repeat(27)}😀x`], modes: OFF });
+    assert.ok(skills.svg.includes(`${"a".repeat(27)}😀<`) && !skills.svg.includes("�"), `${style} skills cut the chip text between characters`);
+  }
+  const [card] = await renderEffect("rpg-card", buildContext("x", { ...PROFILES[1], name: "🦄 Mona" }), { ...OPTIONS[0], avatar: null, modes: OFF });
+  assert.ok(card.svg.includes(">🦄</text>"), "the initial is a whole emoji");
+}
+// Dates must exist; a Feb 29 birthday is celebrated on Feb 28 in other years
+{
+  const { resolveSettings } = await import("../src/settings.mjs");
+  assert.throws(() => parseCountdowns("2026-02-30 Launch"), /doesn't exist/);
+  assert.throws(() => parseCountdowns("0099-01-01 Old"), /doesn't exist/);
+  assert.throws(() => parseBirthday("04-31"));
+  assert.throws(() => resolveSettings({ today: "2026-02-30" }), /real date/);
+  const leap = (today) => resolveModes({ today: new Date(`${today}T12:00:00Z`), birthday: parseBirthday("02-29"), countdowns: [{ birthday: true, label: null }] });
+  assert.ok(leap("2026-02-28").birthday && leap("2026-02-28").countdowns[0].days === 0);
+  assert.ok(!leap("2026-03-01").birthday && leap("2026-03-01").countdowns[0].iso === "2027-02-28");
+  assert.ok(leap("2028-02-29").birthday && !leap("2028-02-28").birthday);
+}
+// Transient GitHub API failures are retried; anything else fails at once
+{
+  const { fetchProfile } = await import("../src/lib.mjs");
+  const { fetch: realFetch } = globalThis, { warn } = console, cache = process.env.CALENDAR_CACHE;
+  const user = { login: "mona", contributionsCollection: {} };
+  const reply = (status, body) => () => new Response(typeof body === "string" ? body : JSON.stringify(body), { status });
+  const script = (...steps) => {
+    let n = 0;
+    globalThis.fetch = async () => { const step = steps[Math.min(n++, steps.length - 1)]; if (step instanceof Error) throw step; return step(); };
+    return () => n;
+  };
+  const quick = { retryDelays: [0, 0] };
+  console.warn = () => {};
+  delete process.env.CALENDAR_CACHE;
+  try {
+    let calls = script(reply(502, { message: "Bad gateway" }), reply(200, { errors: [{ message: "Something went wrong while executing your query. This may be the result of a timeout" }] }), reply(200, { data: { user } }));
+    assert.deepEqual(await fetchProfile("mona", "t", quick), user);
+    assert.equal(calls(), 3);
+    calls = script(new TypeError("fetch failed"), reply(200, '{"data":'), reply(200, { data: { user } }));
+    assert.deepEqual(await fetchProfile("mona", "t", quick), user);
+    assert.equal(calls(), 3, "network errors and cut-off answers are retried");
+    calls = script(reply(401, { message: "Bad credentials" }));
+    await assert.rejects(fetchProfile("mona", "t", quick), /401/);
+    assert.equal(calls(), 1);
+    calls = script(reply(200, { data: { user: null } }));
+    await assert.rejects(fetchProfile("mona", "t", quick), /not found/);
+    assert.equal(calls(), 1);
+    calls = script(reply(503, {}));
+    await assert.rejects(fetchProfile("mona", "t", quick), /503/);
+    assert.equal(calls(), 3, "gives up after two retries");
+  } finally {
+    globalThis.fetch = realFetch;
+    console.warn = warn;
+    if (cache !== undefined) process.env.CALENDAR_CACHE = cache;
+  }
+}
+// Bad CLI inputs end with a clear message, not a stack trace
+{
+  const { spawnSync } = await import("node:child_process");
+  const cli = new URL("../src/cli.mjs", import.meta.url).pathname;
+  for (const [arg, message] of [["--out=", /output-dir is empty/], ["--readme=", /readme is empty/], ["--readme-position=middle", /top or bottom/], ["--bogus", /Unknown option/]]) {
+    const r = spawnSync(process.execPath, [cli, "--login=x", arg], { env: { ...process.env, GITHUB_TOKEN: "t" } });
+    assert.equal(r.status, 1, arg);
+    assert.match(r.stderr.toString(), message);
+    assert.ok(!r.stderr.toString().includes("    at "), `${arg}: no stack trace`);
+  }
+}
+// Every list of effects (Action docs, installer, configurator, READMEs) matches the registry
+{
+  const { readFile } = await import("node:fs/promises");
+  const { EFFECTS } = await import("../src/registry.mjs");
+  const { EFFECT_TEXT_RU } = await import("../site/i18n.mjs");
+  const read = (p) => readFile(new URL(`../${p}`, import.meta.url), "utf8");
+  const ids = Object.keys(EFFECTS);
+  const listed = (await read("action.yml")).match(/`all`: ([^"]+)"/)[1].split(",").map((s) => s.trim());
+  assert.deepEqual(listed, ids, "action.yml's effects description lists every effect");
+  assert.deepEqual((await read("install.sh")).match(/^AVAILABLE="([^"]+)"/m)[1].split(" "), ids, "install.sh knows every effect");
+  assert.deepEqual(Object.keys(EFFECT_TEXT_RU), ids, "every effect has a Russian title in the configurator");
+  for (const readme of ["README.md", "README.ru.md"]) {
+    const text = await read(readme);
+    for (const id of ids) {
+      const image = id === "countdown" ? "examples/modes/countdown/countdown.svg" : `examples/${id}.svg`;
+      assert.ok(text.includes(image), `${readme} shows ${image}`);
+    }
+  }
+}
+// The one-command installer writes exactly the configurator's workflow (with a stub gh)
+{
+  const { mkdtemp, readFile, writeFile } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { execFileSync } = await import("node:child_process");
+  const { installCommand, workflowYaml } = await import("../site/output.mjs");
+  const dir = await mkdtemp(join(tmpdir(), "cyp-install-"));
+  await writeFile(join(dir, "gh"), `#!/bin/sh
+case "$1 $2" in "auth status" | "repo view" | "workflow run") exit 0 ;; "api user") echo mona; exit 0 ;; esac
+for a in "$@"; do case "$a" in content=*) printf '%s' "\${a#content=}" > "$STUB_DIR/upload" ;; esac; done
+case " $* " in *" -X PUT "*) exit 0 ;; esac
+exit 1
+`, { mode: 0o755 });
+  const installer = new URL("../install.sh", import.meta.url).pathname;
+  for (const cfg of [
+    { effects: ["dino-run"], style: "clean", language: "en", name: "", tagline: "", skills: "", seasons: [], birthday: "", countdown: "", position: "top" },
+    { effects: ["intro", "rpg-card", "dino-run"], style: "neon", language: "ru", name: `Ma"k \\ o'N $(x)`, tagline: "a|b ${{ github.token }}", skills: "Go, C#",
+      seasons: ["new-year", "halloween"], birthday: "03-15", countdown: "2026-12-31 Release; birthday", position: "bottom" },
+  ]) {
+    const command = installCommand(cfg).replace(/bash <\(curl[^)]*\)/, `bash '${installer}'`);
+    execFileSync("bash", ["-c", command], { env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, STUB_DIR: dir }, stdio: "pipe" });
+    const uploaded = Buffer.from(await readFile(join(dir, "upload"), "utf8"), "base64").toString();
+    assert.equal(uploaded, workflowYaml(cfg), `installer and configurator agree for ${cfg.effects.join(",")}`);
+  }
+}
+
+console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode, README, configurator, installer and consistency checks pass`);

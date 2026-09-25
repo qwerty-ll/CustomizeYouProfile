@@ -57,7 +57,7 @@ ${withLines}
 `;
 }
 
-const ENV = { style: "STYLE", language: "LANGUAGE", name: "NAME", tagline: "TAGLINE", skills: "SKILLS", seasons: "SEASONS", birthday: "BIRTHDAY", countdown: "COUNTDOWN", "readme-position": "README_POSITION" };
+const ENV = { style: "CYP_STYLE", language: "CYP_LANGUAGE", name: "CYP_NAME", tagline: "CYP_TAGLINE", skills: "CYP_SKILLS", seasons: "CYP_SEASONS", birthday: "CYP_BIRTHDAY", countdown: "CYP_COUNTDOWN", "readme-position": "CYP_README_POSITION" };
 
 export function installCommand(cfg) {
   const env = inputs(cfg).filter(([k]) => k !== "effects").map(([k, v]) => `${ENV[k]}=${sq(v)}`);

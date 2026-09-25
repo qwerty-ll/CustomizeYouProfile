@@ -7,11 +7,12 @@
 #   1. creates your profile repository <you>/<you> if it doesn't exist yet,
 #   2. adds .github/workflows/profile-effects.yml with the effects you chose,
 #   3. starts the first run, which adds the images to your README.
-# Optional: NAME="Mona" TAGLINE="Frontend dev|Loves cats" SKILLS="React,Go" LANGUAGE=ru
-#           SEASONS="new-year,halloween" BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday"
-#           (seasonal/birthday/countdown modes stay off unless you set them)
-#           STYLE=neon for the glowing synthwave look instead of the calm default
-#           README_POSITION=bottom to add the images at the end of an existing README
+# Optional settings, as CYP_* variables in front of the command:
+#   CYP_NAME="Mona" CYP_TAGLINE="Frontend dev|Loves cats" CYP_SKILLS="React,Go" CYP_LANGUAGE=ru
+#   CYP_SEASONS="new-year,halloween" CYP_BIRTHDAY=03-15 CYP_COUNTDOWN="2026-12-31 Release; birthday"
+#     (seasonal/birthday/countdown modes stay off unless you set them)
+#   CYP_STYLE=neon for the glowing synthwave look instead of the calm default
+#   CYP_README_POSITION=bottom to add the images at the end of an existing README
 # Easiest: build this command in the configurator, https://qwerty-ll.github.io/CustomizeYouProfile/
 # Set DRY_RUN=1 to only print what would happen. Your README text is never replaced:
 # the images go into their own marked block.
@@ -19,7 +20,17 @@
 set -euo pipefail
 
 EFFECTS="${1:-dino-run}"
-LANGUAGE="${LANGUAGE:-en}"
+# The older unprefixed names (TAGLINE=…) still work, except NAME and LANGUAGE:
+# WSL sets NAME to the computer's name, and LANGUAGE is the system's locale list.
+style="${CYP_STYLE:-${STYLE:-}}"
+language="${CYP_LANGUAGE:-en}"
+name="${CYP_NAME:-}"
+tagline="${CYP_TAGLINE:-${TAGLINE:-}}"
+skills="${CYP_SKILLS:-${SKILLS:-}}"
+seasons="${CYP_SEASONS:-${SEASONS:-}}"
+birthday="${CYP_BIRTHDAY:-${BIRTHDAY:-}}"
+countdown="${CYP_COUNTDOWN:-${COUNTDOWN:-}}"
+position="${CYP_README_POSITION:-${README_POSITION:-}}"
 ACTION_REF="${ACTION_REF:-qwerty-ll/CustomizeYouProfile@v1}"
 WORKFLOW_PATH=".github/workflows/profile-effects.yml"
 AVAILABLE="intro skills rpg-card languages dino-run fireworks black-hole oscilloscope terminal notebook space-shooter countdown"
@@ -37,7 +48,8 @@ if [ "$EFFECTS" != "all" ]; then
   for e in "${REQUESTED[@]}"; do
     [[ " $AVAILABLE " == *" $e "* ]] || die "Unknown effect '$e'. Available: $AVAILABLE (or all)"
   done
-  EFFECTS=$(IFS=,; printf '%s' "${REQUESTED[*]}")   # normalized: only validated ids go into the workflow
+  EFFECTS=$(printf '%s, ' "${REQUESTED[@]}")   # normalized: only validated ids go into the workflow
+  EFFECTS="${EFFECTS%, }"
 fi
 
 LOGIN=$(gh api user --jq .login)
@@ -84,15 +96,16 @@ YAML
 yaml_quote() {
   printf '"%s"' "$(printf '%s' "$1" | tr '\000-\037\177' ' ' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\$[{][{]/$ {{/g')"
 }
-[ -n "${NAME:-}" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$NAME")"
-[ -n "${TAGLINE:-}" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$TAGLINE")"
-[ -n "${SKILLS:-}" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$SKILLS")"
-[ "$LANGUAGE" != "en" ] && WORKFLOW+=$'\n'"          language: $(yaml_quote "$LANGUAGE")"
-[ -n "${STYLE:-}" ] && WORKFLOW+=$'\n'"          style: $(yaml_quote "$STYLE")"
-[ -n "${SEASONS:-}" ] && WORKFLOW+=$'\n'"          seasons: $(yaml_quote "$SEASONS")"
-[ -n "${BIRTHDAY:-}" ] && WORKFLOW+=$'\n'"          birthday: $(yaml_quote "$BIRTHDAY")"
-[ -n "${COUNTDOWN:-}" ] && WORKFLOW+=$'\n'"          countdown: $(yaml_quote "$COUNTDOWN")"
-[ -n "${README_POSITION:-}" ] && WORKFLOW+=$'\n'"          readme-position: $(yaml_quote "$README_POSITION")"
+# same order as the configurator's workflow file
+[ -n "$style" ] && WORKFLOW+=$'\n'"          style: $(yaml_quote "$style")"
+[ "$language" != "en" ] && WORKFLOW+=$'\n'"          language: $(yaml_quote "$language")"
+[ -n "$name" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$name")"
+[ -n "$tagline" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$tagline")"
+[ -n "$skills" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$skills")"
+[ -n "$seasons" ] && WORKFLOW+=$'\n'"          seasons: $(yaml_quote "$seasons")"
+[ -n "$birthday" ] && WORKFLOW+=$'\n'"          birthday: $(yaml_quote "$birthday")"
+[ -n "$countdown" ] && WORKFLOW+=$'\n'"          countdown: $(yaml_quote "$countdown")"
+[ -n "$position" ] && WORKFLOW+=$'\n'"          readme-position: $(yaml_quote "$position")"
 
 [ -n "${DRY_RUN:-}" ] && printf '%s\n' "$WORKFLOW" | sed 's/^/    /'
 
@@ -106,17 +119,24 @@ if [ -n "$SHA" ] && [ -z "${FORCE:-}" ]; then
 fi
 say "$( [ -n "$SHA" ] && echo Updating || echo Adding ) $WORKFLOW_PATH"
 CONTENT=$(printf '%s\n' "$WORKFLOW" | base64 | tr -d '\n')
+WRITE_FAILED="Couldn't write $WORKFLOW_PATH. If gh mentions the \"workflow\" scope, run: gh auth refresh -s workflow, then run this again."
 if [ -n "$SHA" ]; then
-  run gh api -X PUT "repos/$REPO/contents/$WORKFLOW_PATH" -f message="Set up profile effects" -f content="$CONTENT" -f sha="$SHA" --silent
+  run gh api -X PUT "repos/$REPO/contents/$WORKFLOW_PATH" -f message="Set up profile effects" -f content="$CONTENT" -f sha="$SHA" --silent || die "$WRITE_FAILED"
 else
-  run gh api -X PUT "repos/$REPO/contents/$WORKFLOW_PATH" -f message="Set up profile effects" -f content="$CONTENT" --silent
+  run gh api -X PUT "repos/$REPO/contents/$WORKFLOW_PATH" -f message="Set up profile effects" -f content="$CONTENT" --silent || die "$WRITE_FAILED"
 fi
 
 say "Starting the first run"
+started=""
 for _ in 1 2 3 4 5; do
-  if run gh workflow run profile-effects.yml -R "$REPO" 2>/dev/null; then break; fi
+  if run gh workflow run profile-effects.yml -R "$REPO" 2>/dev/null; then started=1; break; fi
   sleep 3   # GitHub needs a moment to register a new workflow
 done
 
-say "Done! In about a minute your effects will be at https://github.com/$LOGIN"
+if [ -n "$started" ]; then
+  say "Done! In about a minute your effects will be at https://github.com/$LOGIN"
+else
+  say "The workflow is in place, but starting it by hand didn't work. Adding the file usually starts a run anyway;"
+  say "if nothing shows up, open the link below and press Run workflow (or wait for tomorrow's run)."
+fi
 say "Progress: https://github.com/$REPO/actions"

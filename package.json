@@ -9,7 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node test/validate.mjs",
+    "test": "node test/validate.mjs && bash test/install.test.sh",
     "build": "node site/build.mjs",
     "dev": "node site/serve.mjs"
   }
