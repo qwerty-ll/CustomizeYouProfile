@@ -232,6 +232,16 @@ Want to place the images yourself, for example side by side in a table? Use `upd
 **Will everyone who uses it see my commits?**
 No. The action reads the data of the repository owner (or `login`), so each profile shows its own graph and stats. Decorations like mountains, city lights and stars are also seeded from your username, so the scenery is unique too.
 
+**Will it overwrite my README?**
+No. Your README is never replaced, only one marked block inside it:
+- no README yet: one is created with just the block;
+- a README without the block: the block is added at the top (or `readme-position: bottom`), and everything you wrote stays as it is;
+- a README with the block: only the content between the markers is refreshed. You can move the block anywhere, and text around it is kept;
+- markers damaged (one deleted, or two blocks): the README is left untouched and the run shows a warning;
+- `readme.md` / `Readme.md` are found too, so you never end up with two README files.
+
+Don't hand-edit *inside* the block, because it's regenerated every day. To arrange images your own way (a table, side by side, smaller), set `update-readme: false` and reference `profile-effects/<effect>.svg` yourself. The installer also refuses to overwrite a `profile-effects.yml` workflow that isn't ours (unless you pass `FORCE=1`).
+
 **What data does it read?**
 Your contribution calendar and totals, follower count, PR and issue counts, and your **public** repositories (for stars and languages). Private repositories are never read, so their names and languages can't leak into a public image.
 
@@ -285,6 +295,7 @@ LANGUAGE=ru NAME="Макар" TAGLINE="фронтенд и геймджемы|п
 - **Эффекты про тебя:** `intro` (имя и печатающиеся строки: `name`, `tagline`), `skills` (твой стек: `skills`), `rpg-card` (карточка персонажа: уровень, характеристики, класс, ачивки), `languages` (языки из публичных репозиториев).
 - **Эффекты по коммитам:** `dino-run`, `fireworks`, `black-hole`, `oscilloscope`, `terminal`, `notebook` (с `language: ru` на русском: «Классная работа» и «5+»), `space-shooter`, или `all`.
 - **Сезонные и личные режимы, только по желанию:** `seasons: new-year, halloween` (снег, гирлянда, шапка Санты и ёлки / летучие мыши, паук и тыквы), `birthday: 03-15` (конфетти и «С днём рождения» в этот день), `countdown: "2026-12-31 Релиз; birthday"` (карточка обратного отсчёта). Если эти строки не прописать, ничего не включится.
+- **Твой README не перезаписывается:** картинки живут в отдельном блоке между метками `customize-you-profile:start/end`, текст вокруг не трогается. Если метки повреждены, README не меняется, а в логах будет предупреждение. Внутри блока руками не правь, он обновляется каждый день. Чтобы расставить картинки по-своему, поставь `update-readme: false`.
 - **Приватные репозитории не читаются**, в картинку попадают только публичные данные.
 - **Сделано с помощью ИИ:** код, эффекты и документацию писал **Claude** (Anthropic) в Claude Code вместе с автором, идеи и направление от [@qwerty-ll](https://github.com/qwerty-ll).
 - Все настройки описаны в разделе [Options](#%EF%B8%8F-options), ответы на вопросы в [FAQ](#-faq).

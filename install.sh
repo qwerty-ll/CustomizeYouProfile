@@ -11,7 +11,8 @@
 #           SEASONS="new-year,halloween" BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday"
 #           (seasonal/birthday/countdown modes stay off unless you set them)
 #           STYLE=neon for the glowing synthwave look instead of the calm default
-# Set DRY_RUN=1 to only print what would happen.
+# Set DRY_RUN=1 to only print what would happen. Your README text is never replaced:
+# the images go into their own marked block.
 
 set -euo pipefail
 
@@ -81,6 +82,13 @@ yaml_quote() { printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')
 [ -n "${DRY_RUN:-}" ] && printf '%s\n' "$WORKFLOW" | sed 's/^/    /'
 
 SHA=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" --jq .sha 2>/dev/null) || SHA=""   # 404 prints JSON; discard it
+# Only ever replace our own workflow; a different file with the same name is left alone.
+if [ -n "$SHA" ] && [ -z "${FORCE:-}" ]; then
+  EXISTING=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" -H "Accept: application/vnd.github.raw" 2>/dev/null || true)
+  if [[ "$EXISTING" != *"CustomizeYouProfile"* ]]; then
+    die "$WORKFLOW_PATH already exists in $REPO and isn't from CustomizeYouProfile. Rename it, or rerun with FORCE=1 to replace it."
+  fi
+fi
 say "$( [ -n "$SHA" ] && echo Updating || echo Adding ) $WORKFLOW_PATH"
 CONTENT=$(printf '%s\n' "$WORKFLOW" | base64 | tr -d '\n')
 if [ -n "$SHA" ]; then

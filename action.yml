@@ -102,7 +102,11 @@ runs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add -- "$IN_OUT"
-        [ -f "$IN_README" ] && git add -- "$IN_README"
+        # the README may be readme.md / Readme.md; stage whichever one exists
+        want=$(basename "$IN_README" | tr '[:upper:]' '[:lower:]')
+        for f in "$(dirname "$IN_README")"/*; do
+          if [ "$(basename "$f" | tr '[:upper:]' '[:lower:]')" = "$want" ]; then git add -- "$f"; fi
+        done
         if git diff --cached --quiet; then
           echo "Nothing changed."
           exit 0

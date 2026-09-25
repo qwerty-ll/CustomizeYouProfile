@@ -6,13 +6,13 @@
 //     --out profile-effects --readme README.md --name "Mona" --tagline "Builds things|Loves cats" \
 //     --skills "TypeScript,Go,Figma" --language en
 
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { dirname, join, relative } from "node:path";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { basename, dirname, join, relative } from "node:path";
 import { parseArgs } from "node:util";
 import { decorate } from "./decorate.mjs";
 import { buildContext, fetchAvatar, fetchProfile, seedFor } from "./lib.mjs";
 import { parseBirthday, parseCountdowns, parseSeasons, resolveModes } from "./seasonal.mjs";
-import { updateReadme } from "./readme.mjs";
+import { ReadmeMarkerError, updateReadme } from "./readme.mjs";
 
 // Order here is the order used for `all`.
 export const EFFECTS = {
@@ -130,7 +130,14 @@ for (const id of selected) {
 }
 
 if (!values["no-readme"]) {
-  const readmePath = values.readme;
+  // Match an existing readme.md / Readme.md too: Linux runners are case-sensitive,
+  // and writing README.md next to readme.md would leave two files.
+  let readmePath = values.readme;
+  try {
+    const dir = dirname(readmePath) || ".";
+    const hit = (await readdir(dir)).find((f) => f.toLowerCase() === basename(readmePath).toLowerCase());
+    if (hit) readmePath = join(dir, hit);
+  } catch {}
   const base = relative(dirname(readmePath), values.out).split("\\").join("/") || ".";
   const block = produced.map(({ id, files }) => {
     const { alt } = EFFECTS[id];
@@ -142,8 +149,16 @@ if (!values["no-readme"]) {
   }).join("\n\n");
   let current = null;
   try { current = await readFile(readmePath, "utf8"); } catch {}
-  const next = updateReadme(current, block, values["readme-position"]);
-  if (next !== current) {
+  let next = current, skipped = false;
+  try {
+    next = updateReadme(current, block, values["readme-position"]);
+  } catch (err) {
+    if (!(err instanceof ReadmeMarkerError)) throw err;
+    console.warn(`::warning::CustomizeYouProfile: ${readmePath}: ${err.message}`);
+    skipped = true;
+  }
+  if (skipped) console.log(`${readmePath} left untouched (images were still updated)`);
+  else if (next !== current) {
     await mkdir(dirname(readmePath) || ".", { recursive: true });
     await writeFile(readmePath, next);
     console.log(`${current === null ? "created" : "updated"} ${readmePath}`);

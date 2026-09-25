@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
 import { buildContext, rng } from "../src/lib.mjs";
 import { decorate } from "../src/decorate.mjs";
-import { updateReadme, START, END } from "../src/readme.mjs";
+import { NOTE, ReadmeMarkerError, updateReadme, START, END } from "../src/readme.mjs";
 import { parseBirthday, parseCountdowns, parseSeasons, resolveModes } from "../src/seasonal.mjs";
 
 const LEVEL_NAMES = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
@@ -125,12 +125,24 @@ assert.equal(decorate("<svg width=\"10\" height=\"10\"></svg>", OFF, 1), "<svg w
 
 // README block handling
 const b = "<img src=a.svg>";
-assert.equal(updateReadme(null, b), `${START}\n${b}\n${END}\n`);
+assert.equal(updateReadme(null, b), `${START}\n${NOTE}\n${b}\n${END}\n`);
 const mine = "# Hi\n\ntext\n";
 const top = updateReadme(mine, b, "top");
 assert.ok(top.startsWith(START) && top.endsWith(mine));
 assert.ok(updateReadme(mine, b, "bottom").trimEnd().endsWith(END));
 const again = updateReadme(top, "<img src=b.svg>");
 assert.ok(again.includes("b.svg") && !again.includes("a.svg") && again.split(START).length === 2);
+assert.equal(updateReadme(again, "<img src=b.svg>"), again, "second run is a no-op");
+// damaged markers: never guess, never duplicate
+assert.throws(() => updateReadme(`# Me\n${START}\n<img src=old.svg>\n`, b), ReadmeMarkerError);
+assert.throws(() => updateReadme(`${END}\n# Me\n${START}\n`, b), ReadmeMarkerError);
+assert.throws(() => updateReadme(`${START}\nx\n${END}\n${START}\ny\n${END}\n`, b), ReadmeMarkerError);
+// the user's text around the block always survives
+const custom = "# Mona\n\n[![badge](x)](y)\n\n<p align=center>hi</p>\n";
+const placed = updateReadme(custom, b, "bottom");
+assert.ok(placed.startsWith(custom.trimEnd()));
+const moved = `# Mona\n\ntext\n\n${placed.slice(placed.indexOf(START))}\nfooter\n`;
+const refreshed = updateReadme(moved, "<img src=c.svg>");
+assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().endsWith("footer") && refreshed.includes("c.svg"));
 
 console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode + README checks pass`);
