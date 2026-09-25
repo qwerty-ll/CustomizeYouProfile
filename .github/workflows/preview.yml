@@ -1,0 +1,31 @@
+# Runs this action on its own repository every day: regenerates the gallery in
+# examples/ and doubles as an end-to-end test of action.yml.
+name: Preview
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["src/**", "action.yml", ".github/workflows/preview.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: preview
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: ./
+        with:
+          effects: all
+          output-dir: examples
+          readme: examples/README.md
+          commit-message: Update examples

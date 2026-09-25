@@ -1,0 +1,78 @@
+name: CustomizeYouProfile
+description: Animated effects for your GitHub profile README, drawn from your own contributions and refreshed daily.
+author: qwerty-ll
+branding:
+  icon: star
+  color: purple
+
+inputs:
+  effects:
+    description: "Comma-separated effect ids, or `all`: dino-run, fireworks, black-hole, solar-system, oscilloscope, terminal, notebook, space-shooter"
+    default: dino-run
+  login:
+    description: GitHub user whose contributions are drawn. Defaults to the repository owner.
+    default: ""
+  output-dir:
+    description: Folder (relative to the repository root) where the SVG files are written.
+    default: profile-effects
+  readme:
+    description: README file to add the images to. Created if it does not exist.
+    default: README.md
+  readme-position:
+    description: Where the image block goes the first time (`top` or `bottom`). Later runs update it in place.
+    default: top
+  update-readme:
+    description: Set to `false` to only write the SVG files and leave the README alone.
+    default: "true"
+  language:
+    description: Language for text inside effects that have it (notebook). `en` or `ru`.
+    default: en
+  commit:
+    description: Commit and push the result. Set to `false` to handle that yourself.
+    default: "true"
+  commit-message:
+    description: Commit message for the update.
+    default: Update profile effects
+  token:
+    description: Token used to read contributions. The default token only sees public activity.
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Generate effects
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        IN_LOGIN: ${{ inputs.login }}
+        IN_EFFECTS: ${{ inputs.effects }}
+        IN_OUT: ${{ inputs.output-dir }}
+        IN_README: ${{ inputs.readme }}
+        IN_POSITION: ${{ inputs.readme-position }}
+        IN_UPDATE_README: ${{ inputs.update-readme }}
+        IN_LANGUAGE: ${{ inputs.language }}
+      run: |
+        args=(--login "${IN_LOGIN:-$GITHUB_REPOSITORY_OWNER}" --effects "$IN_EFFECTS" --out "$IN_OUT"
+              --readme "$IN_README" --readme-position "$IN_POSITION" --language "$IN_LANGUAGE")
+        [ "$IN_UPDATE_README" = "false" ] && args+=(--no-readme)
+        node "$GITHUB_ACTION_PATH/src/cli.mjs" "${args[@]}"
+
+    - name: Commit and push
+      if: inputs.commit == 'true'
+      shell: bash
+      env:
+        IN_OUT: ${{ inputs.output-dir }}
+        IN_README: ${{ inputs.readme }}
+        IN_MESSAGE: ${{ inputs.commit-message }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -- "$IN_OUT"
+        [ -f "$IN_README" ] && git add -- "$IN_README"
+        if git diff --cached --quiet; then
+          echo "Nothing changed."
+          exit 0
+        fi
+        git commit -m "$IN_MESSAGE"
+        # another run may have pushed meanwhile; our files are generated, so rebasing is safe
+        git push || { git pull --rebase --autostash && git push; }
