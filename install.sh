@@ -11,6 +11,8 @@
 #           SEASONS="new-year,halloween" BIRTHDAY=03-15 COUNTDOWN="2026-12-31 Release; birthday"
 #           (seasonal/birthday/countdown modes stay off unless you set them)
 #           STYLE=neon for the glowing synthwave look instead of the calm default
+#           README_POSITION=bottom to add the images at the end of an existing README
+# Easiest: build this command in the configurator, https://qwerty-ll.github.io/CustomizeYouProfile/
 # Set DRY_RUN=1 to only print what would happen. Your README text is never replaced:
 # the images go into their own marked block.
 
@@ -52,11 +54,16 @@ name: Profile effects
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # daily
+    - cron: "0 3 * * *"   # every day
   workflow_dispatch:
+  push:                   # also run right after this file is added or edited
+    paths: [".github/workflows/profile-effects.yml"]
 
 permissions:
   contents: write
+
+concurrency:
+  group: profile-effects
 
 jobs:
   effects:
@@ -66,7 +73,6 @@ jobs:
       - uses: $ACTION_REF
         with:
           effects: $EFFECTS
-          language: $LANGUAGE
 YAML
 )
 # optional personal text, quoted for YAML
@@ -74,10 +80,12 @@ yaml_quote() { printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')
 [ -n "${NAME:-}" ] && WORKFLOW+=$'\n'"          name: $(yaml_quote "$NAME")"
 [ -n "${TAGLINE:-}" ] && WORKFLOW+=$'\n'"          tagline: $(yaml_quote "$TAGLINE")"
 [ -n "${SKILLS:-}" ] && WORKFLOW+=$'\n'"          skills: $(yaml_quote "$SKILLS")"
+[ "$LANGUAGE" != "en" ] && WORKFLOW+=$'\n'"          language: $(yaml_quote "$LANGUAGE")"
 [ -n "${STYLE:-}" ] && WORKFLOW+=$'\n'"          style: $(yaml_quote "$STYLE")"
 [ -n "${SEASONS:-}" ] && WORKFLOW+=$'\n'"          seasons: $(yaml_quote "$SEASONS")"
 [ -n "${BIRTHDAY:-}" ] && WORKFLOW+=$'\n'"          birthday: $(yaml_quote "$BIRTHDAY")"
 [ -n "${COUNTDOWN:-}" ] && WORKFLOW+=$'\n'"          countdown: $(yaml_quote "$COUNTDOWN")"
+[ -n "${README_POSITION:-}" ] && WORKFLOW+=$'\n'"          readme-position: $(yaml_quote "$README_POSITION")"
 
 [ -n "${DRY_RUN:-}" ] && printf '%s\n' "$WORKFLOW" | sed 's/^/    /'
 

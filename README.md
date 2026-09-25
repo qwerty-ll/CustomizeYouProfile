@@ -9,6 +9,9 @@ Every image is generated from your own contributions, repositories and stats, so
 
 [![Built with AI](https://img.shields.io/badge/built%20with-AI%20(Claude)-8A63D2?logo=anthropic&logoColor=white)](#-built-with-ai)
 
+### [🎛 Open the configurator →](https://qwerty-ll.github.io/CustomizeYouProfile/)
+Pick effects, preview them on **your own** profile right in the browser, and get a ready-made setup in one click.
+
 [Gallery](#-gallery) · [Seasonal modes](#-seasonal--personal-modes-opt-in) · [Install in one command](#-install-in-one-command) · [Manual setup](#-manual-setup) · [Options](#%EF%B8%8F-options) · [FAQ](#-faq) · [На русском](#-на-русском)
 
 </div>
@@ -133,7 +136,9 @@ Dates follow UTC and the image updates once a day when the workflow runs.
 
 ## 🚀 Install in one command
 
-You need the [GitHub CLI](https://cli.github.com) logged in (`gh auth login`). Then:
+**Easiest:** open the [configurator](https://qwerty-ll.github.io/CustomizeYouProfile/), pick what you like, and press *Add workflow on GitHub*. It opens GitHub with the file already filled in, and no terminal is needed.
+
+Prefer a terminal? You need the [GitHub CLI](https://cli.github.com) logged in (`gh auth login`). Then:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/qwerty-ll/CustomizeYouProfile/main/install.sh) intro,rpg-card,dino-run
@@ -173,9 +178,14 @@ on:
   schedule:
     - cron: "0 3 * * *"   # every day
   workflow_dispatch:       # plus a "Run workflow" button
+  push:                    # and right after this file is added or edited
+    paths: [".github/workflows/profile-effects.yml"]
 
 permissions:
   contents: write
+
+concurrency:
+  group: profile-effects
 
 jobs:
   effects:
@@ -190,7 +200,7 @@ jobs:
           skills: TypeScript, React, Go, Figma
 ```
 
-3. Open the **Actions** tab, choose **Profile effects**, and click **Run workflow**.
+3. Commit it. The first run starts by itself (or open **Actions** → **Profile effects** → **Run workflow**).
 
 The action writes the SVGs to `profile-effects/` and adds this block to your README (creating the README if needed):
 
@@ -279,6 +289,8 @@ Found a bug or have an idea for an effect? [Open an issue](https://github.com/qw
 ## 🇷🇺 На русском
 
 **CustomizeYouProfile** — анимированные эффекты для профиля GitHub, которые рисуются из **твоих** коммитов и обновляются каждый день.
+
+**Проще всего через [конструктор](https://qwerty-ll.github.io/CustomizeYouProfile/):** вводишь ник, выбираешь эффекты, сразу видишь превью на своих данных и одной кнопкой добавляешь всё в профиль, без терминала.
 
 **Установка одной командой** (нужен залогиненный [GitHub CLI](https://cli.github.com)):
 

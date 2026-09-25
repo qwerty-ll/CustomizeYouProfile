@@ -4,43 +4,11 @@
 
 import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
-import { buildContext, rng } from "../src/lib.mjs";
+import { buildContext } from "../src/lib.mjs";
+import { demoUser as fakeUser } from "../src/demo.mjs";
 import { decorate } from "../src/decorate.mjs";
 import { NOTE, ReadmeMarkerError, updateReadme, START, END } from "../src/readme.mjs";
 import { parseBirthday, parseCountdowns, parseSeasons, resolveModes } from "../src/seasonal.mjs";
-
-const LEVEL_NAMES = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
-
-function fakeUser({ login, activity, peak, langs = 5, name = "Test User", seed = 1 }) {
-  const random = rng(seed);
-  const start = new Date(Date.UTC(2025, 8, 21));
-  const weeks = [];
-  let total = 0;
-  for (let w = 0; w < 53; w++) {
-    const days = [];
-    for (let d = 0; d < 7; d++) {
-      const date = new Date(start.getTime() + (w * 7 + d) * 864e5);
-      const count = random() < activity ? Math.ceil(random() ** 3 * peak) : 0;
-      total += count;
-      days.push({ date: date.toISOString().slice(0, 10), weekday: d, contributionCount: count, contributionLevel: LEVEL_NAMES[count === 0 ? 0 : Math.min(4, 1 + Math.floor((count / peak) * 4))] });
-    }
-    weeks.push({ contributionDays: days });
-  }
-  const palette = ["#f1e05a", "#3178c6", "#3572A5", "#e34c26", "#563d7c", "#178600", "#00ADD8", "#dea584", "#b07219"];
-  const names = ["JavaScript", "TypeScript", "Python", "HTML", "CSS", "C#", "Go", "Rust", "Java"];
-  return {
-    login, name, avatarUrl: "https://example.invalid/a.png", createdAt: "2019-01-01T00:00:00Z",
-    followers: { totalCount: Math.round(peak * 3) }, pullRequests: { totalCount: Math.round(peak * 5) }, issues: { totalCount: 4 },
-    repositories: { totalCount: langs * 3, nodes: Array.from({ length: langs * 3 }, (_, i) => ({
-      name: `repo${i}`, stargazerCount: i * 2,
-      languages: { edges: [{ size: Math.round(100000 / (i + 1)), node: { name: names[i % langs], color: palette[i % langs] } }] },
-    })) },
-    contributionsCollection: {
-      totalCommitContributions: total, totalPullRequestContributions: 3, totalIssueContributions: 1, totalPullRequestReviewContributions: 0,
-      contributionCalendar: { totalContributions: total, weeks },
-    },
-  };
-}
 
 const PROFILES = [
   fakeUser({ login: "empty", activity: 0, peak: 1, langs: 0 }),
@@ -145,4 +113,57 @@ const moved = `# Mona\n\ntext\n\n${placed.slice(placed.indexOf(START))}\nfooter\
 const refreshed = updateReadme(moved, "<img src=c.svg>");
 assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().endsWith("footer") && refreshed.includes("c.svg"));
 
-console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode + README checks pass`);
+// ---------- web configurator ----------
+{
+  const { toUser } = await import("../site/data.mjs");
+  const { workflowYaml, installCommand, newWorkflowUrl } = await import("../site/output.mjs");
+  // REST + contributions mirror → the same context the Action builds
+  const contributions = Array.from({ length: 370 }, (_, i) => {
+    const d = new Date(Date.UTC(2025, 8, 21) + i * 864e5);
+    return { date: d.toISOString().slice(0, 10), count: i % 9 === 0 ? 5 : 0, level: i % 9 === 0 ? 2 : 0 };
+  });
+  const user = toUser(
+    { login: "mona", name: "Mona", avatar_url: "https://avatars.githubusercontent.com/u/1", created_at: "2020-01-01T00:00:00Z", followers: 3, public_repos: 2 },
+    [{ name: "a", fork: false, stargazers_count: 4, language: "Go", size: 10 }, { name: "b", fork: true, stargazers_count: 9, language: "C", size: 5 }],
+    { total: { lastYear: 205 }, contributions }, 7);
+  const c = buildContext("mona", user);
+  assert.equal(c.days.length, 370);
+  assert.ok(c.calendar.weeks.every((w) => w.contributionDays[0].weekday === 0 || w === c.calendar.weeks[0]), "weeks start on Sunday");
+  assert.equal(c.profile.repos, 1, "forks are skipped");
+  assert.equal(c.profile.stars, 4);
+  assert.equal(c.profile.languages[0].name, "Go");
+  assert.equal(c.profile.pullRequests, 7);
+  for (const id of effects) (await (await import(`../src/effects/${id}.mjs`)).default(c, { ...OPTIONS[0], modes: OFF })).forEach((f) => checkXml(f.svg, `${id} from REST data`));
+  // outputs keep every value intact and only list what was changed
+  const tricky = `Ma"k \\ o'N $(echo hi) \`x\``;
+  const cfg = { effects: ["intro", "dino-run"], style: "clean", language: "en", name: tricky, tagline: "a|b", skills: "", seasons: [], birthday: "", countdown: "", position: "top" };
+  const yaml = workflowYaml(cfg);
+  const nameLine = yaml.split("\n").find((l) => l.trim().startsWith("name: \""));
+  assert.equal(JSON.parse(nameLine.trim().slice("name: ".length)), tricky, "YAML keeps the value exactly");
+  assert.ok(!yaml.includes("style:") && !yaml.includes("skills:"), "defaults are left out");
+  assert.ok(yaml.includes("uses: qwerty-ll/CustomizeYouProfile@v1") && yaml.includes("effects: intro, dino-run"));
+  const { execFileSync: run } = await import("node:child_process");
+  const probe = installCommand(cfg).replace(/bash <\(curl[^)]*\)/, `bash -c 'printf "%s" "$NAME"' _`);
+  assert.equal(run("bash", ["-c", probe]).toString(), tricky, "shell command passes the value exactly, nothing is executed");
+  assert.ok(newWorkflowUrl("mona", "main", yaml).startsWith("https://github.com/mona/mona/new/main?filename=.github%2Fworkflows%2Fprofile-effects.yml&value="));
+}
+// the built site must render exactly like src/
+{
+  const { mkdtemp, writeFile: wf } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { execFileSync } = await import("node:child_process");
+  const dir = await mkdtemp(join(tmpdir(), "cyp-site-"));
+  execFileSync(process.execPath, [new URL("../site/build.mjs", import.meta.url).pathname, dir]);
+  await wf(join(dir, "package.json"), '{"type":"module"}');
+  const built = await import(join(dir, "src/render.js"));
+  const direct = await import("../src/render.mjs");
+  const ctx = buildContext(PROFILES[1].login, PROFILES[1]);
+  for (const id of ["intro", "dino-run", "fireworks"]) {
+    const a = await built.renderEffect(id, ctx, { ...OPTIONS[0], modes: OFF });
+    const b = await direct.renderEffect(id, ctx, { ...OPTIONS[0], modes: OFF });
+    assert.deepEqual(a.map((f) => f.svg), b.map((f) => f.svg), `built site renders ${id} differently`);
+  }
+}
+
+console.log(`ok: ${count} SVGs across ${PROFILES.length} profiles × ${OPTIONS.length} option sets (modes off / all on), mode + README + configurator checks pass`);
