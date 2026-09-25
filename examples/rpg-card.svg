@@ -64,8 +64,8 @@
 <text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">23</text>
 <text x="230" y="157" class="key" fill="#51cf66">DEX</text><text x="268" y="157" class="label">pull requests</text>
 <rect x="390" y="148" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="148" width="153" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
-<text x="820" y="157" text-anchor="end" class="m val" style="animation-name:sv2">7</text>
+<rect x="390" y="148" width="102" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
+<text x="820" y="157" text-anchor="end" class="m val" style="animation-name:sv2">3</text>
 <text x="230" y="183" class="key" fill="#f783ac">CHA</text><text x="268" y="183" class="label">followers</text>
 <rect x="390" y="174" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="174" width="46.8" height="10" rx="5" fill="#f783ac" class="m fbl" style="animation-name:st3"/>
