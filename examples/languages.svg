@@ -7,15 +7,15 @@
     .lang{font:bold 11px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#e8e4ff}
     .pct{font:bold 11px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
     @keyframes eq0{0%{transform:scaleY(0.8)}16.7%{transform:scaleY(0.9)}33.3%{transform:scaleY(0.9)}50%{transform:scaleY(0.9)}66.7%{transform:scaleY(0.9)}83.3%{transform:scaleY(0.8)}100%{transform:scaleY(0.8)}}
-@keyframes pk0{0%{transform:translateY(0)}15%{transform:translateY(-10.6px)}100%{transform:translateY(18.2px)}}
+@keyframes pk0{0%{transform:translateY(0)}15%{transform:translateY(-10.7px)}100%{transform:translateY(18.3px)}}
 @keyframes eq1{0%{transform:scaleY(0.7)}16.7%{transform:scaleY(0.6)}33.3%{transform:scaleY(1)}50%{transform:scaleY(0.7)}66.7%{transform:scaleY(0.7)}83.3%{transform:scaleY(0.9)}100%{transform:scaleY(0.7)}}
 @keyframes pk1{0%{transform:translateY(0)}15%{transform:translateY(-7.8px)}100%{transform:translateY(10.5px)}}
 @keyframes eq2{0%{transform:scaleY(0.9)}16.7%{transform:scaleY(1.1)}33.3%{transform:scaleY(1.1)}50%{transform:scaleY(0.7)}66.7%{transform:scaleY(1)}83.3%{transform:scaleY(0.8)}100%{transform:scaleY(0.9)}}
 @keyframes pk2{0%{transform:translateY(0)}15%{transform:translateY(-7.6px)}100%{transform:translateY(9.9px)}}
 @keyframes eq3{0%{transform:scaleY(0.8)}16.7%{transform:scaleY(1.1)}33.3%{transform:scaleY(1)}50%{transform:scaleY(0.7)}66.7%{transform:scaleY(0.7)}83.3%{transform:scaleY(0.9)}100%{transform:scaleY(0.8)}}
-@keyframes pk3{0%{transform:translateY(0)}15%{transform:translateY(-7.4px)}100%{transform:translateY(9.3px)}}
+@keyframes pk3{0%{transform:translateY(0)}15%{transform:translateY(-7.3px)}100%{transform:translateY(9.2px)}}
 @keyframes eq4{0%{transform:scaleY(1.1)}16.7%{transform:scaleY(1)}33.3%{transform:scaleY(0.9)}50%{transform:scaleY(0.8)}66.7%{transform:scaleY(0.9)}83.3%{transform:scaleY(1)}100%{transform:scaleY(1.1)}}
-@keyframes pk4{0%{transform:translateY(0)}15%{transform:translateY(-6.9px)}100%{transform:translateY(8px)}}
+@keyframes pk4{0%{transform:translateY(0)}15%{transform:translateY(-6.9px)}100%{transform:translateY(7.9px)}}
 @keyframes eq5{0%{transform:scaleY(0.6)}16.7%{transform:scaleY(0.7)}33.3%{transform:scaleY(0.6)}50%{transform:scaleY(0.8)}66.7%{transform:scaleY(1.1)}83.3%{transform:scaleY(0.7)}100%{transform:scaleY(0.6)}}
 @keyframes pk5{0%{transform:translateY(0)}15%{transform:translateY(-5.2px)}100%{transform:translateY(3.2px)}}
 @keyframes eq6{0%{transform:scaleY(0.6)}16.7%{transform:scaleY(0.7)}33.3%{transform:scaleY(0.6)}50%{transform:scaleY(1)}66.7%{transform:scaleY(0.8)}83.3%{transform:scaleY(0.7)}100%{transform:scaleY(0.6)}}
@@ -27,20 +27,20 @@
 <text x="24" y="32" class="ttl">top languages</text>
 <text x="836" y="32" class="sub" text-anchor="end">@qwerty-ll · public repos</text>
 <g mask="url(#reflect)" opacity=".6"><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq0 2s ease-in-out -1.1s infinite">
-      <rect x="68" y="95.4" width="52" height="82.6" rx="3" fill="#f1e05a"/>
-      <rect x="68" y="95.4" width="52" height="82.6" rx="3" fill="url(#leds)"/>
+      <rect x="68" y="94.8" width="52" height="83.2" rx="3" fill="#f1e05a"/>
+      <rect x="68" y="94.8" width="52" height="83.2" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq1 2.6s ease-in-out -0.9s infinite">
-      <rect x="164" y="130.1" width="52" height="47.9" rx="3" fill="#e34c26"/>
-      <rect x="164" y="130.1" width="52" height="47.9" rx="3" fill="url(#leds)"/>
+      <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="#e34c26"/>
+      <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq2 1.7s ease-in-out -1.1s infinite">
-      <rect x="260" y="132.9" width="52" height="45.1" rx="3" fill="#3178c6"/>
-      <rect x="260" y="132.9" width="52" height="45.1" rx="3" fill="url(#leds)"/>
+      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="#3178c6"/>
+      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq3 2.5s ease-in-out -0.8s infinite">
-      <rect x="356" y="135.9" width="52" height="42.1" rx="3" fill="#663399"/>
-      <rect x="356" y="135.9" width="52" height="42.1" rx="3" fill="url(#leds)"/>
+      <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="#663399"/>
+      <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq4 1.7s ease-in-out -1.4s infinite">
-      <rect x="452" y="141.7" width="52" height="36.3" rx="3" fill="#3572A5"/>
-      <rect x="452" y="141.7" width="52" height="36.3" rx="3" fill="url(#leds)"/>
+      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="#3572A5"/>
+      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="url(#leds)"/>
     </g></g><g transform="translate(0,360) scale(1,-1)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq5 1.9s ease-in-out -0.7s infinite">
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="#b07219"/>
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="url(#leds)"/>
@@ -53,40 +53,40 @@
     </g></g></g>
 <rect x="24" y="180" width="812" height="1" fill="#fff" opacity=".12"/>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq0 2s ease-in-out -1.1s infinite">
-      <rect x="68" y="95.4" width="52" height="82.6" rx="3" fill="#f1e05a"/>
-      <rect x="68" y="95.4" width="52" height="82.6" rx="3" fill="url(#leds)"/>
+      <rect x="68" y="94.8" width="52" height="83.2" rx="3" fill="#f1e05a"/>
+      <rect x="68" y="94.8" width="52" height="83.2" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="68" y="87.4" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk0 2s ease-out -1.1s infinite"/>
+<rect x="68" y="86.8" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk0 2s ease-out -1.1s infinite"/>
 <text x="94" y="200" class="lang" text-anchor="middle">JavaScript</text>
-<text x="94" y="216" class="pct" text-anchor="middle" fill="#f1e05a">47%</text>
+<text x="94" y="216" class="pct" text-anchor="middle" fill="#f1e05a">48%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq1 2.6s ease-in-out -0.9s infinite">
-      <rect x="164" y="130.1" width="52" height="47.9" rx="3" fill="#e34c26"/>
-      <rect x="164" y="130.1" width="52" height="47.9" rx="3" fill="url(#leds)"/>
+      <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="#e34c26"/>
+      <rect x="164" y="130.4" width="52" height="47.6" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="164" y="122.1" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk1 2.6s ease-out -0.9s infinite"/>
+<rect x="164" y="122.4" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk1 2.6s ease-out -0.9s infinite"/>
 <text x="190" y="200" class="lang" text-anchor="middle">HTML</text>
 <text x="190" y="216" class="pct" text-anchor="middle" fill="#e34c26">16%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq2 1.7s ease-in-out -1.1s infinite">
-      <rect x="260" y="132.9" width="52" height="45.1" rx="3" fill="#3178c6"/>
-      <rect x="260" y="132.9" width="52" height="45.1" rx="3" fill="url(#leds)"/>
+      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="#3178c6"/>
+      <rect x="260" y="133.1" width="52" height="44.9" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="260" y="124.9" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk2 1.7s ease-out -1.1s infinite"/>
+<rect x="260" y="125.1" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk2 1.7s ease-out -1.1s infinite"/>
 <text x="286" y="200" class="lang" text-anchor="middle">TypeScript</text>
 <text x="286" y="216" class="pct" text-anchor="middle" fill="#3178c6">14%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq3 2.5s ease-in-out -0.8s infinite">
-      <rect x="356" y="135.9" width="52" height="42.1" rx="3" fill="#663399"/>
-      <rect x="356" y="135.9" width="52" height="42.1" rx="3" fill="url(#leds)"/>
+      <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="#663399"/>
+      <rect x="356" y="136.2" width="52" height="41.8" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="356" y="127.9" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk3 2.5s ease-out -0.8s infinite"/>
+<rect x="356" y="128.2" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk3 2.5s ease-out -0.8s infinite"/>
 <text x="382" y="200" class="lang" text-anchor="middle">CSS</text>
 <text x="382" y="216" class="pct" text-anchor="middle" fill="#663399">12%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq4 1.7s ease-in-out -1.4s infinite">
-      <rect x="452" y="141.7" width="52" height="36.3" rx="3" fill="#3572A5"/>
-      <rect x="452" y="141.7" width="52" height="36.3" rx="3" fill="url(#leds)"/>
+      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="#3572A5"/>
+      <rect x="452" y="141.9" width="52" height="36.1" rx="3" fill="url(#leds)"/>
     </g></g>
-<rect x="452" y="133.7" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk4 1.7s ease-out -1.4s infinite"/>
+<rect x="452" y="133.9" width="52" height="3" rx="1.5" fill="#fff" opacity=".85" style="animation:pk4 1.7s ease-out -1.4s infinite"/>
 <text x="478" y="200" class="lang" text-anchor="middle">Python</text>
-<text x="478" y="216" class="pct" text-anchor="middle" fill="#3572A5">9.1%</text>
+<text x="478" y="216" class="pct" text-anchor="middle" fill="#3572A5">9.0%</text>
 <g filter="url(#glow)"><g style="transform-box:fill-box;transform-origin:50% 100%;animation:eq5 1.9s ease-in-out -0.7s infinite">
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="#b07219"/>
       <rect x="548" y="163.6" width="52" height="14.4" rx="3" fill="url(#leds)"/>
