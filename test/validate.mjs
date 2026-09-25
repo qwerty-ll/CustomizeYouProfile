@@ -182,6 +182,57 @@ assert.ok(refreshed.startsWith("# Mona\n\ntext\n\n") && refreshed.trimEnd().ends
   assert.deepEqual(jc.days.map((d) => [d.date, d.count, d.level]), [["2026-01-04", 0, 4], ["2026-01-05", 0, 0]]);
   assert.equal(jc.total, 0);
   assert.ok(newWorkflowUrl("mona", "main", yaml).startsWith("https://github.com/mona/mona/new/main?filename=.github%2Fworkflows%2Fprofile-effects.yml&value="));
+  // no calendar: the profile stays real and the page draws in a sample year (as app.mjs does)
+  const { seedFor } = await import("../src/lib.mjs");
+  const sampleYear = (login) => fakeUser({ login, activity: 0.35, peak: 12, seed: seedFor(login, 365) }).contributionsCollection;
+  const bare = toUser({ login: "mona", name: "Mona", followers: 3, public_repos: 1 }, [{ name: "a", fork: false, stargazers_count: 4, language: "Go" }]);
+  assert.equal(bare.contributionsCollection.contributionCalendar.weeks.length, 0);
+  const sc = buildContext("mona", { ...bare, contributionsCollection: sampleYear("mona") });
+  assert.deepEqual([sc.profile.name, sc.profile.stars, sc.profile.languages[0].name, sc.weeks], ["Mona", 4, "Go", 53]);
+  assert.ok(sc.calendar.weeks.every((w) => w.contributionDays[0].weekday === 0) && sc.total > 0, "a year of Sunday-first weeks");
+  assert.deepEqual(sampleYear("Mona"), sampleYear("mona"), "the same sample for a login every time");
+  assert.notDeepEqual(sampleYear("mona"), sampleYear("octocat"));
+  for (const id of effects) (await (await import(`../src/effects/${id}.mjs`)).default(sc, { ...OPTIONS[0], modes: OFF })).forEach((f) => checkXml(f.svg, `${id} with a sample year`));
+  // the lookup against stubbed APIs: however the calendar mirror fails, it still succeeds
+  const { CALENDAR_API, LoadError, fetchPublicProfile } = await import("../site/data.mjs");
+  const reply = (body, status = 200) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status });
+  const api = (calendar) => async (url) => {
+    url = String(url);
+    if (CALENDAR_API && url.startsWith(CALENDAR_API)) return calendar();
+    if (url.endsWith("/users/mona")) return reply({ login: "mona", name: "Mona", avatar_url: "x", followers: 3, public_repos: 1 });
+    if (url.includes("/users/mona/repos?")) return reply([{ name: "a", full_name: "mona/a", fork: false, stargazers_count: 4, language: "Go", size: 9 }]);
+    if (url.includes("/search/issues?")) return reply({ total_count: 7 });
+    if (url.endsWith("/repos/mona/a/languages")) return reply({ Shell: 100, Go: 900 });
+    if (url.endsWith("/repos/mona/mona")) return reply({ default_branch: "trunk" });
+    return reply({ message: "Not Found" }, 404);
+  };
+  const realFetch = globalThis.fetch;
+  try {
+    for (const calendar of [() => { throw new TypeError("Failed to fetch"); }, () => reply("", 502), () => reply("{not json"), () => reply({ contributions: "x" })]) {
+      globalThis.fetch = api(calendar);
+      const { user, repo, calendar: kind } = await fetchPublicProfile("mona");
+      assert.equal(kind, "sample");
+      assert.equal(user.contributionsCollection.contributionCalendar.weeks.length, 0, "no made-up days from the data layer");
+      const ctx = buildContext(user.login, { ...user, contributionsCollection: sampleYear(user.login) });
+      assert.deepEqual([ctx.profile.name, ctx.profile.stars, ctx.profile.pullRequests, ctx.profile.languages[0].name, repo.exists, repo.branch], ["Mona", 4, 7, "Go", true, "trunk"]);
+    }
+    if (CALENDAR_API) {
+      globalThis.fetch = api(() => reply({ total: { lastYear: 205 }, contributions }));
+      const live = await fetchPublicProfile("mona");
+      assert.equal(live.calendar, "live");
+      assert.equal(buildContext("mona", live.user).total, 205);
+    }
+    await assert.rejects(fetchPublicProfile("nobody"), (e) => e instanceof LoadError && e.kind === "notfound", "GitHub's own errors still count");
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  // every interface string exists in both languages
+  const { STRINGS, EFFECT_TEXT_RU, MONTHS } = await import("../site/i18n.mjs");
+  const { EFFECTS } = await import("../src/registry.mjs");
+  assert.deepEqual(Object.keys(STRINGS.ru).sort(), Object.keys(STRINGS.en).sort(), "EN and RU have the same strings");
+  for (const k in STRINGS.en) assert.equal(typeof STRINGS.ru[k], typeof STRINGS.en[k], `"${k}" is text in one language and a function in the other`);
+  assert.deepEqual(Object.keys(EFFECT_TEXT_RU).sort(), Object.keys(EFFECTS).sort(), "every effect has Russian text");
+  assert.ok(MONTHS.en.length === 12 && MONTHS.ru.length === 12);
 }
 // the built site must render exactly like src/
 {

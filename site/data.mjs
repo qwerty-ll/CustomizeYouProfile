@@ -1,8 +1,13 @@
 // Public data for the configurator's preview, fetched straight from the
 // browser (no token): GitHub's REST API for the profile and repositories, and
-// a public contributions mirror for the calendar. The Action itself uses
-// GitHub's GraphQL API, so numbers in the preview can differ slightly
-// (languages come from the byte counts of your largest repositories only).
+// a public contributions mirror for the calendar (GitHub has no token-free API
+// for it). The Action itself uses GitHub's GraphQL API, so numbers in the
+// preview can differ slightly (languages come from the byte counts of your
+// largest repositories only).
+
+// The calendar mirror. null turns it off: like when it's down or blocked, the
+// preview then shows the real profile with a sample contribution year.
+export const CALENDAR_API = "https://github-contributions-api.jogruber.de/v4/";
 
 const LEVELS = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
 
@@ -33,10 +38,10 @@ export class LoadError extends Error {
   constructor(kind, message) { super(message); this.kind = kind; }
 }
 
-async function getJson(url) {
+async function getJson(url, signal) {
   let res;
   try {
-    res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+    res = await fetch(url, { headers: { Accept: "application/vnd.github+json" }, signal });
   } catch {
     throw new LoadError("network", "network error");
   }
@@ -46,13 +51,10 @@ async function getJson(url) {
   return res.json();
 }
 
-// Pure: REST + contributions responses → the GraphQL user shape buildContext() expects.
-// langBytes: { repoName: { Language: bytes } } for the biggest repos. Those dominate the
-// byte totals the Action computes, so they give the same top language. Without it
-// (rate limited) each repo counts once for its main language.
-export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null) {
-  const own = repos.filter((r) => !r.fork);
-  // the calendar comes from a third-party mirror: keep only well-formed days
+// Pure: the mirror's { total, contributions } → the GraphQL contributionsCollection.
+// It's a third-party service, so only well-formed days are kept; none (or no
+// response at all) gives an empty calendar.
+function toYear(contrib) {
   const days = (Array.isArray(contrib?.contributions) ? contrib.contributions : [])
     .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d?.date) && !Number.isNaN(Date.parse(d.date)))
     .map((d) => ({ date: d.date, count: Math.max(0, Math.floor(Number(d.count)) || 0), level: Math.min(4, Math.max(0, Math.floor(Number(d.level)) || 0)) }));
@@ -64,6 +66,22 @@ export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null)
   }
   const total = days.reduce((s, d) => s + d.count, 0);
   const reported = Number(contrib?.total?.lastYear);
+  return {
+    totalCommitContributions: total,
+    totalPullRequestContributions: 0,
+    totalIssueContributions: 0,
+    totalPullRequestReviewContributions: 0,
+    contributionCalendar: { totalContributions: Number.isFinite(reported) && reported >= 0 ? reported : total, weeks },
+  };
+}
+const hasDays = (year) => year.contributionCalendar.weeks.length > 0;
+
+// Pure: REST + contributions responses → the GraphQL user shape buildContext() expects.
+// langBytes: { repoName: { Language: bytes } } for the biggest repos. Those dominate the
+// byte totals the Action computes, so they give the same top language. Without it
+// (rate limited) each repo counts once for its main language.
+export function toUser(rest, repos, contrib = null, pullRequests = 0, langBytes = null) {
+  const own = repos.filter((r) => !r.fork);
   return {
     login: rest.login,
     name: rest.name,
@@ -80,31 +98,50 @@ export function toUser(rest, repos, contrib, pullRequests = 0, langBytes = null)
         languages: { edges: languageEdges(r, langBytes) },
       })),
     },
-    contributionsCollection: {
-      totalCommitContributions: total,
-      totalPullRequestContributions: 0,
-      totalIssueContributions: 0,
-      totalPullRequestReviewContributions: 0,
-      contributionCalendar: { totalContributions: Number.isFinite(reported) && reported >= 0 ? reported : total, weeks },
-    },
+    contributionsCollection: toYear(contrib),
   };
 }
 
-// Cached per session so tweaking options doesn't spend the 60 requests/hour
-// GitHub allows without login (a lookup costs about a dozen).
-export async function fetchPublicProfile(login) {
-  const key = `cyp:user2:${login.toLowerCase()}`;
+// The mirror's raw answer, or null when it's turned off, blocked, down, too slow or not JSON.
+const fetchCalendar = (login) => CALENDAR_API
+  ? getJson(`${CALENDAR_API}${encodeURIComponent(login)}?y=last`, AbortSignal.timeout?.(8000)).catch(() => null)
+  : Promise.resolve(null);
+
+// Lookups are kept for an hour (the last 5 users), so reloading or coming back
+// doesn't spend the 60 requests/hour GitHub allows without login (a lookup
+// costs about a dozen).
+const CACHE = "cyp:users3", HOUR = 60 * 60e3;
+function cached(login) {
   try {
-    const hit = JSON.parse(sessionStorage.getItem(key) ?? "null");
-    if (hit && Date.now() - hit.at < 15 * 60e3) return hit.data;
+    const hit = JSON.parse(localStorage.getItem(CACHE) ?? "{}")[login.toLowerCase()];
+    return hit && Date.now() - hit.at < HOUR ? hit.data : null;
+  } catch { return null; }
+}
+function remember(login, data) {
+  try {
+    const all = { ...JSON.parse(localStorage.getItem(CACHE) ?? "{}"), [login.toLowerCase()]: { at: Date.now(), data } };
+    const keep = Object.entries(all).filter(([, v]) => Date.now() - v?.at < HOUR).sort((a, b) => b[1].at - a[1].at).slice(0, 5);
+    localStorage.setItem(CACHE, JSON.stringify(Object.fromEntries(keep)));
   } catch {}
+  return data;
+}
+
+// → { user, repo, calendar }. calendar is "live", or "sample" when the mirror
+// gave nothing usable: the user's calendar is then empty, and the page draws a
+// sample year into it (with src/demo.mjs; this file has no imports so the tests
+// can load it straight from the repo).
+export async function fetchPublicProfile(login) {
+  const hit = cached(login);
+  if (hit?.calendar === "sample") {                  // GitHub's part is still fresh: just retry the calendar
+    const year = toYear(await fetchCalendar(hit.user.login));
+    if (hasDays(year)) return remember(login, { ...hit, user: { ...hit.user, contributionsCollection: year }, calendar: "live" });
+  }
+  if (hit) return hit;
   const enc = encodeURIComponent(login);
   const rest = await getJson(`https://api.github.com/users/${enc}`);
   const [repos, contrib, prs, profileRepo] = await Promise.all([
     getJson(`https://api.github.com/users/${enc}/repos?per_page=100&type=owner&sort=pushed`),
-    getJson(`https://github-contributions-api.jogruber.de/v4/${enc}?y=last`).catch(() => {
-      throw new LoadError("contrib", "contributions unavailable");
-    }),
+    fetchCalendar(rest.login),
     getJson(`https://api.github.com/search/issues?q=${encodeURIComponent(`author:${rest.login} type:pr`)}&per_page=1`).then((r) => r.total_count).catch(() => 0),
     getJson(`https://api.github.com/repos/${rest.login}/${rest.login}`).catch(() => null),
   ]);
@@ -116,12 +153,12 @@ export async function fetchPublicProfile(login) {
   if (profileRepo) {
     hasWorkflow = await getJson(`https://api.github.com/repos/${rest.login}/${rest.login}/contents/.github/workflows/profile-effects.yml`).then(() => true, () => false);
   }
-  const data = {
-    user: toUser(rest, repos, contrib, prs, langBytes),
+  const user = toUser(rest, repos, contrib, prs, langBytes);
+  return remember(login, {
+    user,
     repo: profileRepo ? { exists: true, branch: profileRepo.default_branch || "main", hasWorkflow } : { exists: false, branch: "main", hasWorkflow: false },
-  };
-  try { sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data })); } catch {}
-  return data;
+    calendar: hasDays(user.contributionsCollection) ? "live" : "sample",
+  });
 }
 
 // Avatar as a data URI: images inside an SVG shown via <img> can't load URLs.

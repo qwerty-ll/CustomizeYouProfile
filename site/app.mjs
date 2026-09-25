@@ -2,11 +2,11 @@
 // data with the exact code the Action runs, then copy a ready-made setup.
 
 import { demoUser } from "./src/demo.mjs";
-import { buildContext, safeAvatar } from "./src/lib.mjs";
+import { buildContext, safeAvatar, seedFor } from "./src/lib.mjs";
 import { EFFECTS, resolveEffects } from "./src/registry.mjs";
 import { renderEffect } from "./src/render.mjs";
 import { resolveSettings } from "./src/settings.mjs";
-import { LoadError, fetchAvatarDataUri, fetchPublicProfile } from "./data.mjs";
+import { CALENDAR_API, LoadError, fetchAvatarDataUri, fetchPublicProfile } from "./data.mjs";
 import { EFFECT_TEXT_RU, MONTHS, STRINGS } from "./i18n.mjs";
 import { actionsUrl, editWorkflowUrl, installCommand, newRepoUrl, newWorkflowUrl, workflowYaml } from "./output.mjs";
 
@@ -37,6 +37,8 @@ const t = (k, ...a) => { const v = STRINGS[state.ui][k] ?? STRINGS.en[k]; return
 const effectTitle = (id) => (state.ui === "ru" ? EFFECT_TEXT_RU[id]?.[0] : null) ?? EFFECTS[id].title;
 const effectBlurb = (id) => (state.ui === "ru" ? EFFECT_TEXT_RU[id]?.[1] : null) ?? EFFECTS[id].blurb;
 const DEMO_CTX = buildContext("demo", demoUser({ login: "demo", activity: 0.35, peak: 24, langs: 6, name: "Demo User", seed: 7 }));
+// Stands in for the contribution calendar when its mirror can't be used: made up, but the same for a login every time.
+const sampleYear = (login) => demoUser({ login, activity: 0.35, peak: 12, seed: seedFor(login, 365) }).contributionsCollection;
 
 function save() { store.set("cfg", state.cfg); store.set("ui", state.ui); store.set("theme", state.theme); }
 
@@ -76,7 +78,7 @@ function renderShell() {
     <nav>
       <a href="https://github.com/qwerty-ll/CustomizeYouProfile#readme" target="_blank" rel="noopener">${t("readme")}</a>
       <a href="https://github.com/qwerty-ll/CustomizeYouProfile" target="_blank" rel="noopener">${t("source")}</a>
-      <button class="chip" id="ui-lang" type="button" aria-label="Language">${state.ui === "ru" ? "EN" : "RU"}</button>
+      ${state.ui === "ru" ? `<button class="chip" id="ui-lang" type="button" lang="en" aria-label="English (EN)">EN</button>` : `<button class="chip" id="ui-lang" type="button" lang="ru" aria-label="Русский (RU)">RU</button>`}
     </nav>
   </header>
   <section class="hero">
@@ -86,7 +88,7 @@ function renderShell() {
   <main class="layout">
     <div class="controls">
       <section class="card">
-        <h2><span class="num">1</span>${t("s1")}</h2>
+        <h2><span class="num">1</span><label for="login">${t("s1")}</label></h2>
         <form id="login-form" class="login">
           <label class="prefix" for="login">github.com/</label>
           <input id="login" name="login" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="octocat" value="${esc(state.login)}" maxlength="39">
@@ -181,7 +183,7 @@ function renderShell() {
       </div>
       <div id="problems" class="problems" hidden></div>
       <div id="frame" class="frame" data-theme="${state.theme}"></div>
-      <p class="note">${t("previewNote")}</p>
+      <p class="note">${t("previewNote")}${CALENDAR_API ? ` ${t("graphSource", new URL(CALENDAR_API).host)}` : ""}</p>
     </aside>
   </main>
   <footer>${t("footer")} · <a href="https://github.com/qwerty-ll/CustomizeYouProfile" target="_blank" rel="noopener">qwerty-ll/CustomizeYouProfile</a></footer>`;
@@ -196,12 +198,14 @@ function renderStatus() {
   const el = $("#status");
   const s = state.status;
   if (s.kind === "loading") el.innerHTML = `<span class="spinner"></span>${t("loading")}`;
-  else if (s.kind === "error") el.innerHTML = `<span class="bad">${esc(s.message)}</span>`;
+  else if (s.kind === "error") el.innerHTML = `<span class="bad">${esc(s.reason === "notfound" ? t("errNotFound", s.login) : s.reason === "ratelimit" ? t("errRate") : t("errNetwork"))}</span>`;
   else if (s.kind === "loaded") {
     const p = state.ctx.profile;
+    const repo = state.repo.exists ? `<span class="good">✓ ${t("repoOk")}</span>` : `<span class="warn">${t("repoMissing")}</span>`;
     el.innerHTML = `${state.avatar ? `<img class="avatar" src="${esc(state.avatar)}" alt="">` : ""}
       <span><b>${esc(p.name)}</b> <span class="muted">@${esc(state.ctx.login)}</span><br>
-      <small>${esc(t("loaded", state.ctx.total))} · ${state.repo.exists ? `<span class="good">✓ ${t("repoOk")}</span>` : `<span class="warn">${t("repoMissing")}</span>`}</small></span>`;
+      <small>${s.sample ? repo : `${esc(t("loaded", state.ctx.total))} · ${repo}`}</small>
+      ${s.sample ? `<br><small class="warn">${t("sampleYear")}</small>` : ""}</span>`;
   } else el.innerHTML = `<span class="muted">${t("demo")}</span>`;
 }
 
@@ -297,19 +301,19 @@ async function loadUser(login) {
   state.status = { kind: "loading" };
   renderStatus();
   try {
-    const { user, repo } = await fetchPublicProfile(login);
-    state.ctx = buildContext(user.login, user);
+    const { user, repo, calendar } = await fetchPublicProfile(login);
+    const sample = calendar === "sample";
+    state.ctx = buildContext(user.login, sample ? { ...user, contributionsCollection: sampleYear(user.login) } : user);
     state.repo = repo;
     state.avatar = safeAvatar(await fetchAvatarDataUri(user.avatarUrl));
-    state.status = { kind: "loaded" };
+    state.status = { kind: "loaded", sample };
     store.set("login", user.login);                       // remember only names that worked
     const url = new URL(location.href);
     url.searchParams.set("u", user.login);
     history.replaceState(null, "", url);
   } catch (err) {
     state.ctx = null; state.avatar = null; state.repo = null;
-    const kind = err instanceof LoadError ? err.kind : "network";
-    state.status = { kind: "error", message: kind === "notfound" ? t("errNotFound", login) : kind === "ratelimit" ? t("errRate") : kind === "contrib" ? t("errContrib") : t("errNetwork") };
+    state.status = { kind: "error", reason: err instanceof LoadError ? err.kind : "network", login };
   }
   renderStatus();
   renderOutput();
