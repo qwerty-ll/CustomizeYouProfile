@@ -2,7 +2,9 @@
 
 export const LEVELS = { NONE: 0, FIRST_QUARTILE: 1, SECOND_QUARTILE: 2, THIRD_QUARTILE: 3, FOURTH_QUARTILE: 4 };
 
-export async function fetchProfile(login, token) {
+// retryDelays: waits (ms) before each retry of a transient failure; tests pass zeros.
+export async function fetchProfile(login, token, { retryDelays = [5000, 20000] } = {}) {
+  const live = () => withRetries(() => fetchProfileLive(login, token), retryDelays);
   // Local dev: CALENDAR_CACHE=/tmp/x.json reuses one API response across runs.
   const cache = process.env.CALENDAR_CACHE;
   if (cache) {
@@ -11,12 +13,27 @@ export async function fetchProfile(login, token) {
       const cached = JSON.parse(await readFile(cache, "utf8"));
       if (cached.contributionsCollection) return cached;
     } catch {}
-    const user = await fetchProfileLive(login, token);
+    const user = await live();
     await writeFile(cache, JSON.stringify(user));
     return user;
   }
-  return fetchProfileLive(login, token);
+  return live();
 }
+
+// GitHub hiccups (network errors, timeouts, 5xx) are retried, so a daily run
+// doesn't fail, and email its owner, over a blip. Other errors fail at once.
+export async function withRetries(attempt, delays) {
+  for (let i = 0; ; i++) {
+    try {
+      return await attempt();
+    } catch (err) {
+      if (!err.transient || i >= delays.length) throw err;
+      console.warn(`${err.message}; retrying in ${delays[i] / 1000}s`);
+      await new Promise((resolve) => setTimeout(resolve, delays[i]));
+    }
+  }
+}
+const transient = (message) => Object.assign(new Error(message), { transient: true });
 
 // One query for everything the effects use. Only public repositories are read,
 // so private project languages never end up in a public image.
@@ -30,13 +47,24 @@ async function fetchProfileLive(login, token) {
     contributionsCollection{
       totalCommitContributions totalPullRequestContributions totalIssueContributions totalPullRequestReviewContributions
       contributionCalendar{totalContributions weeks{contributionDays{date weekday contributionCount contributionLevel}}}}}}`;
-  const res = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json", "User-Agent": "CustomizeYouProfile" },
-    body: JSON.stringify({ query, variables: { login } }),
-  });
+  let res;
+  try {
+    res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json", "User-Agent": "CustomizeYouProfile" },
+      body: JSON.stringify({ query, variables: { login } }),
+      signal: AbortSignal.timeout(60e3),
+    });
+  } catch (err) {
+    throw transient(`GitHub API unreachable (${err.name === "TimeoutError" ? "no answer in 60s" : err.cause?.code ?? err.message})`);
+  }
   const json = await res.json().catch(() => ({}));
-  if (!res.ok || json.errors) throw new Error(`GitHub API error for "${login}": ${JSON.stringify(json.errors ?? json)}`);
+  if (!res.ok || json.errors) {
+    const message = `GitHub API error ${res.status} for "${login}": ${JSON.stringify(json.errors ?? json)}`;
+    // a busy GraphQL backend answers 502/504, or 200 with "Something went wrong … timeout"
+    const busy = res.status >= 500 || (json.errors ?? []).some((e) => /something went wrong|timeout/i.test(e?.message));
+    throw busy ? transient(message) : new Error(message);
+  }
   if (!json.data?.user) throw new Error(`GitHub user "${login}" not found`);
   return json.data.user;
 }
@@ -44,7 +72,7 @@ async function fetchProfileLive(login, token) {
 // Small avatar as a data URI: images inside an SVG shown via <img> can't load external URLs.
 export async function fetchAvatar(url) {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: AbortSignal.timeout(20e3) });
     if (!res.ok) return null;
     const type = (res.headers.get("content-type") || "image/png").split(";")[0].trim().toLowerCase();
     const bytes = Buffer.from(await res.arrayBuffer());
