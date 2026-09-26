@@ -22,12 +22,12 @@
 <g style="transform-origin:127.7px 77px;animation:flipBottom 6s ease-out 0s infinite"><g clip-path="url(#b0_0)"><rect x="102.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="127.7" y="94" class="digit" text-anchor="middle">9</text></g></g>
 <g filter="url(#glow)">
         <rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
-        <text x="185.7" y="94" class="digit" text-anchor="middle">8</text>
+        <text x="185.7" y="94" class="digit" text-anchor="middle">7</text>
         <rect x="160.7" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
       </g>
-<g style="transform-origin:185.7px 77px;animation:flipTop 6s ease-in -0.3s infinite"><g clip-path="url(#t0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">8</text></g></g>
-<g style="transform-origin:185.7px 77px;animation:flipBottom 6s ease-out -0.3s infinite"><g clip-path="url(#b0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">8</text></g></g>
-<text x="156.7" y="136" class="big" text-anchor="middle">98 days</text>
+<g style="transform-origin:185.7px 77px;animation:flipTop 6s ease-in -0.3s infinite"><g clip-path="url(#t0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">7</text></g></g>
+<g style="transform-origin:185.7px 77px;animation:flipBottom 6s ease-out -0.3s infinite"><g clip-path="url(#b0_1)"><rect x="160.7" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="185.7" y="94" class="digit" text-anchor="middle">7</text></g></g>
+<text x="156.7" y="136" class="big" text-anchor="middle">97 days</text>
 <text x="156.7" y="154" class="date" text-anchor="middle">Jan 1, 2027</text>
 <text x="430" y="30" class="label" text-anchor="middle">my birthday</text>
 <g filter="url(#glow)">
@@ -46,12 +46,12 @@
 <g style="transform-origin:430px 77px;animation:flipBottom 6s ease-out -1.6s infinite"><g clip-path="url(#b1_1)"><rect x="405" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="430" y="94" class="digit" text-anchor="middle">7</text></g></g>
 <g filter="url(#glow)">
         <rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
-        <text x="488" y="94" class="digit" text-anchor="middle">1</text>
+        <text x="488" y="94" class="digit" text-anchor="middle">0</text>
         <rect x="463" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
       </g>
-<g style="transform-origin:488px 77px;animation:flipTop 6s ease-in -1.8s infinite"><g clip-path="url(#t1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">1</text></g></g>
-<g style="transform-origin:488px 77px;animation:flipBottom 6s ease-out -1.8s infinite"><g clip-path="url(#b1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">1</text></g></g>
-<text x="430" y="136" class="big" text-anchor="middle">171 days</text>
+<g style="transform-origin:488px 77px;animation:flipTop 6s ease-in -1.8s infinite"><g clip-path="url(#t1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">0</text></g></g>
+<g style="transform-origin:488px 77px;animation:flipBottom 6s ease-out -1.8s infinite"><g clip-path="url(#b1_2)"><rect x="463" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="488" y="94" class="digit" text-anchor="middle">0</text></g></g>
+<text x="430" y="136" class="big" text-anchor="middle">170 days</text>
 <text x="430" y="154" class="date" text-anchor="middle">Mar 15, 2027</text>
 <rect x="293.3" y="24" width="1" height="132" fill="#fff" opacity=".08"/>
 <text x="703.3" y="30" class="label" text-anchor="middle">Vacation</text>
@@ -71,12 +71,12 @@
 <g style="transform-origin:703.3px 77px;animation:flipBottom 6s ease-out -2.9s infinite"><g clip-path="url(#b2_1)"><rect x="678.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="703.3" y="94" class="digit" text-anchor="middle">4</text></g></g>
 <g filter="url(#glow)">
         <rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)" stroke="#3b3f63"/>
-        <text x="761.3" y="94" class="digit" text-anchor="middle">9</text>
+        <text x="761.3" y="94" class="digit" text-anchor="middle">8</text>
         <rect x="736.3" y="76.5" width="50" height="1.5" fill="#0b0c18"/>
       </g>
-<g style="transform-origin:761.3px 77px;animation:flipTop 6s ease-in -3.1s infinite"><g clip-path="url(#t2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">9</text></g></g>
-<g style="transform-origin:761.3px 77px;animation:flipBottom 6s ease-out -3.1s infinite"><g clip-path="url(#b2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">9</text></g></g>
-<text x="703.3" y="136" class="big" text-anchor="middle">249 days</text>
+<g style="transform-origin:761.3px 77px;animation:flipTop 6s ease-in -3.1s infinite"><g clip-path="url(#t2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">8</text></g></g>
+<g style="transform-origin:761.3px 77px;animation:flipBottom 6s ease-out -3.1s infinite"><g clip-path="url(#b2_2)"><rect x="736.3" y="44" width="50" height="66" rx="8" fill="url(#card)"/><text x="761.3" y="94" class="digit" text-anchor="middle">8</text></g></g>
+<text x="703.3" y="136" class="big" text-anchor="middle">248 days</text>
 <text x="703.3" y="154" class="date" text-anchor="middle">Jun 1, 2027</text>
 <rect x="566.7" y="24" width="1" height="132" fill="#fff" opacity=".08"/>
 </g>
