@@ -51,17 +51,17 @@
 <rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 26</text>
 <text x="112" y="208" text-anchor="middle" class="name">mellou</text>
 <text x="112" y="226" text-anchor="middle" class="klass">JavaScript Sorcerer</text>
-<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">455 contributions · next level 60%</text>
+<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">452 contributions · next level 51%</text>
 <rect x="230" y="54" width="590" height="12" rx="6" fill="#2a2340"/>
-<rect x="230" y="54" width="352.2" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
+<rect x="230" y="54" width="302.3" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
 <text x="230" y="105" class="key" fill="#ff6b6b">STR</text><text x="268" y="105" class="label">commits this year</text>
 <rect x="390" y="96" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="96" width="347.4" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
-<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">423</text>
+<rect x="390" y="96" width="347.1" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
+<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">421</text>
 <text x="230" y="131" class="key" fill="#4dabf7">INT</text><text x="268" y="131" class="label">public repos</text>
 <rect x="390" y="122" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="122" width="315" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
-<text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">26</text>
+<rect x="390" y="122" width="311.4" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
+<text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">25</text>
 <text x="230" y="157" class="key" fill="#51cf66">DEX</text><text x="268" y="157" class="label">pull requests</text>
 <rect x="390" y="148" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="148" width="194.2" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>

@@ -12,12 +12,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(222.4,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(304,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(378.2,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(296.6,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(378.2,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g><g transform="translate(504.2,12)">
@@ -27,12 +27,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(726.6,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(808.2,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(882.4,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(800.8,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(882.4,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g><g transform="translate(1008.4,12)">
@@ -42,12 +42,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(1230.8,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(1312.4,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(1386.6,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(1305,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(1386.6,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g><g transform="translate(1512.6,12)">
@@ -57,12 +57,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(1735,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(1816.6,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(1890.8,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(1809.2,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(1890.8,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g><g transform="translate(2016.8,12)">
@@ -72,12 +72,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(2239.2,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(2320.8,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(2395,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(2313.4,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(2395,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g><g transform="translate(2521,12)">
@@ -87,12 +87,12 @@
       <rect width="86.4" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3776ab"/>
       <text x="28" y="20.5" class="chip">Python</text></g><g transform="translate(2743.4,12)">
-      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
-      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
-      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(2825,12)">
       <rect width="64.2" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#1572b6"/>
-      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(2899.2,12)">
+      <text x="28" y="20.5" class="chip">CSS</text></g><g transform="translate(2817.6,12)">
+      <rect width="71.6" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
+      <circle cx="17" cy="16" r="4.5" fill="#e34f26"/>
+      <text x="28" y="20.5" class="chip">HTML</text></g><g transform="translate(2899.2,12)">
       <rect width="116" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de"/>
       <circle cx="17" cy="16" r="4.5" fill="#3178c6"/>
       <text x="28" y="20.5" class="chip">TypeScript</text></g></g><g style="animation:row62 55.6s linear infinite"><g transform="translate(0,62)">

@@ -20,14 +20,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(227.2,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(308,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(299.8,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(380.6,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
@@ -45,14 +45,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(737.8,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(818.6,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(810.4,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(891.2,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
@@ -70,14 +70,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(1248.4,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(1329.2,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(1321,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(1401.8,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
@@ -95,14 +95,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(1759,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(1839.8,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(1831.6,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(1912.4,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
@@ -120,14 +120,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(2269.6,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(2350.4,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(2342.2,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(2423,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
@@ -145,14 +145,14 @@
         <text x="22" y="22" textLength="49.2" lengthAdjust="spacingAndGlyphs" class="chip">Python</text>
       </g>
       <g transform="translate(2780.2,30)">
-        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
-        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
-        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
-      </g>
-      <g transform="translate(2861,30)">
         <rect width="60.6" height="34" rx="17" fill="#1572b6" fill-opacity=".1" stroke="#1572b6" stroke-width="1.5" filter="url(#glow)"/>
         <circle cx="14" cy="17" r="3" fill="#1572b6"/>
         <text x="22" y="22" textLength="24.6" lengthAdjust="spacingAndGlyphs" class="chip">CSS</text>
+      </g>
+      <g transform="translate(2852.8,30)">
+        <rect width="68.8" height="34" rx="17" fill="#e34f26" fill-opacity=".1" stroke="#e34f26" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="14" cy="17" r="3" fill="#e34f26"/>
+        <text x="22" y="22" textLength="32.8" lengthAdjust="spacingAndGlyphs" class="chip">HTML</text>
       </g>
       <g transform="translate(2933.6,30)">
         <rect width="118" height="34" rx="17" fill="#3178c6" fill-opacity=".1" stroke="#3178c6" stroke-width="1.5" filter="url(#glow)"/>
