@@ -115,7 +115,7 @@
 <rect x="3" y="3" width="854" height="230" rx="6" fill="url(#sq)"/>
 <rect x="3" y="3" width="854" height="230" rx="6" fill="#fff" filter="url(#grain)"/>
 <line x1="56" y1="3" x2="56" y2="233" stroke="#e57373" stroke-width="1.2" opacity=".8"/>
-<text x="430" y="27" text-anchor="middle" class="m hand pen" style="animation-name:h1">October 29</text>
+<text x="430" y="27" text-anchor="middle" class="m hand pen" style="animation-name:h1">October 30</text>
 <text x="430" y="48" text-anchor="middle" class="m hand pen" style="animation-name:h2">Classwork</text>
 <text x="840" y="27" class="hand pen small" text-anchor="end" opacity=".8">@qwerty-ll</text>
 <g class="m " style="animation-name:labels"><text x="99" y="65" class="hand pencil">Nov</text><text x="169" y="65" class="hand pencil">Dec</text><text x="225" y="65" class="hand pencil">Jan</text><text x="281" y="65" class="hand pencil">Feb</text><text x="337" y="65" class="hand pencil">Mar</text><text x="407" y="65" class="hand pencil">Apr</text><text x="463" y="65" class="hand pencil">May</text><text x="533" y="65" class="hand pencil">Jun</text><text x="589" y="65" class="hand pencil">Jul</text><text x="645" y="65" class="hand pencil">Aug</text><text x="715" y="65" class="hand pencil">Sep</text><text x="771" y="65" class="hand pencil">Oct</text><text x="78" y="95" class="hand pencil" text-anchor="end">Mon</text><text x="78" y="123" class="hand pencil" text-anchor="end">Wed</text><text x="78" y="151" class="hand pencil" text-anchor="end">Fri</text>
