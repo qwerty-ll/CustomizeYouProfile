@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="860" height="230" viewBox="0 0 860 230" data-bg="light">
-<title>qwerty-ll: a dino jumping over 543 contributions</title>
+<title>qwerty-ll: a dino jumping over 541 contributions</title>
 <defs><clipPath id="frame"><rect width="860" height="230" rx="12"/></clipPath><linearGradient id="tree" gradientUnits="userSpaceOnUse" x1="0" y1="126" x2="0" y2="186"><stop offset="0" stop-color="#69db7c"/><stop offset="1" stop-color="#1b7a3a"/></linearGradient><radialGradient id="pk" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffa94d"/><stop offset="1" stop-color="#d9480f"/></radialGradient></defs>
 <style>
     .m{animation-duration:34.205s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}
@@ -222,7 +222,7 @@
 <g class="m " style="animation-name:over">
     <text x="430" y="99" text-anchor="middle" class="over">GAME OVER</text>
     <g transform="translate(413,111)"><rect width="34" height="30" rx="4" fill="#535353"/><path d="M17 8a7 7 0 1 0 7 7" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M20 3l6 5-7 3z" fill="#ffffff"/></g>
-    <text x="430" y="165" text-anchor="middle" class="hud muted">543 contributions · NOV 2025 → NOV 2026</text>
+    <text x="430" y="165" text-anchor="middle" class="hud muted">541 contributions · NOV 2025 → NOV 2026</text>
   </g>
 </g>
 <defs><clipPath id="cyp-clip"><rect width="860" height="230" rx="14"/></clipPath><filter id="cyp-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>@keyframes cyp-fly{0%{transform:translate(-40px,var(--y))}50%{transform:translate(430px,calc(var(--y) - 16px))}100%{transform:translate(900px,var(--y))}}
