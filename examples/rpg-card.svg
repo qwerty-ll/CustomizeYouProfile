@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="320" viewBox="0 0 860 320">
-<title>qwerty-ll: level 29 Python Mage</title>
+<title>qwerty-ll: level 29 JavaScript Sorcerer</title>
 <defs><clipPath id="frame"><rect width="860" height="320" rx="16"/></clipPath><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1530"/><stop offset="1" stop-color="#0c0a16"/></linearGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a3"/><stop offset=".5" stop-color="#c9973b"/><stop offset="1" stop-color="#ffe7a3"/></linearGradient><linearGradient id="xp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7048e8"/><stop offset="1" stop-color="#e599f7"/></linearGradient><linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="avatar"><circle cx="112" cy="112" r="58"/></clipPath></defs>
 <style>
     .m{animation-duration:10.040s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}
@@ -50,18 +50,18 @@
 <circle cx="112" cy="112" r="60" fill="none" stroke="url(#gold)" stroke-width="3"/>
 <rect x="72" y="160" width="80" height="22" rx="11" fill="#1b1530" stroke="url(#gold)" stroke-width="1.5"/><text x="112" y="175" text-anchor="middle" class="lvl">LV 29</text>
 <text x="112" y="208" text-anchor="middle" class="name">mellou</text>
-<text x="112" y="226" text-anchor="middle" class="klass">Python Mage</text>
-<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">550 contributions · next level 14%</text>
+<text x="112" y="226" text-anchor="middle" class="klass">JavaScript Sorcerer</text>
+<text x="230" y="46" class="label">EXPERIENCE</text><text x="820" y="46" class="label" text-anchor="end">553 contributions · next level 22%</text>
 <rect x="230" y="54" width="590" height="12" rx="6" fill="#2a2340"/>
-<rect x="230" y="54" width="84.1" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
+<rect x="230" y="54" width="129.3" height="12" rx="6" fill="url(#xp)" filter="url(#glow)" class="m fbl" style="animation-name:xp"/>
 <text x="230" y="105" class="key" fill="#ff6b6b">STR</text><text x="268" y="105" class="label">commits this year</text>
 <rect x="390" y="96" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="96" width="358.2" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
-<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">511</text>
+<rect x="390" y="96" width="358.5" height="10" rx="5" fill="#ff6b6b" class="m fbl" style="animation-name:st0"/>
+<text x="820" y="105" text-anchor="end" class="m val" style="animation-name:sv0">513</text>
 <text x="230" y="131" class="key" fill="#4dabf7">INT</text><text x="268" y="131" class="label">public repos</text>
 <rect x="390" y="122" width="420" height="10" rx="5" fill="#2a2340"/>
-<rect x="390" y="122" width="339.8" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
-<text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">34</text>
+<rect x="390" y="122" width="342.5" height="10" rx="5" fill="#4dabf7" class="m fbl" style="animation-name:st1"/>
+<text x="820" y="131" text-anchor="end" class="m val" style="animation-name:sv1">35</text>
 <text x="230" y="157" class="key" fill="#51cf66">DEX</text><text x="268" y="157" class="label">pull requests</text>
 <rect x="390" y="148" width="420" height="10" rx="5" fill="#2a2340"/>
 <rect x="390" y="148" width="194.2" height="10" rx="5" fill="#51cf66" class="m fbl" style="animation-name:st2"/>
