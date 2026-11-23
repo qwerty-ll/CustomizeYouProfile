@@ -131,7 +131,7 @@
 <rect x="3" y="3" width="854" height="230" rx="6" fill="url(#sq)"/>
 <rect x="3" y="3" width="854" height="230" rx="6" fill="#fff" filter="url(#grain)"/>
 <line x1="56" y1="3" x2="56" y2="233" stroke="#e57373" stroke-width="1.2" opacity=".8"/>
-<text x="430" y="27" text-anchor="middle" class="m hand pen" style="animation-name:h1">November 22</text>
+<text x="430" y="27" text-anchor="middle" class="m hand pen" style="animation-name:h1">November 23</text>
 <text x="430" y="48" text-anchor="middle" class="m hand pen" style="animation-name:h2">Classwork</text>
 <text x="840" y="27" class="hand pen small" text-anchor="end" opacity=".8">@qwerty-ll</text>
 <g class="m " style="animation-name:labels"><text x="113" y="65" class="hand pencil">Dec</text><text x="169" y="65" class="hand pencil">Jan</text><text x="225" y="65" class="hand pencil">Feb</text><text x="281" y="65" class="hand pencil">Mar</text><text x="351" y="65" class="hand pencil">Apr</text><text x="407" y="65" class="hand pencil">May</text><text x="477" y="65" class="hand pencil">Jun</text><text x="533" y="65" class="hand pencil">Jul</text><text x="589" y="65" class="hand pencil">Aug</text><text x="659" y="65" class="hand pencil">Sep</text><text x="715" y="65" class="hand pencil">Oct</text><text x="771" y="65" class="hand pencil">Nov</text><text x="78" y="95" class="hand pencil" text-anchor="end">Mon</text><text x="78" y="123" class="hand pencil" text-anchor="end">Wed</text><text x="78" y="151" class="hand pencil" text-anchor="end">Fri</text>
@@ -157,7 +157,7 @@
       <rect x="93" y="-5.8" width="10" height="11.6" fill="#b9bec6"/><rect x="95" y="-5.8" width="1.4" height="11.6" fill="#8b919a"/><rect x="99" y="-5.8" width="1.4" height="11.6" fill="#8b919a"/>
       <rect x="103" y="-5.5" width="11" height="11" rx="2.5" fill="#f28b95"/>
     </g></g>
-<text x="58" y="199" class="m hand pen" style="animation-name:tot">Total: 653 commits this year ✓</text>
+<text x="58" y="199" class="m hand pen" style="animation-name:tot">Total: 639 commits this year ✓</text>
 <g class="m " style="animation-name:legend"><text x="699" y="195" class="hand pencil" text-anchor="end">less</text><rect x="706.5" y="185.5" width="11" height="11" fill="none" stroke="#5b5b5b" stroke-width=".6" rx="1"/><rect x="724.5" y="185.5" width="11" height="11" fill="#9fd89a" rx="1"/><rect x="742.5" y="185.5" width="11" height="11" fill="#5fbf68" rx="1"/><rect x="760.5" y="185.5" width="11" height="11" fill="#2f9444" rx="1"/><rect x="778.5" y="185.5" width="11" height="11" fill="#1b6530" rx="1"/><text x="797" y="195" class="hand pencil">more</text></g>
 <g transform="translate(444,195) rotate(-10)">
     <path d="M-19 -2C-20 -18 2 -24 14 -14C24 -6 21 12 6 17C-8 21 -21 12 -19 -2C-18 -12 -8 -19 3 -19" fill="none" stroke="#d32f2f" stroke-width="2" stroke-linecap="round" pathLength="1" stroke-dasharray="1 2" class="m " style="animation-name:ring"/>
